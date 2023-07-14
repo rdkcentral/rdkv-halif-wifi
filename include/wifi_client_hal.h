@@ -47,10 +47,6 @@
 **********************************************************************/
 #ifndef __WIFI_CLINET_HAL_H__
 #define __WIFI_CLINET_HAL_H__
-/**
-* @addtogroup HPK HPK
-* @{
-**/
 
 /**
  * @defgroup WIFI_HAL Wi-Fi HAL Public APIs and Data Types
@@ -144,7 +140,7 @@ typedef struct _wifi_roamingCtrl_t
 
 }wifi_roamingCtrl_t;
 
-/** @} */
+/** @} */ //End of WIFI_HAL_TYPES
 
 
 //1. WPS method
@@ -163,7 +159,7 @@ typedef struct _wifi_roamingCtrl_t
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);	//RDKB
+INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
 
 /**
  * @brief This API enables or disables WPS functionality for this access point.
@@ -174,7 +170,7 @@ INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);	//RDKB
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_setCliWpsEnable(INT ssidIndex, BOOL enableValue);	//RDKB
+INT wifi_setCliWpsEnable(INT ssidIndex, BOOL enableValue);
 
 /**
  * @brief This API is used to read the device PIN required for making a WPS connection.
@@ -186,7 +182,7 @@ INT wifi_setCliWpsEnable(INT ssidIndex, BOOL enableValue);	//RDKB
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_getCliWpsDevicePIN(INT ssidIndex, ULONG *output_ulong);	//RDKB
+INT wifi_getCliWpsDevicePIN(INT ssidIndex, ULONG *output_ulong);
 
 /**
  * @brief This API sets the WPS Device pin to the Wi-Fi hal.
@@ -197,7 +193,7 @@ INT wifi_getCliWpsDevicePIN(INT ssidIndex, ULONG *output_ulong);	//RDKB
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_setCliWpsDevicePIN(INT ssidIndex, ULONG pin);	//RDKB
+INT wifi_setCliWpsDevicePIN(INT ssidIndex, ULONG pin);
 
 /**
  * @brief This API is used to get WPS configuration  methods supported by the device.
@@ -236,7 +232,7 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);	//RDKB
+INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief This API sets the active WPS method.
@@ -247,7 +243,7 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);	//RD
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);	//RDKB
+INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
 /**
  * @brief This API is used to get the WPS config status, whether "configured" or "not configured"
@@ -258,7 +254,7 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);	//RDK
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_getCliWpsConfigurationState(INT ssidIndex, CHAR *output_string);	//RDKB	//OEM
+INT wifi_getCliWpsConfigurationState(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief This API sets the PIN to connect.
@@ -270,7 +266,7 @@ INT wifi_getCliWpsConfigurationState(INT ssidIndex, CHAR *output_string);	//RDKB
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);	//RDKB
+INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 
 /**
  * @brief Start the Push button pairing.
@@ -280,7 +276,7 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);	//RDKB
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_setCliWpsButtonPush(INT ssidIndex);	//RDKB
+INT wifi_setCliWpsButtonPush(INT ssidIndex);
 
 /**
  * @brief Stop the WPS process.
@@ -290,7 +286,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);	//RDKB
  * @return The status of the operation.
  * @retval RETURN_OK returns O if successful, appropriate error code otherwise.
  */
-INT wifi_cancelCliWPS(INT ssidIndex);	//RDKB
+INT wifi_cancelCliWPS(INT ssidIndex);
 
 
 //2. Directly pairing method
@@ -341,7 +337,7 @@ INT wifi_clearSSIDInfo(INT ssidIndex);
 
 /**
  * @brief This call back should be registered by Wi-Fi manager to receive status updates from HAL in case of a
- * connection/disconnection event.
+ * disconnection event.
  *
  * @param[in]  ssidIndex The index of SSID array.
  * @param[in]  AP_SSID  The ssid to disconnect.
@@ -353,11 +349,9 @@ INT wifi_clearSSIDInfo(INT ssidIndex);
 typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
 /**
- * @brief Callback registration function.
+ * @brief Disconnect Callback registration function.
  *
  * @param[in] callback_proc the callback function to disconnect the client.
- *
- * @execution callback
  */
 void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback callback_proc);
 
@@ -374,11 +368,9 @@ void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback 
 typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
 /**
- * @brief Callback registration function.
+ * @brief Connect Callback registration function.
  *
  * @param[in] callback_proc The callback function to connect the client to the access point.
- *
- * @execution callback
  */
 void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callback_proc);
 
@@ -388,11 +380,13 @@ void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callba
 typedef struct _wifi_telemetry_ops_t
 {
     void (*init)(char* name);    //!< init telemetry callback function
-    void (*event_s)(char* marker, char* value); //!< cllback funtion event_s
-    void (*event_d)(char* marker, int value); //!< cllback funtion event_d
+    void (*event_s)(char* marker, char* value); //!< callback funtion event_s
+    void (*event_d)(char* marker, int value); //!< callback funtion event_d
 } wifi_telemetry_ops_t;
 
 /**
+ * @brief Telemetry Callbacks registration function.
+ * 
  * @param[in] telemetry_ops Telemetry callback functions
  */
 void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
@@ -408,7 +402,7 @@ void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
 INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
 
 /**
- * @brief this call will set the Roaming control data for a client
+ * @brief This API will set the Roaming control data for a client
  *
  * @param[in] ssidIndex this is used to validate the ssid
  * @param[in] pRoamingCtrl_data this is the structure with values to be set
@@ -419,32 +413,32 @@ INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
 int wifi_setRoamingControl (int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
- * @brief this call gets the Roaming control data
+ * @brief This API gets the Roaming control data
  *
  * @param[in] ssidIndex to validate the interface
- * @param[out] pRoamingCtrl_data
+ * @param[out] pRoamingCtrl_data Roaming control configuration
  *
  * @returns GET status
- * @retval 0 if SUCCESSFULLY gets the Roaming control data
+ * @retval 0 if SUCCESSFULLY and gets the Roaming control data
  */
 int wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
- * @brief this call gets the current wifi status
+ * @brief This API gets the current wifi status
  *
- * @returns wifi_status_code
+ * @returns wifi_status_code WIFISTATUS_HAL_COMPLETED
  */
 WiFiHalStatus_t getwifiStatusCode();
 
 /**
- * @brief this call will cancel any in progress WPS operaiotn
+ * @brief This API will cancel any in progress WPS operaiotn
  *
  * @returns WPS cancel status.
- * @retval 0 if SUCCESFULLY cancels WPS operation, false in failure cases.
+ * @retval RETURN_OK if SUCCESFULLY cancels WPS operation, RETURN_ERR in failure cases.
  */
 INT wifi_cancelWpsPairing();
 
-/** @} */
+/** @} */ // End of WIFI_HAL_CLIENT_API
 #else
 #error "! __WIFI_CLINET_HAL_H__"
 #endif

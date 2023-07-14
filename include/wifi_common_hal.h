@@ -257,25 +257,25 @@ typedef enum {
  * @brief wifi wpa supplicant status codes
  */
 typedef enum _WiFiHalStatus_t {
-    WIFISTATUS_HAL_DISCONNECTED,
-    WIFISTATUS_HAL_INTERFACE_DISABLED,
-    WIFISTATUS_HAL_INACTIVE,
-    WIFISTATUS_HAL_SCANNING,
-    WIFISTATUS_HAL_AUTHENTICATING,
-    WIFISTATUS_HAL_ASSOCIATING,
-    WIFISTATUS_HAL_ASSOCIATED,
-    WIFISTATUS_HAL_4WAY_HANDSHAKE,
-    WIFISTATUS_HAL_GROUP_HANDSHAKE,
-    WIFISTATUS_HAL_COMPLETED
+    WIFISTATUS_HAL_DISCONNECTED,          //!< Disconnected to the AP
+    WIFISTATUS_HAL_INTERFACE_DISABLED,    //!< Interface disabled
+    WIFISTATUS_HAL_INACTIVE,              //!< Inactive
+    WIFISTATUS_HAL_SCANNING,              //!< Scanning for list of available SSID's
+    WIFISTATUS_HAL_AUTHENTICATING,        //!< Authenticating 
+    WIFISTATUS_HAL_ASSOCIATING,           //!< Associating to the AP
+    WIFISTATUS_HAL_ASSOCIATED,            //!< Associated
+    WIFISTATUS_HAL_4WAY_HANDSHAKE,        //!< 4 way handshake
+    WIFISTATUS_HAL_GROUP_HANDSHAKE,       //!< Group hand shake
+    WIFISTATUS_HAL_COMPLETED              //!< Completed and connected to AP
 } WiFiHalStatus_t;
 
 /**
  * @brief WiFi Bands
  */
 typedef enum {
-    WIFI_HAL_FREQ_BAN_NONE,
-    WIFI_HAL_FREQ_BAND_24GHZ,
-    WIFI_HAL_FREQ_BAND_5GHZ,
+    WIFI_HAL_FREQ_BAN_NONE,     //!< No frequency band
+    WIFI_HAL_FREQ_BAND_24GHZ,   //!< 2.4Ghz frequency band
+    WIFI_HAL_FREQ_BAND_5GHZ,    //!< 5Ghz frequency band
 } WIFI_HAL_FREQ_BAND;
 
 
@@ -440,7 +440,7 @@ typedef struct _wifi_neighbor_ap
 } wifi_neighbor_ap_t;	//COSA_DML_NEIGHTBOURING_WIFI_RESULT
 
 /**
- * @brief structure for diag_ipping_setting
+ * @brief structure for Diagnostics settings of ip ping
  */
 
 typedef struct _wifi_diag_ipping_setting
@@ -455,7 +455,7 @@ typedef struct _wifi_diag_ipping_setting
 } wifi_diag_ipping_setting_t;
 
 /**
- * @brief structure for diag_ipping_result
+ * @brief structure for Diagnostics result of ip ping
  */
 
 typedef struct _wifi_diag_ipping_result
@@ -470,7 +470,7 @@ typedef struct _wifi_diag_ipping_result
 } wifi_diag_ipping_result_t;
 
 /**
- * @brief structure for sta_stats
+ * @brief structure for AP info
  */
 
 typedef struct _wifi_sta_stats
@@ -489,12 +489,17 @@ typedef struct _wifi_sta_stats
     UINT  sta_Retransmissions;			/**< The number of packets that had to be re-transmitted, from the last 100 packets sent to the access point. \
 											Multiple re-transmissions of the same packet count as one.*/
 } wifi_sta_stats_t;
-/** @} */
+/** @} */ //End of WIFI_HAL_TYPES
 
-//---------------------------------------------------------------------------------------------------
-//Wifi system api
-//Get the wifi hal version in string, eg "2.0.0".  WIFI_HAL_MAJOR_VERSION.WIFI_HAL_MINOR_VERSION.WIFI_HAL_MAINTENANCE_VERSION
-INT wifi_getHalVersion(CHAR *output_string);   //RDKB
+/**
+ * @brief Get the wifi hal version in string, eg "2.0.0".  WIFI_HAL_MAJOR_VERSION.WIFI_HAL_MINOR_VERSION.WIFI_HAL_MAINTENANCE_VERSION
+ *
+ * @param[out] output_string it contains HAL version
+ * @return The status of the operation.
+ * @retval RETURN_OK if successful.
+ * @retval RETURN_ERR if any error is detected. 
+ */
+INT wifi_getHalVersion(CHAR *output_string);
 
 //---------------------------------------------------------------------------------------------------
 //
@@ -551,10 +556,10 @@ INT wifi_factoryResetRadios(); //RDKB
  * calls. It should probably just send a message to a driver event handler task.
  *
  */
-INT wifi_factoryResetRadio(int radioIndex); 	//RDKB
+INT wifi_factoryResetRadio(int radioIndex); 
 
 //Set the system LED status
-//INT wifi_setLED(INT apIndex, BOOL enable);	//RDKB
+//INT wifi_setLED(INT apIndex, BOOL enable);
 
 /**
  * @brief Initializes the wifi subsystem.
@@ -573,7 +578,7 @@ INT wifi_factoryResetRadio(int radioIndex); 	//RDKB
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
-INT wifi_init();                              //RDKB
+INT wifi_init(); 
 
 /**
  * @brief Defines for iface name size
@@ -610,7 +615,7 @@ INT wifi_initWithConfig(wifi_halConfig_t * conf);
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
-INT wifi_reset();                            //RDKB
+INT wifi_reset();
 
 /**
  * @brief Turns off transmit power for the entire Wifi subsystem, for all radios.
@@ -622,7 +627,7 @@ INT wifi_reset();                            //RDKB
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
-INT wifi_down();                       		//RDKB
+INT wifi_down(); 
 
 /**
  * @brief Uninitilizes wifi module.
@@ -632,7 +637,7 @@ INT wifi_down();                       		//RDKB
  * @retval RETURN_ERR if any error is detected.
  */
 INT wifi_uninit();
-                       		//RDKB
+
 /**
  * @brief Creates wifi configuration files.
  *
@@ -653,7 +658,7 @@ INT wifi_createInitialConfigFiles();
 // log wifi parameters  format SSID:   BSSID:  ulChan: Noise:  RSSI:
 
 /**
- * @brief Returns current station connection status.
+ * @brief Gets current station connection status bssid,ssid,rssi,phyrate,noise,Band.
  *
  * @param[in] radioIndex The index of the radio.
  * @param[out] wifi_sta_stats Station status data.
@@ -722,7 +727,7 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);	//RDKB
+INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 
 /**
  * @brief Set the Radio enable config parameter.
@@ -736,7 +741,7 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);	//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_setRadioEnable(INT radioIndex, BOOL enable);		//RDKB
+INT wifi_setRadioEnable(INT radioIndex, BOOL enable);
 
 //Device.WiFi.Radio.{i}.Status
 
@@ -752,7 +757,7 @@ INT wifi_setRadioEnable(INT radioIndex, BOOL enable);		//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);	//RDKB
+INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
 
 //Device.WiFi.Radio.{i}.Alias
 
@@ -792,7 +797,7 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string); //Tr181
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);	//RDKB
+INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 
 //Device.WiFi.Radio.{i}.SupportedFrequencyBands
 
@@ -808,7 +813,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);	//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);	//RDKB
+INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 
 //Device.WiFi.Radio.{i}.OperatingFrequencyBand
 
@@ -830,9 +835,9 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string); //
 //Device.WiFi.Radio.{i}.SupportedStandards
 
 /**
- * @brief Get Supported frequency bands at which the radio can operate.
+ * @brief Get radio supported standards.
  *
- * Output is comma seperated Values. Eg: 2.4Ghz,5Ghz.
+ * Output is comma seperated Values. Eg: b,g,n or a,n,ac.
  *
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores the supported freq band.
@@ -859,7 +864,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string); //Tr18
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);	//RDKB
+INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);
 
 /**
  * @brief Set the radio operating mode and pure mode flag.
@@ -874,7 +879,7 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_setRadioChannelMode(INT radioIndex, CHAR *channelMode, BOOL gOnlyFlag, BOOL nOnlyFlag, BOOL acOnlyFlag);	//RDKB
+INT wifi_setRadioChannelMode(INT radioIndex, CHAR *channelMode, BOOL gOnlyFlag, BOOL nOnlyFlag, BOOL acOnlyFlag);
 
 //Device.WiFi.Radio.{i}.PossibleChannels
 
@@ -893,7 +898,7 @@ INT wifi_setRadioChannelMode(INT radioIndex, CHAR *channelMode, BOOL gOnlyFlag, 
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);	//RDKB
+INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 
 //Device.WiFi.Radio.{i}.ChannelsInUse
 
@@ -907,7 +912,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);	//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);	//RDKB
+INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 
 //Device.WiFi.Radio.{i}.Channel
 
@@ -921,7 +926,7 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);	//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);	//RDKB
+INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 
 /**
  * @brief Set the running channel number.
@@ -933,7 +938,7 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);	//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_setRadioChannel(INT radioIndex, ULONG channel);	//RDKB	//AP only
+INT wifi_setRadioChannel(INT radioIndex, ULONG channel);
 
 //Device.WiFi.Radio.{i}.AutoChannelSupported
 
@@ -959,7 +964,7 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool); //Tr18
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);	//RDKB
+INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
 /**
  * @brief Set the Auto Channel Selection / Dynamic channel selection enable status.
@@ -971,7 +976,7 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);	//RDKB
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_setRadioAutoChannelEnable(INT radioIndex, BOOL enable);	//RDKB
+INT wifi_setRadioAutoChannelEnable(INT radioIndex, BOOL enable);
 
 //Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod
 
@@ -1138,7 +1143,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list); //Tr
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
-INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);	//RDKB
+INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 
 /**
  * @brief Set the transmit power.
@@ -1151,7 +1156,7 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);	//RDKB
  * @retval RETURN_ERR if any error is detected.
  */
 
-INT wifi_setRadioTransmitPower(INT radioIndex, ULONG TransmitPower);	//RDKB
+INT wifi_setRadioTransmitPower(INT radioIndex, ULONG TransmitPower);
 
 //Device.WiFi.Radio.{i}.IEEE80211hSupported
 
@@ -1557,7 +1562,7 @@ INT wifi_setSSIDName(INT apIndex, CHAR *ssid_string);
  * @retval RETURN_ERR if any error is detected.
  *
  */
-INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);	//RDKB
+INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 
 //Device.WiFi.SSID.{i}.MACAddress
 
@@ -1661,7 +1666,7 @@ INT wifi_applySSIDSettings(INT ssidIndex);
 /**
  * @brief Get neighbor wifi diagnostics.
  *
- * Start the wifi scan and get the result into output buffer for RDKB to parser.
+ * Start the wifi scan and get the result into output buffer for RDKV to parser.
  * The result will be used to manage endpoint list.
  *
  * @param[in] radioIndex  The index of the radio
@@ -1726,5 +1731,5 @@ INT wifi_getDualBandSupport();
  *
  */
 INT wifi_waitForScanResults(void);
-/** @} */
+/** @} */ // End of WIFI_HAL_COMMON_API
 #endif
