@@ -1705,7 +1705,7 @@ INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_nei
  * @param[in] freqList frequency list
  *
  * @return The status of the operation.
- * @retval result if successful.
+ * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
 INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
