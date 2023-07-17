@@ -3,13 +3,13 @@
 
 ## Version History
 
-| Date | Author | Comment | Version |
-| --- | --- | --- | --- |
-| 07/14/23 || Initial Release | 0.1.0 |
+| Date (DD/MM/YY) | Comment | Version |
+| --- | --- | --- |
+| 14/07/23 | Initial Release | 0.1.0 |
 
 ## Acronyms
 
-- `HAL` \- Hardware Abstraction Layer, may include some common components
+- `HAL` \- Hardware Abstraction Layer
 - `RDK` \- Reference Design Kit for All Devices
 - `RDK-V` \- Reference Design Kit for Video Devices
 - `Wi-Fi` \- Wireless Radio Networking
@@ -79,7 +79,7 @@ There is no requirement for this component to participate in power management.
 
 ## Asynchronous Notification Model
 
-The below asynchronous callback registration functions are defined and marked in the doxygen comments with token `@execution callback`
+The below asynchronous callback registration functions are defined:
 
 - `wifi_disconnectEndpoint_callback_register()` - for asynchronous notification on disconnect from an AP
 - `wifi_connectEndpoint_callback_register()`- for asynchronous notification on connect to an AP
@@ -177,6 +177,7 @@ sequenceDiagram
     WiFi_HAL->>wpa_supplicant: start
     wpa_supplicant->>WiFi_Driver: wifi driver init
     WiFi_Driver-->>wpa_supplicant: 
+    Note over wpa_supplicant,WiFi_Driver: Init driver interface, register driver event handler
     wpa_supplicant-->>WiFi_HAL: 
     WiFi_HAL->>wpa_supplicant: wpa_ctrl_open
     wpa_supplicant-->>WiFi_HAL: 
@@ -193,15 +194,15 @@ sequenceDiagram
     Note over WiFiNetworkMgr,WiFi_HAL: Example HAL API call
     WiFiNetworkMgr->>WiFi_HAL: wifi_getStats
     WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("STATUS")
-    wpa_supplicant->>WiFi_Driver: 
+    wpa_supplicant->>WiFi_Driver: NL80211_CMD
     WiFi_Driver-->>wpa_supplicant: 
     wpa_supplicant-->>WiFi_HAL: 
     WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("BSS current")
-    wpa_supplicant->>WiFi_Driver: 
+    wpa_supplicant->>WiFi_Driver: NL80211_CMD
     WiFi_Driver-->>wpa_supplicant: 
     wpa_supplicant-->>WiFi_HAL: 
     WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("SIGNAL_POLL")
-    wpa_supplicant->>WiFi_Driver: 
+    wpa_supplicant->>WiFi_Driver: NL80211_CMD
     WiFi_Driver-->>wpa_supplicant: 
     wpa_supplicant-->>WiFi_HAL: 
     WiFi_HAL-->>WiFiNetworkMgr: return wifi stats
