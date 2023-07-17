@@ -1,86 +1,90 @@
 
-# RDKV Wifi HAL Documentation
+# RDK-V Wi-Fi HAL Documentation
 
 ## Version History
 
 | Date | Author | Comment | Version |
 | --- | --- | --- | --- |
-| 07/14/23 | Initial Release | 0.1.0 |
+| 07/14/23 || Initial Release | 0.1.0 |
 
 ## Acronyms
 
 - `HAL` \- Hardware Abstraction Layer, may include some common components
-- `HAL.h` \- Abstracted defined API to control the hardware
-- `HAL.c` \- Implementation wrapper layer created by the `OEM` or `SoC` Vendor
 - `RDK` \- Reference Design Kit for All Devices
 - `RDK-V` \- Reference Design Kit for Video Devices
 - `Wi-Fi` \- Wireless Radio Networking
-- `OEM` \- Original Equipment Manufacturer
-- `SoC` \- System on a Chip
+- `AP` \- Wireless Access Point
 
 ## Description
 
-The Hardware Abstraction Layer (HAL) is to abstract the RDK Wi-Fi requirements at a general level to allow platform independent control.
+The Hardware Abstraction Layer (HAL) is to abstract the RDK-V Wi-Fi requirements at a general level to allow platform independent control.
 
-The picture below shows the relationship between the `HAL`, `Kernel` and the `WiFi Driver`.
+The picture below shows the interactions between `HAL`, `wpa_supplicant` and `Wi-Fi Driver`.
 
-![WiFi HAL DIAGRAM](images/WifiHALDiagram.PNG)
+```mermaid
+%%{ init : { "theme" : "forest", "flowchart" : { "curve" : "linear" }}}%%
+graph TD
+header(HAL header) -.->|implemented by| hal(Vendor HAL)
+hal ---|wpa_cli| wpa(wpa_supplicant)
+wpa ---|nl80211| cfg(cfg80211)
+subgraph kernel
+cfg --- drv(Wi-Fi Driver)
+end
+hal ---|ioctl| drv
+drv --- hw(Wi-Fi Hardware)
+style header fill:#ffa,stroke:#333,stroke-width:0.3px
+style hal fill:#bbdeb8,stroke:#333,stroke-width:0.3px
+style wpa fill:#fc9,stroke:#333,stroke-width:0.3px
+style kernel fill:#fff
+style cfg fill:#0ff,stroke:#333,stroke-width:0.3px
+style drv fill:#0af,stroke:#333,stroke-width:0.3px
+style hw fill:#999,stroke:#333,stroke-width:0.3px
+```
 
 ## Optional Components
 
-The following components are optional and its upto vendor's discretion.
+Use of the following components is recommended but optional and up to the vendor's discretion.
 
-- `wpa_supplicant` is a program that runs in the user space and controls wireless connection.
-
-- `nl80211/cfg80211` nl80211 is the interface between user space software and the kernel (cfg80211 and mac80211 kernel modules, and specific drivers)
-
+- `wpa_supplicant` - user-space daemon software to authenticate the host to a wireless network and to control the wireless connection.
+- `nl80211` - for userspace ←→ kernel communication to configure a cfg80211 device.
+- `cfg80211` - Linux 802.11 configuration API
 
 # Component Runtime Execution Requirements
 
-It should be statically loadable library. There should one HAL interface for the system.
-
-The lifetime of which shall exists throughout the lifetime of process.
+It should be a statically loadable library. There should be one Wi-Fi HAL interface for the system, the lifetime of which shall exist throughout the lifetime of the process.
 
 Failure to meet these requirements will likely result in undefined and unexpected behaviour.
 
 ## Initialization and Startup
 
-Initialize the Wifi `HAL` using `wifi_init()` before making any other calls.
+Initialize the Wi-Fi HAL using `wifi_init()` before making any other call.
 
-The kernel boot sequence is expected to start all the dependencies for the WiFi HAL.
+The kernel boot sequence is expected to start all dependencies of the Wi-Fi HAL.
 
 ## Threading Model
 
-`HAL` is expected to be thread safe.
-
-There is no restriction on the vendor to create any number of threads to meet the operational requirements.
+The Wi-Fi HAL is expected to be thread-safe. There is no restriction on the number of threads created.
 
 ## Process Model
 
-A single instance is expected to exist. And only one instance will be initialized.
+A single instance of the Wi-Fi HAL is expected to exist, and only one instance will be initialized.
 
 ## Memory Model
 
-Where `HAL` creates any memory, then `HAL` will be expected to own it.
-Where `client` creates memory, then `client` is expected to own it.
-
-Exceptions to these rules can be specified in the API documentation.
+The Wi-Fi HAL will own any memory that it creates. The client will own any memory that it creates. Exceptions to these rules can be specified in the API documentation.
 
 ## Power Management Requirements
 
-There is no requirement for the component to participate in power management.
+There is no requirement for this component to participate in power management.
 
 ## Asynchronous Notification Model
 
-There are number of asynchronous callback registration functions these are defined by `xxx_callback_register()`
-and marked in the doxygen comments with token `@execution callback`
+The below asynchronous callback registration functions are defined and marked in the doxygen comments with token `@execution callback`
 
-As a few examples of this are:-
+- `wifi_disconnectEndpoint_callback_register()` - for asynchronous notification on disconnect from an AP
+- `wifi_connectEndpoint_callback_register()`- for asynchronous notification on connect to an AP
 
-- For asynchronous notification on disconnect from an AP - `wifi_disconnectEndpoint_callback_register()`
-- For asynchronous notification on connection to an AP - `wifi_connectEndpoint_callback_register()`
-
-During callbacks the client is responsible to create a copy of data if any, unless otherwise specified in the API documentation.
+During callbacks, the client is responsible for the creation of any copies of data it might need unless otherwise specified in the API documentation.
 
 ## Blocking calls
 
@@ -88,42 +92,41 @@ None of the calls in the interface should block.
 
 ## Internal Error Handling
 
-All the APIs define a list of return codes, each API must be capable of returning all of the codes defined, the `UT` if possible, will create cases
+All the APIs define a list of return codes. Each API must be capable of returning all of the codes defined. The `UT`, if possible, will create cases
 for the error codes to be exercised.
 
-HAL is responsible to handle system errors (e.g., failure of memory allocation, array boundary out of memory, return code check), and returning
-only the fixed returned codes as defined in the `API` specification.
+The Wi-Fi HAL is responsible for handling any system errors such as memory allocation failures and performing any checks such as array out-of-bounds checks and return-code checks before returning the return codes as defined in the `API` specification.
 
 ## Persistence Model
 
-Wifi HAL configuration will be maintained by upper layer.
+The Wi-Fi HAL configuration will be maintained by the upper layer.
 
-# Non functional requirements
+# Non-functional requirements
 
-Following non-functional requirement should be supported by the component.
+The following non-functional requirements should be supported by the component.
 
-## Logging and debugging requirements
+## Logging and Debugging requirements
 
-The component should log all the error and critical informative messages.
-This helps to debug/triage the issues and understand the functional flow of the system.
+The component must log all error, warning and informational messages. This helps to debug/triage issues and understand the functional flow of the system.
 
-The logging should be consistance across all HAL components.
+Logging should be consistent across all components of the Wi-Fi HAL.
 
 Logging should be defined with log levels as per Linux standard logging.
-## Memory and performance requirements
 
-During idle and Standby, memory and CPU utilization will be a minimal footprint.
+## Memory and Performance requirements
 
-Refer to product specification for guidance on maximum CPU load average and memory requirements.
+During idle and standby, memory and CPU utilization footprints should be minimal.
+
+Refer to product specification for guidance on maximum CPU load-average and memory requirements.
 
 ## Quality Control
 
-The vendor should endeavour to:-
+The vendor should endeavour to:
 
-- Run a static analysis tool like Coverity etc
-- Have a zero-warning policy with regards to compiling. All warnings should be enabled by default in the makefiles.
-- Use of memory analysis tools like Valgrind are encouraged, to identify leaks/corruptions.
-- `HAL` Tests will endeavour to create worst case scenarios to assist investigations
+- have a zero-warning policy with regards to compilation of the Wi-Fi HAL code. All warnings should be enabled by default in the makefiles.
+- run a static analysis tool like Coverity on the Wi-Fi HAL code.
+- run a memory analysis tool like Valgrind on the Wi-Fi HAL code to identify leaks/corruptions.
+- create Wi-Fi HAL tests with worst-case scenarios to assist investigations.
 
 ## Licensing
 
@@ -153,8 +156,6 @@ Example of this would be:-
 #enidf
 ```
 
-The interface will maintain `getCapabilities()` functionality, and the upper layers will use this to determine available features.
-
 # Interface API Documentation
 
 The interface is documented by Doxygen and will be included with this release.
@@ -164,3 +165,50 @@ The interface is documented by Doxygen and will be included with this release.
 Covered as per "Description" sections in the API documentation.
 
 ## Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    participant WiFiNetworkMgr
+    participant WiFi_HAL
+    participant wpa_supplicant
+    participant WiFi_Driver
+
+    WiFiNetworkMgr->>WiFi_HAL: wifi_init()
+    WiFi_HAL->>wpa_supplicant: start
+    wpa_supplicant->>WiFi_Driver: wifi driver init
+    WiFi_Driver-->>wpa_supplicant: 
+    wpa_supplicant-->>WiFi_HAL: 
+    WiFi_HAL->>wpa_supplicant: wpa_ctrl_open
+    wpa_supplicant-->>WiFi_HAL: 
+    Note over wpa_supplicant,WiFi_HAL: get wpa_ctrl interface for sending commands
+    WiFi_HAL->>wpa_supplicant: wpa_ctrl_open
+    wpa_supplicant-->>WiFi_HAL: 
+    Note over wpa_supplicant,WiFi_HAL: get wpa_ctrl interface for event monitoring
+    WiFi_HAL->>wpa_supplicant: wpa_ctrl_attach
+    wpa_supplicant-->>WiFi_HAL: 
+    Note over wpa_supplicant,WiFi_HAL: register for event monitoring
+    WiFi_HAL-->>WiFiNetworkMgr: return wifi init status
+    Note over WiFi_HAL: System is up and running
+
+    Note over WiFiNetworkMgr,WiFi_HAL: Example HAL API call
+    WiFiNetworkMgr->>WiFi_HAL: wifi_getStats
+    WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("STATUS")
+    wpa_supplicant->>WiFi_Driver: 
+    WiFi_Driver-->>wpa_supplicant: 
+    wpa_supplicant-->>WiFi_HAL: 
+    WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("BSS current")
+    wpa_supplicant->>WiFi_Driver: 
+    WiFi_Driver-->>wpa_supplicant: 
+    wpa_supplicant-->>WiFi_HAL: 
+    WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("SIGNAL_POLL")
+    wpa_supplicant->>WiFi_Driver: 
+    WiFi_Driver-->>wpa_supplicant: 
+    wpa_supplicant-->>WiFi_HAL: 
+    WiFi_HAL-->>WiFiNetworkMgr: return wifi stats
+
+    Note over WiFiNetworkMgr,WiFi_HAL: Example HAL callback
+    WiFiNetworkMgr->>WiFi_HAL: wifi_disconnectEndpoint_callback_register
+    WiFi_Driver->>wpa_supplicant: NL80211_CMD_DISCONNECT
+    wpa_supplicant->>WiFi_HAL: CTRL-EVENT-DISCONNECTED
+    WiFi_HAL->>WiFiNetworkMgr: wifi_disconnectEndpoint_callback
+```
