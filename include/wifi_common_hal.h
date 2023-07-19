@@ -28,7 +28,7 @@
     description:
 
         This header file gives the function call prototypes and
-        structure definitions used for the RDK-Broadband
+        structure definitions used for the RDK-Video
         Wifi radio hardware abstraction layer
 
         NOTE:
@@ -271,6 +271,7 @@ typedef enum _WiFiHalStatus_t {
 
 /**
  * @brief WiFi Bands
+ * @todo Need to change WIFI_HAL_FREQ_BAN_NONE to WIFI_HAL_FREQ_BAND_NONE
  */
 typedef enum {
     WIFI_HAL_FREQ_BAN_NONE,     //!< No frequency band
@@ -524,7 +525,7 @@ INT wifi_getHalVersion(CHAR *output_string);
  * @note This function must not suspend and must not invoke any blocking system 
  * calls. It should probably just send a message to a driver event handler task. 
  */
-INT wifi_factoryReset();	//RDKB
+INT wifi_factoryReset();
 
 /**
  * @brief Reset all radio parameters.
@@ -538,7 +539,7 @@ INT wifi_factoryReset();	//RDKB
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
-INT wifi_factoryResetRadios(); //RDKB
+INT wifi_factoryResetRadios();
 
 /**
  * @brief Reset specified radio parameter.
@@ -575,6 +576,7 @@ INT wifi_factoryResetRadio(int radioIndex);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @see wifi_uninit()
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
@@ -601,6 +603,8 @@ typedef struct _wifi_halSettings
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 
 INT wifi_initWithConfig(wifi_halConfig_t * conf);
@@ -612,6 +616,7 @@ INT wifi_initWithConfig(wifi_halConfig_t * conf);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should  be called  before calling this API.
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
@@ -624,6 +629,7 @@ INT wifi_reset();
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
@@ -635,6 +641,9 @@ INT wifi_down();
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_init()
  */
 INT wifi_uninit();
 
@@ -650,6 +659,7 @@ INT wifi_uninit();
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected. 
  *
+ * @pre wifi_init() should be called  before calling this API.
  * @note This function must not suspend and must not invoke any blocking system 
  * calls. It should probably just send a message to a driver event handler task. 
  */
@@ -662,6 +672,9 @@ INT wifi_createInitialConfigFiles();
  *
  * @param[in] radioIndex The index of the radio.
  * @param[out] wifi_sta_stats Station status data.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "wifi_sta_stats" must be preallocated by the caller.
  */
 void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
 
@@ -681,6 +694,8 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected. 
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getRadioNumberOfEntries(ULONG *output); //Tr181
 
@@ -694,6 +709,8 @@ INT wifi_getRadioNumberOfEntries(ULONG *output); //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected. 
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
 
@@ -726,6 +743,10 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
+ * @see wifi_setRadioEnable()
  */
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 
@@ -740,6 +761,9 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioStatus()
  */
 INT wifi_setRadioEnable(INT radioIndex, BOOL enable);
 
@@ -756,6 +780,9 @@ INT wifi_setRadioEnable(INT radioIndex, BOOL enable);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
 
@@ -772,6 +799,9 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string); //Tr181
 
@@ -796,6 +826,9 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string); //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 
@@ -812,6 +845,9 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 
@@ -829,6 +865,10 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
+ * @see wifi_getRadioSupportedFrequencyBands()
  */
 INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string); //Tr181
 
@@ -845,6 +885,9 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string); //
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string); //Tr181
 
@@ -863,6 +906,9 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string); //Tr18
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioSupportedStandards() wifi_setRadioChannelMode()
  */
 INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);
 
@@ -878,6 +924,9 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioStandard()
  */
 INT wifi_setRadioChannelMode(INT radioIndex, CHAR *channelMode, BOOL gOnlyFlag, BOOL nOnlyFlag, BOOL acOnlyFlag);
 
@@ -897,6 +946,9 @@ INT wifi_setRadioChannelMode(INT radioIndex, CHAR *channelMode, BOOL gOnlyFlag, 
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 
@@ -911,6 +963,10 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
+ * @see wifi_getRadioPossibleChannels()
  */
 INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 
@@ -925,6 +981,9 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioChannel()
  */
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 
@@ -937,6 +996,9 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioChannel()
  */
 INT wifi_setRadioChannel(INT radioIndex, ULONG channel);
 
@@ -951,6 +1013,9 @@ INT wifi_setRadioChannel(INT radioIndex, ULONG channel);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_bool" buffer must be preallocated by the caller.
  */
 INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool); //Tr181
 
@@ -963,6 +1028,10 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool); //Tr18
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_bool" buffer must be preallocated by the caller.
+ * @see wifi_setRadioAutoChannelEnable() wifi_getRadioAutoChannelSupported()
  */
 INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
@@ -975,6 +1044,9 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioAutoChannelEnable()
  */
 INT wifi_setRadioAutoChannelEnable(INT radioIndex, BOOL enable);
 
@@ -989,6 +1061,10 @@ INT wifi_setRadioAutoChannelEnable(INT radioIndex, BOOL enable);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_ulong" buffer must be preallocated by the caller.
+ * @see wifi_setRadioAutoChannelRefreshPeriod()
  */
 
 INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong); //Tr181
@@ -1002,6 +1078,9 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong); 
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioAutoChannelRefreshPeriod()
  */
 INT wifi_setRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG seconds); //Tr181
 
@@ -1018,6 +1097,10 @@ INT wifi_setRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG seconds); //Tr18
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
+ * @see wifi_setRadioOperatingChannelBandwidth()
  */
 INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string); //Tr181
 
@@ -1030,6 +1113,9 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioOperatingChannelBandwidth()
  */
 INT wifi_setRadioOperatingChannelBandwidth(INT radioIndex, CHAR *bandwidth); //Tr181	//AP only
 
@@ -1048,6 +1134,10 @@ INT wifi_setRadioOperatingChannelBandwidth(INT radioIndex, CHAR *bandwidth); //T
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
+ * @see wifi_setRadioExtChannel()
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string); //Tr181
 
@@ -1060,6 +1150,9 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string); //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioExtChannel()
  */
 INT wifi_setRadioExtChannel(INT radioIndex, CHAR *string); //Tr181	//AP only
 
@@ -1074,6 +1167,10 @@ INT wifi_setRadioExtChannel(INT radioIndex, CHAR *string); //Tr181	//AP only
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
+ * @see wifi_setRadioGuardInterval()
  */
 INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);	//Tr181
 
@@ -1086,6 +1183,9 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);	//Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioGuardInterval()
  */
 INT wifi_setRadioGuardInterval(INT radioIndex, CHAR *string);	//Tr181
 
@@ -1100,6 +1200,9 @@ INT wifi_setRadioGuardInterval(INT radioIndex, CHAR *string);	//Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioMCS()
  */
 INT wifi_getRadioMCS(INT radioIndex, INT *output_INT); //Tr181
 
@@ -1112,6 +1215,9 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT); //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioMCS()
  */
 INT wifi_setRadioMCS(INT radioIndex, INT MCS); //Tr181
 
@@ -1126,6 +1232,10 @@ INT wifi_setRadioMCS(INT radioIndex, INT MCS); //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_list" buffer must be preallocated by the caller.
+ * 
  */
 INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list); //Tr181
 
@@ -1142,6 +1252,9 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list); //Tr
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioTransmitPower() wifi_getRadioTransmitPowerSupported()
  */
 INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 
@@ -1154,6 +1267,9 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioTransmitPower()
  */
 
 INT wifi_setRadioTransmitPower(INT radioIndex, ULONG TransmitPower);
@@ -1171,6 +1287,9 @@ INT wifi_setRadioTransmitPower(INT radioIndex, ULONG TransmitPower);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "Supported" buffer must be preallocated by the caller.
  */
 int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);  //Tr181
 
@@ -1185,6 +1304,9 @@ int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);  //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioIEEE80211hEnabled()
  */
 int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);  //Tr181
 
@@ -1197,6 +1319,9 @@ int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);  //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioIEEE80211hEnabled()
  */
 int wifi_setRadioIEEE80211hEnabled(INT radioIndex, BOOL enable);  //Tr181
 
@@ -1214,6 +1339,9 @@ int wifi_setRadioIEEE80211hEnabled(INT radioIndex, BOOL enable);  //Tr181
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 
@@ -1228,6 +1356,8 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getRadioCarrierSenseThresholdRange(INT radioIndex, INT *output);  //P3
 
@@ -1246,6 +1376,9 @@ INT wifi_getRadioCarrierSenseThresholdRange(INT radioIndex, INT *output);  //P3
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioCarrierSenseThresholdInUse()
  */
 INT wifi_getRadioCarrierSenseThresholdInUse(INT radioIndex, INT *output);	//P3
 
@@ -1258,6 +1391,9 @@ INT wifi_getRadioCarrierSenseThresholdInUse(INT radioIndex, INT *output);	//P3
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioCarrierSenseThresholdInUse()
  */
 INT wifi_setRadioCarrierSenseThresholdInUse(INT radioIndex, INT threshold);	//P3
 
@@ -1274,6 +1410,8 @@ INT wifi_setRadioCarrierSenseThresholdInUse(INT radioIndex, INT threshold);	//P3
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getRadioChannelSwitchingCount(INT radioIndex, INT *output); 	//P3
 
@@ -1290,6 +1428,9 @@ INT wifi_getRadioChannelSwitchingCount(INT radioIndex, INT *output); 	//P3
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioBeaconPeriod()
  */
 INT wifi_getRadioBeaconPeriod(INT radioIndex, UINT *output);
 
@@ -1302,6 +1443,9 @@ INT wifi_getRadioBeaconPeriod(INT radioIndex, UINT *output);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioBeaconPeriod()
  */
 INT wifi_setRadioBeaconPeriod(INT radioIndex, UINT BeaconPeriod);
 
@@ -1323,11 +1467,14 @@ INT wifi_setRadioBeaconPeriod(INT radioIndex, UINT BeaconPeriod);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioBasicDataTransmitRates()
  */
 INT wifi_getRadioBasicDataTransmitRates(INT radioIndex, CHAR *output);
 
 /**
- * @brief The basic data transmit rate.
+ * @brief The set basic data transmit rate.
  *
  * @param[in] radioIndex The index of the radio.
  * @param[out] TransmitRates The transmit rate to set.
@@ -1335,6 +1482,9 @@ INT wifi_getRadioBasicDataTransmitRates(INT radioIndex, CHAR *output);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioBasicDataTransmitRates()
  */
 
 INT wifi_setRadioBasicDataTransmitRates(INT radioIndex, CHAR *TransmitRates);
@@ -1373,6 +1523,9 @@ INT wifi_setRadioBasicDataTransmitRates(INT radioIndex, CHAR *TransmitRates);
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setRadioTrafficStatsMeasure()
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct); //Tr181
 
@@ -1388,6 +1541,9 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getRadioTrafficStats
  */
 INT wifi_setRadioTrafficStatsMeasure(INT radioIndex, wifi_radioTrafficStatsMeasure_t *input_struct); //Tr181
 
@@ -1401,7 +1557,7 @@ INT wifi_setRadioTrafficStatsMeasure(INT radioIndex, wifi_radioTrafficStatsMeasu
  * @brief Set radio traffic static Measuring rules.
  *
  * Clients associated with the AP over a specific interval.
- * The histogram MUST have a range from -110to 0 dBm and MUST be divided in bins of 3 dBM, with bins aligning on the -110 dBm
+ * The histogram MUST have a range from -110 to 0 dBm and MUST be divided in bins of 3 dBM, with bins aligning on the -110 dBm
  * end of the range.  Received signal levels equal to or greater than the smaller boundary of a bin and less than the larger
  * boundary are included in the respective bin.
  *
@@ -1427,6 +1583,8 @@ INT wifi_setRadioTrafficStatsMeasure(INT radioIndex, wifi_radioTrafficStatsMeasu
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getRadioStatsReceivedSignalLevel(INT radioIndex, INT signalIndex, INT *SignalLevel); //Tr181
 
@@ -1441,6 +1599,8 @@ INT wifi_getRadioStatsReceivedSignalLevel(INT radioIndex, INT signalIndex, INT *
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_applyRadioSettings(INT radioIndex);
 
@@ -1456,11 +1616,13 @@ INT wifi_applyRadioSettings(INT radioIndex);
  * @brief Get the radio index assocated with the SSID entry
  *
  * @param[in] ssidIndex The index of the ssid.
- * @param[in] radioIndex The index of the SSID
+ * @param[in] radioIndex The index of the Radio.
  *
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDRadioIndex(INT ssidIndex, INT *radioIndex);
 
@@ -1476,6 +1638,7 @@ INT wifi_getSSIDRadioIndex(INT ssidIndex, INT *radioIndex);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool); //Tr181
 
@@ -1489,6 +1652,8 @@ INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool); //Tr181
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_getSSIDStatus()
  */
 INT wifi_setSSIDEnable(INT ssidIndex, BOOL enable); //Tr181
 
@@ -1504,6 +1669,8 @@ INT wifi_setSSIDEnable(INT ssidIndex, BOOL enable); //Tr181
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
+ * @see wifi_setSSIDEnable()
  */
 INT wifi_getSSIDStatus(INT ssidIndex, CHAR *output_string); //Tr181
 
@@ -1515,7 +1682,6 @@ INT wifi_getSSIDStatus(INT ssidIndex, CHAR *output_string); //Tr181
  * @brief Get SSID name.
  *
  * Outputs a 32 byte or less string indicating the SSID name.
- * Sring buffer must be preallocated by the caller.
  *
  * @param[in] apIndex The index of the access point.
  * @param[out] output_string String which holds the SSID name.
@@ -1524,6 +1690,8 @@ INT wifi_getSSIDStatus(INT ssidIndex, CHAR *output_string); //Tr181
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
 
@@ -1539,6 +1707,7 @@ INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_setSSIDName(INT apIndex, CHAR *ssid_string);
 
@@ -1561,6 +1730,8 @@ INT wifi_setSSIDName(INT apIndex, CHAR *ssid_string);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API..
+ * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 
@@ -1576,6 +1747,7 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API..
  */
 INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string); //Tr181
 
@@ -1617,6 +1789,7 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string); //Tr181
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct); //Tr181
 
@@ -1631,6 +1804,7 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_applySSIDSettings(INT ssidIndex);
 
@@ -1677,6 +1851,7 @@ INT wifi_applySSIDSettings(INT ssidIndex);
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  * @note HAL function should allocate an data structure array, and return to caller with "neighbor_ap_array".
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size); //Tr181
@@ -1684,7 +1859,7 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
 /**
  * @brief Get Specific SSID Info.
  *
- * Start the wifi scan and get the result into output buffer for RDKB to parser.
+ * Start the wifi scan and get the result into output buffer for RDKV to parser.
  * The result will be used to manage endpoint list.
  *
  * @param[in] SSID  SSID name
@@ -1695,6 +1870,8 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **filtered_ap_array, UINT *output_array_size);
 
@@ -1707,6 +1884,8 @@ INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_nei
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
 
@@ -1716,6 +1895,8 @@ INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
  * @return The status of the operation.
  * @retval 1 if dual band support enabled.
  * @retval 0 if dual band support disabled.
+ * 
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getDualBandSupport();
 
@@ -1729,6 +1910,7 @@ INT wifi_getDualBandSupport();
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
+ * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_waitForScanResults(void);
 /** @} */ // End of WIFI_HAL_COMMON_API
