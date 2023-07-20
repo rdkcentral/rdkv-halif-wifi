@@ -5,13 +5,11 @@
 
 | Date (DD/MM/YY) | Comment | Version |
 | --- | --- | --- |
-| 14/07/23 | Initial Release | 0.1.0 |
+| 14/07/23 | Initial Release | 1.0.0 |
 
 ## Table of Contents
 
 - [RDK-V Wi-Fi HAL Documentation](#rdk-v-wi-fi-hal-documentation)
-  - [Version History](#version-history)
-  - [Table of Contents](#table-of-contents)
   - [Acronyms](#acronyms)
   - [Description](#description)
   - [Component Runtime Execution Requirements](#component-runtime-execution-requirements)
@@ -43,13 +41,28 @@
 - `Wi-Fi` - Wireless Radio Networking
 - `HAL` - Hardware Abstraction Layer
 - `API` - Application Programming Interface
+- `Caller` - Any user of the interface via the `API`s
 - `AP` - Wireless Access Point
+- `SSID` - Service Set IDentifier
+- `BSSID` - Basic Service Set IDentifier
+- `MAC` - Media Access Control
+- `WEP` - Wired Equivalent Privacy
+- `WPA2` - Wi-Fi Protected Access 2
+- `WPA3` - Wi-Fi Protected Access 3
+- `PSK` - Pre-Shared Key
+- `EAP` - Extensible Authentication Protocol
+- `802.11` - Set of standards that define communication for Wireless Local Area Networks
+- `AES` - Advanced Encryption Standard
+- `TKIP` - Temporal Key Integrity Protocol
+- `PHY` - Physical Layer
+- `RSSI` - Received Signal Strength Indicator
+- `WPS` - Wi-Fi Protected Setup
 
 ## Description
 
-This interface is to abstract the RDK-V Wi-Fi requirements at a general level to allow platform independent control.
+This interface is to abstract the `RDK-V` `Wi-Fi` `HAL` requirements at a general level to allow platform independent control.
 
-The picture below shows the interactions between `Caller`, `Wi-Fi HAL` and `Wi-Fi Driver`.
+The picture below shows the interactions between `Caller`, `Wi-Fi` `HAL` and `Wi-Fi` Driver.
 
 ```mermaid
 %%{ init : { "theme" : "forest", "flowchart" : { "curve" : "linear" }}}%%
@@ -63,58 +76,60 @@ style drv fill:#0af,stroke:#333,stroke-width:0.3px
 
 ## Component Runtime Execution Requirements
 
-These requirements ensure that the HAL executes correctly within the run-time environment that it will be used in.
+These requirements ensure that the `HAL` executes correctly within the run-time environment that it will be used in.
 
 ### Initialization and Startup
 
-`Caller` is expected to initialize Wi-Fi `HAL` by calling `wifi_init` before any other call. The kernel boot sequence is expected to start all dependencies of Wi-Fi `HAL`. When `wifi_uninit` is called, any resources allocated by `wifi_init` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init` and `wifi_uninit` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down Wi-Fi whenever ethernet is plugged in and to start up Wi-Fi whenever ethernet is plugged out.
+`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
 
 ### Threading Model
 
-This interface is required to be thread-safe as it could be invoked from multiple `Caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit` must cause all created threads to be terminated.
+<!-- @todo Check if Wi-Fi HAL is called from more than one caller thread -->
+
+This interface is required to be thread-safe as it could be invoked from multiple `caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit()` must cause all created threads to be terminated.
 
 ### Process Model
 
-There is only one `Caller` process that will initialize and use Wi-Fi `HAL`. The interface is expected to support a single instantiation with a single process.
+<!-- @todo Say results are undefined if HAL is called from more than one process -->
+
+The interface is expected to support a single instantiation with a single process.
 
 ### Memory Model
 
-The Wi-Fi `HAL` will own any memory that it creates. The `Caller` will own any memory that it creates. Exceptions to these rules will be specified in the API documentation.
+The `Wi-Fi` `HAL` will own any memory that it creates. The `Caller` will own any memory that it creates. Exceptions to these rules are the `API`s `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who must deallocate this memory.
 
 ### Power Management Requirements
 
-There is no requirement for this component to participate in power management.
+This interface is not required to be involved in power management.
 
 ### Asynchronous Notification Model
 
-The below callback registration functions are defined by the HAL interface:
+The below callback registration functions are defined by the `HAL` interface:
 
-- `wifi_connectEndpoint_callback_register()`- to register a callback for asynchronous notification on connect to an AP
-- `wifi_disconnectEndpoint_callback_register()` - to register a callback for asynchronous notification on disconnect from an AP
+- `wifi_connectEndpoint_callback_register()`- to register a callback for asynchronous notification on connect to an `AP`
+- `wifi_disconnectEndpoint_callback_register()` - to register a callback for asynchronous notification on disconnect from an `AP`
 
-`HAL` must make these callbacks from a `HAL` thread. `Caller` must not make any calls to `HAL` from this thread.
-
-During callbacks, `Caller` is responsible for the creation of any copies of data it might need unless otherwise specified in the API documentation.
+Callback functions must originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
 
 ### Blocking calls
 
-None of the calls in the interface should block.
+This interface is required to have no blocking calls.
 
 ### Internal Error Handling
 
-All APIs must return errors synchronously as a return argument. The interface is responsible for managing its internal errors.
+All `API`s must return errors synchronously as a return argument. The interface is responsible for managing its internal errors.
 
 ### Persistence Model
 
-Wi-Fi `HAL` is expected to persist the following configurations:
-- Wi-Fi credentials for the last Wi-Fi network that was successfully connected to
-- Wi-Fi roaming controls
+`Wi-Fi` `HAL` is expected to persist the following configurations:
+- `Wi-Fi` credentials for the last `Wi-Fi` network that was successfully connected to
+- `Wi-Fi` roaming controls
 
-These configurations must be applied on every `HAL` initialization. These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations.
+These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations.
 
 ## Non-functional requirements
 
-The following non-functional requirements should be supported by the component.
+The following non-functional requirements should be supported by the component:
 
 ### Logging and Debugging requirements
 
@@ -122,7 +137,7 @@ This component is required to log all ERROR, WARNING and INFO messages. DEBUG me
 
 ### Memory and Performance requirements
 
-This component is required to use minimal memory and CPU resources when the device is idle or in standby.
+This interface is required to not cause excessive memory and CPU utilization.
 
 ### Quality Control
 
@@ -130,16 +145,16 @@ This component is required to use minimal memory and CPU resources when the devi
 * Have a zero-warning policy with regards to compiling. All warnings are required to be treated as errors.
 * Copyright validation is required to be performed, e.g.: Black duck, FossID.
 * Use of memory analysis tools like Valgrind are encouraged, to identify leaks/corruptions.
-* HAL Tests will endeavour to create worst-case scenarios to assist investigations.
+* `HAL` Tests will endeavour to create worst-case scenarios to assist investigations.
 * Improvements by any party to the testing suite are required to be fed back.
 
 ### Licensing
 
-The Wi-Fi `HAL` header file is released under the Apache 2.0 license. The implementation may use any license compatible with the aforementioned header file.
+This interface is required to be released under the Apache License 2.0.
 
 ### Build Requirements
 
-The Wi-Fi `HAL` source code must build into a shared library named `libwifihal.so`.
+This interface is required to build into shared library. The shared library must be named libwifihal.so. The building mechanism must be independent of Yocto.
 
 ### Variability Management
 
@@ -147,7 +162,7 @@ Any change to the interface must be reviewed and approved by component architect
 
 ### Platform or Product Customization
 
-Wi-Fi HAL is not required to support platform-specific customizations.
+`Wi-Fi` `HAL` is not required to support platform-specific customizations.
 
 ## Interface API Documentation
 
@@ -155,19 +170,21 @@ Wi-Fi HAL is not required to support platform-specific customizations.
 
 ### Theory of operation
 
-After having called `wifi_init`, `Caller` can use this interface to get various Wi-Fi settings such as:
+Calling `wifi_init()` is a necessary precondition for the remaining `API`s to work.
+
+`Caller` must use this interface to get various `Wi-Fi` settings such as:
 
 - Radio status (on/off)
-- SSID name
-- BSSID/Router MAC
+- `SSID` name
+- `BSSID` / `Wi-Fi` Router `MAC` address
 - Regulatory domain
 - Operating frequency/channel
 - Operating channel bandwidth
-- Radio standard (802.11 a / b / g / n / ac / ax / etc.)
-- Security mode (WPA2-PSK / WPA2-EAP / etc.)
-- Encryption type (AES / TKIP / etc.)
-- Phy rate
-- RSSI (received signal strength indicator)
+- Radio standard (`802.11` a / b / g / n / ac / ax / etc.)
+- Security mode (Open, `WEP`, `WPA2`-`PSK` / `WPA2`-`EAP` / `WPA3` / etc.)
+- Encryption type (`AES` / `TKIP` / etc.)
+- `PHY` rate
+- `RSSI`
 - Noise
 - Last data downlink rate
 - Last data uplink rate
@@ -178,21 +195,23 @@ After having called `wifi_init`, `Caller` can use this interface to get various 
 
 and to perform actions such as:
 
-- get scan results
-- connect to a Wi-Fi network using password
-- connect to a Wi-Fi network using WPS Push Button / WPS PIN
-- disconnect from a Wi-Fi network
-- cancel an in-progress WPS
-- clear current network configuration
-- set/get Wi-Fi roaming controls
+- Get `Wi-Fi` scan results
+- Connect to a `Wi-Fi` network using password
+- Connect to a `Wi-Fi` network using `WPS` Push Button / `WPS` PIN
+- Disconnect from a `Wi-Fi` network
+- Cancel an in-progress `WPS`
+- Clear current `Wi-Fi` network configuration
+- Get/Set `Wi-Fi` roaming controls
 
 The interface will provide notifications via callbacks regarding various events such as:
 
-- Wi-Fi connection in progress
-- Wi-Fi connected
-- Wi-Fi disconnected
-- Wi-Fi network not found
-- Wi-Fi connection failed / invalid credentials / auth failed
+- `Wi-Fi` connection in progress
+- `Wi-Fi` connected
+- `Wi-Fi` disconnected
+- `Wi-Fi` network not found
+- `Wi-Fi` connection failed / invalid credentials / auth failed
+
+<!-- @todo All these callbacks must be mentioned under "Asynchronous Notification Model" subsection -->
 
 ### Diagrams
 
