@@ -49,8 +49,8 @@
 #define __WIFI_CLINET_HAL_H__
 
 /**
- * @defgroup WIFI_HAL Wi-Fi HAL Public APIs and Data Types
- * @ingroup WIFI
+ * @defgroup WIFI_HAL Wi-Fi HAL
+ * @ingroup HPK
  *
  * @defgroup WIFI_HAL_CLIENT_API Wi-Fi Client HAL API List
  * Wi-Fi Client HAL provides an interface (data structures and API) to interact with underlying Wi-Fi driver and
@@ -104,39 +104,41 @@
  */
 
 /**
+ * @struct _wifi_pairedSSIDInfo wifi_client_hal.h "include/wifi_client_hal.h"
  * @brief Structure for SSID information
  *
- * Structure which saves the paired SSID information.
+ * This structure stores the paired SSID information
  */
 typedef struct _wifi_pairedSSIDInfo
 {
-  CHAR  ap_ssid[64];	//!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
-  CHAR  ap_bssid[64];	//!< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID.
-  CHAR  ap_security[64];	//!< Security of AP
+  CHAR  ap_ssid[64];	      //!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
+  CHAR  ap_bssid[64];	      //!< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID.
+  CHAR  ap_security[64];	  //!< Security of AP
   CHAR  ap_passphrase[128]; //!< Passphrase of AP
-  CHAR  ap_wep_key[128]; //!< wep_key of AP incase of WEP security
+  CHAR  ap_wep_key[128];    //!< wep_key of AP incase of WEP security
 }wifi_pairedSSIDInfo_t;
 
 /**
- *  @brief Structure for Roaming Control information (pre assoc data structure}
+ * @struct _wifi_roamingCtrl_t wifi_client_hal.h "include/wifi_client_hal.h"
+ * @brief Structure for Roaming Control information (pre assoc data structure)
  *
- *  Structure which saves pre association information.
+ * Thi structure stores the pre association information.
  */
 typedef struct _wifi_roamingCtrl_t
 {
-  BOOL roamingEnable;       //!< roamingEnable enabled or not
-  BOOL selfSteerOverride;   //!< selfSteerOverride enabled or not
-  BOOL roam80211kvrEnable;  //!< roam80211kvrEnable enabled or not
-  INT preassnBestThreshold; //!<  preassnBestThreshold best threshold
-  INT preassnBestDelta;     //!<  preassnBestDelta best delta
-  INT postAssnLevelDeltaConnected;      //!<  postAssnLevelDeltaConnected
-  INT postAssnLevelDeltaDisconnected;   //!<  postAssnLevelDeltaDisconnected
-  INT postAssnSelfSteerThreshold;       //!<  postAssnSelfSteerThreshold
-  INT postAssnSelfSteerTimeframe;       //!<  postAssnSelfSteerTimeframe
-  INT postAssnBackOffTime;              //!<  postAssnBackOffTime
+  BOOL roamingEnable;                          //!< roamingEnable enabled or not
+  BOOL selfSteerOverride;                      //!< selfSteerOverride enabled or not
+  BOOL roam80211kvrEnable;                     //!< roam80211kvrEnable enabled or not
+  INT preassnBestThreshold;                    //!<  preassnBestThreshold best threshold
+  INT preassnBestDelta;                        //!<  preassnBestDelta best delta
+  INT postAssnLevelDeltaConnected;             //!<  postAssnLevelDeltaConnected
+  INT postAssnLevelDeltaDisconnected;          //!<  postAssnLevelDeltaDisconnected
+  INT postAssnSelfSteerThreshold;              //!<  postAssnSelfSteerThreshold
+  INT postAssnSelfSteerTimeframe;              //!<  postAssnSelfSteerTimeframe
+  INT postAssnBackOffTime;                     //!<  postAssnBackOffTime
   //INT postAssnSelfSteerBeaconsMissedTime;
-  INT postAssnAPctrlThreshold;          //!<  postAssnAPctrlThreshold control threshold
-  INT postAssnAPctrlTimeframe;          //!<  postAssnAPctrlTimeframe control time frame
+  INT postAssnAPctrlThreshold;                 //!<  postAssnAPctrlThreshold control threshold
+  INT postAssnAPctrlTimeframe;                 //!<  postAssnAPctrlTimeframe control time frame
 
 }wifi_roamingCtrl_t;
 
@@ -430,13 +432,15 @@ typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiS
 void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callback_proc);
 
 /**
- *  @brief Structure for Telemetry callback functions
+ * @struct _wifi_telemetry_ops_t wifi_client_hal.h "include/wifi_client_hal.h"
+ * 
+ * @brief Structure for Telemetry callback functions
  */
 typedef struct _wifi_telemetry_ops_t
 {
-    void (*init)(char* name);    //!< init telemetry callback function
+    void (*init)(char* name);                   //!< init telemetry callback function
     void (*event_s)(char* marker, char* value); //!< callback funtion event_s
-    void (*event_d)(char* marker, int value); //!< callback funtion event_d
+    void (*event_d)(char* marker, int value);   //!< callback funtion event_d
 } wifi_telemetry_ops_t;
 
 /**
