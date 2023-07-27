@@ -33,7 +33,11 @@
   - [Interface API Documentation](#interface-api-documentation)
     - [Theory of operation](#theory-of-operation)
     - [Diagrams](#diagrams)
-      - [Operational call sequence](#operational-call-sequence)
+      - [Operational call sequences](#operational-call-sequences)
+        - [Wi-Fi init](#wi-fi-init)
+        - [Get Wi-Fi stats](#get-wi-fi-stats)
+        - [Get Wi-Fi scan results](#get-wi-fi-scan-results)
+        - [Wi-Fi disconnected event](#wi-fi-disconnected-event)
 
 ## Acronyms
 
@@ -84,15 +88,11 @@ These requirements ensure that the `HAL` executes correctly within the run-time 
 
 ### Threading Model
 
-<!-- @todo Check if Wi-Fi HAL is called from more than one caller thread -->
-
 This interface is required to be thread-safe as it could be invoked from multiple `caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit()` must cause all created threads to be terminated.
 
 ### Process Model
 
-<!-- @todo Say results are undefined if HAL is called from more than one process -->
-
-The interface is expected to support a single instantiation with a single process.
+The interface is expected to support a single instantiation with a single process. Results are undefined if `Wi-Fi` `HAL` is instantiated by more than one process.
 
 ### Memory Model
 
@@ -106,8 +106,17 @@ This interface is not required to be involved in power management.
 
 The below callback registration functions are defined by the `HAL` interface:
 
-- `wifi_connectEndpoint_callback_register()`- to register a callback for asynchronous notification on connect to an `AP`
-- `wifi_disconnectEndpoint_callback_register()` - to register a callback for asynchronous notification on disconnect from an `AP`
+- `wifi_connectEndpoint_callback_register()`
+- `wifi_disconnectEndpoint_callback_register()`
+
+The below events are notified via the callback registered using `wifi_connectEndpoint_callback_register()`:
+- `Wi-Fi` connection in progress
+- `Wi-Fi` connected
+- `Wi-Fi` connection failed / invalid credentials / auth failed
+
+The below events are notified via the callback registered using `wifi_disconnectEndpoint_callback_register()`:
+- `Wi-Fi` disconnected
+- `Wi-Fi` network not found / `SSID` changed
 
 Callback functions must originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
 
@@ -122,8 +131,9 @@ All `API`s must return errors synchronously as a return argument. The interface 
 ### Persistence Model
 
 `Wi-Fi` `HAL` is expected to persist the following configurations:
-- `Wi-Fi` credentials for the last `Wi-Fi` network that was successfully connected to
 - `Wi-Fi` roaming controls
+
+<!-- @todo Wi-Fi HAL should not be responsible for persisting Wi-Fi roaming controls. This should be done from outside the Wi-Fi HAL. -->
 
 These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations.
 
@@ -132,6 +142,8 @@ These configurations must persist across reboots and device software upgrades/do
 The following non-functional requirements should be supported by the component:
 
 ### Logging and Debugging requirements
+
+<!-- @todo Provide info on Wi-Fi HAL's internal architecture to Malcom so that Malcolm can get back on what to do about the below. -->
 
 This component is required to log all ERROR, WARNING and INFO messages. DEBUG messages are to be disabled by default and enabled when needed.
 
@@ -162,7 +174,7 @@ Any change to the interface must be reviewed and approved by component architect
 
 ### Platform or Product Customization
 
-`Wi-Fi` `HAL` is not required to support platform-specific customizations.
+`Wi-Fi` `HAL` must not have any product-specific dependencies or customizations.
 
 ## Interface API Documentation
 
@@ -170,9 +182,7 @@ Any change to the interface must be reviewed and approved by component architect
 
 ### Theory of operation
 
-Calling `wifi_init()` is a necessary precondition for the remaining `API`s to work.
-
-`Caller` must use this interface to get various `Wi-Fi` settings such as:
+`Caller` can use the `Wi-Fi` `HAL` to get various `Wi-Fi` settings such as:
 
 - Radio status (on/off)
 - `SSID` name
@@ -203,90 +213,81 @@ and to perform actions such as:
 - Clear current `Wi-Fi` network configuration
 - Get/Set `Wi-Fi` roaming controls
 
-The interface will provide notifications via callbacks regarding various events such as:
-
-- `Wi-Fi` connection in progress
-- `Wi-Fi` connected
-- `Wi-Fi` disconnected
-- `Wi-Fi` network not found
-- `Wi-Fi` connection failed / invalid credentials / auth failed
-
-<!-- @todo All these callbacks must be mentioned under "Asynchronous Notification Model" subsection -->
-
 ### Diagrams
 
-#### Operational call sequence
+#### Operational call sequences
+
+##### Wi-Fi init
 
 ```mermaid
 sequenceDiagram
-    participant WiFiNetworkMgr
+    participant Caller
     participant WiFi_HAL
-    participant wpa_supplicant
     participant WiFi_Driver
 
-    WiFiNetworkMgr->>WiFi_HAL: wifi_init
+    Caller->>WiFi_HAL: wifi_init
     activate WiFi_HAL
-    WiFi_HAL->>wpa_supplicant: start
-    activate wpa_supplicant
-    wpa_supplicant->>WiFi_Driver: wifi driver init
+    WiFi_HAL->>WiFi_Driver: wifi driver init
     activate WiFi_Driver
-    WiFi_Driver-->>wpa_supplicant: 
+    Note right of WiFi_Driver: Init driver interface,<br/>Register driver event handler
+    WiFi_Driver-->>WiFi_HAL: 
     deactivate WiFi_Driver
-    Note over wpa_supplicant,WiFi_Driver: Init driver interface, register driver event handler
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    WiFi_HAL->>wpa_supplicant: wpa_ctrl_open
-    activate wpa_supplicant
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    Note over wpa_supplicant,WiFi_HAL: get wpa_ctrl interface for sending commands
-    WiFi_HAL->>wpa_supplicant: wpa_ctrl_open
-    activate wpa_supplicant
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    Note over wpa_supplicant,WiFi_HAL: get wpa_ctrl interface for event monitoring
-    WiFi_HAL->>wpa_supplicant: wpa_ctrl_attach
-    activate wpa_supplicant
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    Note over wpa_supplicant,WiFi_HAL: register for event monitoring
-    WiFi_HAL-->>WiFiNetworkMgr: return wifi init status
+    WiFi_HAL-->>Caller: Wi-Fi init status
     deactivate WiFi_HAL
     Note over WiFi_HAL: System is up and running
+```
 
-    Note over WiFiNetworkMgr,WiFi_HAL: Example HAL API call
-    WiFiNetworkMgr->>WiFi_HAL: wifi_getStats
+##### Get Wi-Fi stats
+
+```mermaid
+sequenceDiagram
+    participant Caller
+    participant WiFi_HAL
+    participant WiFi_Driver
+
+    Caller->>WiFi_HAL: wifi_getStats
     activate WiFi_HAL
-    WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("STATUS")
-    activate wpa_supplicant
-    wpa_supplicant->>WiFi_Driver: NL80211_CMD
+    loop for each Wi-Fi stat
+    WiFi_HAL->>WiFi_Driver: get Wi-Fi property
     activate WiFi_Driver
-    WiFi_Driver-->>wpa_supplicant: 
+    WiFi_Driver-->>WiFi_HAL: 
     deactivate WiFi_Driver
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("BSS current")
-    activate wpa_supplicant
-    wpa_supplicant->>WiFi_Driver: NL80211_CMD
-    activate WiFi_Driver
-    WiFi_Driver-->>wpa_supplicant: 
-    deactivate WiFi_Driver
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    WiFi_HAL->>wpa_supplicant: wpa_ctrl_request("SIGNAL_POLL")
-    activate wpa_supplicant
-    wpa_supplicant->>WiFi_Driver: NL80211_CMD
-    activate WiFi_Driver
-    WiFi_Driver-->>wpa_supplicant: 
-    deactivate WiFi_Driver
-    wpa_supplicant-->>WiFi_HAL: 
-    deactivate wpa_supplicant
-    WiFi_HAL-->>WiFiNetworkMgr: return wifi stats
+    end
+    WiFi_HAL-->>Caller: Wi-Fi stats
     deactivate WiFi_HAL
+```
 
-    Note over WiFiNetworkMgr,WiFi_HAL: Example HAL callback
-    WiFiNetworkMgr->>WiFi_HAL: wifi_disconnectEndpoint_callback_register
-    WiFi_Driver->>wpa_supplicant: NL80211_CMD_DISCONNECT
-    wpa_supplicant->>WiFi_HAL: CTRL-EVENT-DISCONNECTED
-    WiFi_HAL->>WiFiNetworkMgr: wifi_disconnectEndpoint_callback
+##### Get Wi-Fi scan results
+
+```mermaid
+sequenceDiagram
+    participant Caller
+    participant WiFi_HAL
+    participant WiFi_Driver
+
+    Caller->>WiFi_HAL: wifi_getNeighboringWiFiDiagnosticResult
+    activate WiFi_HAL
+    WiFi_HAL->>WiFi_Driver: Wi-Fi scan request
+    activate WiFi_Driver
+    WiFi_Driver-->>WiFi_HAL: 
+    WiFi_Driver->>WiFi_HAL: Wi-Fi scan started event
+    WiFi_HAL->>WiFi_HAL: wait for Wi-Fi scan results
+    alt Wi-Fi scan timed out
+    else
+    WiFi_Driver->>WiFi_HAL: Wi-Fi scan results event
+    deactivate WiFi_Driver
+    end
+    WiFi_HAL->>WiFi_Driver: get Wi-Fi scan results
+    WiFi_Driver-->>WiFi_HAL: 
+    WiFi_HAL-->>Caller: Wi-Fi scan results
+    deactivate WiFi_HAL
+```
+
+##### Wi-Fi disconnected event
+
+```mermaid
+sequenceDiagram
+    Caller->>WiFi_HAL: wifi_disconnectEndpoint_callback_register(callback_function)
+    WiFi_Driver->>WiFi_HAL: Wi-Fi disconnected event
+    WiFi_HAL->>Caller: callback_function()
 ```
