@@ -21,8 +21,6 @@
 
     module: wifi_common_hal.h
 
-        For CCSP Component:  Wifi_Provisioning_and_management
-
     ---------------------------------------------------------------
 
     description:
@@ -30,10 +28,6 @@
         This header file gives the function call prototypes and
         structure definitions used for the RDK-Video
         Wifi radio hardware abstraction layer
-
-        NOTE:
-        THIS VERSION IS AN EARLY DRAFT INTENDED TO GET COMMENTS FROM COMCAST.
-        TESTING HAS NOT YET BEEN COMPLETED.
 
     ---------------------------------------------------------------
 
@@ -54,7 +48,7 @@
 #define __WIFI_COMMON_HAL_H__
 
 /**
- * @defgroup HPK HPK
+ * @addtogroup HPK HPK
  *
  * @section WIFI_GLOSSARY Glossary of terms
  *
@@ -99,42 +93,6 @@
  * TLS | Transport Layer Security is a protocol designed to encrypt and authenticate all kinds of network traffic at the trans port layer, and is the successor to SSL.
  *
  * @defgroup WIFI_HAL Wi-Fi HAL
- * @section WIFI_SEC_SO Wi-Fi Sub-System Overview
- * - RDK support integrated Wi-Fi chips as well as USB based Wi-Fi adapters.
- * - Implementation differences between on board Wi-Fi & USB Wi-Fi adapter are abstracted from Upper layers i.e.
- *   application doesn.t know what kind of Wi-Fi device or connection they are accessing.
- * - RDK Wi-Fi uses wpa_supplicant wireless daemon for connection management with the Wi-Fi driver.
- * - wpa_supplicant is designed to be a "daemon" that runs in the background and acts as the backend component controlling the wireless connection.
- * - wpa_supplicant also offers a control and monitoring interface to handle different wireless commands.
- * - RDK Wi-Fi stack extensively uses commonly available Linux wireless utilities which brings most of the USB based
- *   and on-chip wireless equipment under our coverage.
- * - It provides support for diagnostics and connection management from remote and native applications.
- * - It uses IARM, which is a Linux D-BUS based communication protocol for managing Wi-Fi event notification and communication across different applications.
- *
- * @section WIFI_SEC_AR RDK Wi-Fi Architecture
- *
- * @par Application
- * In top of the eco-system we have wide range of application which requires wireless network access.
- * This may be a cloud based UI application, a diagnostics webpage or a console application such as test automation
- * kit which will be required to verify readiness of a new RDK box with respect to different component features.
- * @par Service Manager
- * Service manager is the contact point between external applications and native RDK. It is present in RDK as a library
- * which when plugged in to a browser such as WPE or Qt enhances its capability to make communication from web applications
- * to native RDK components through Java script.
- * @par IARM Message Bus
- * RDK provides a common message and event notification mechanism known as IARM which passes the calls from upper layer
- * i.e. service manager to actual network manager.
- * @par Network Manager
- * Wifi network manager is a daemon which handles network states and network interfaces. It handles Wireless initialization
- * and management.
- * @par Generic HAL
- * It is an abstraction of Wireless driver calls and various linux wireless utilities to present a set of APIs for common wireless operation.
- * @par Linux Wireless Utility
- * Wpa_supplicant, wireless-tools, net-link library, etc.
- * @par SoC/OEM Driver/ Firmware
- * Kernel space driver and firmware binaries will be provided by Wi-FI SOC or OEM and it should be present in the defined path in the RDK box.
- *
- * @section WIFI_SEC_SQ Use Case - AP Discovery & Establishing Connection
  *
  * @ingroup HPK
  *
@@ -190,7 +148,7 @@
 #endif
 
 #ifndef FALSE
-#define FALSE    0 //!< flase 0
+#define FALSE    0 //!< false 0
 #endif
 
 #ifndef ENABLE
