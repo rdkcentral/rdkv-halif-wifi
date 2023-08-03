@@ -194,6 +194,7 @@
 
 /**
  * @brief Defines for HAL version 2.0.0
+ * @todo Anjali will check on HAL version really needed or not
  */
 #define WIFI_HAL_MAJOR_VERSION 2         //!<  This is the major version of this HAL.
 #define WIFI_HAL_MINOR_VERSION 0         //!<  This is the minor version of the HAL.
@@ -213,6 +214,7 @@ typedef enum {
 
 /**
  * @brief wifi wpa supplicant status codes
+ * @todo TO BE CHECKED NOW Devika will check this enum is needed or not
  */
 typedef enum _WiFiHalStatus_t {
     WIFISTATUS_HAL_DISCONNECTED,          //!< Disconnected to the AP
@@ -229,12 +231,11 @@ typedef enum _WiFiHalStatus_t {
 
 /**
  * @brief WiFi Bands
- * @todo Need to change WIFI_HAL_FREQ_BAN_NONE to WIFI_HAL_FREQ_BAND_NONE
  */
 typedef enum {
-    WIFI_HAL_FREQ_BAN_NONE,     //!< No frequency band
-    WIFI_HAL_FREQ_BAND_24GHZ,   //!< 2.4Ghz frequency band
-    WIFI_HAL_FREQ_BAND_5GHZ,    //!< 5Ghz frequency band
+    WIFI_HAL_FREQ_BAND_ERROR,     //!< No frequency band 
+    WIFI_HAL_FREQ_BAND_24GHZ,     //!< 2.4Ghz frequency band
+    WIFI_HAL_FREQ_BAND_5GHZ,      //!< 5Ghz frequency band
 } WIFI_HAL_FREQ_BAND;
 
 
