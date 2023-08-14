@@ -613,24 +613,6 @@ INT wifi_down();
  */
 INT wifi_uninit();
 
-/**
- * @brief Creates wifi configuration files.
- *
- * The format and content of these files are implementation dependent. This function call is
- * used to trigger this task if necessary. Some implementations may not need this
- * function. If an implementation does not need to create config files the function call can
- * do nothing and return RETURN_OK.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected. 
- *
- * @pre wifi_init() should be called  before calling this API.
- * @note This function must not suspend and must not invoke any blocking system 
- * calls. It should probably just send a message to a driver event handler task. 
- */
-INT wifi_createInitialConfigFiles();
-
 // log wifi parameters  format SSID:   BSSID:  ulChan: Noise:  RSSI:
 
 /**
@@ -712,26 +694,8 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre "output_string" buffer must be preallocated by the caller.
- * @see wifi_setRadioEnable()
  */
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
-
-/**
- * @brief Set the Radio enable config parameter.
- *
- * If the radio is enable, return TRUE, otherwise FALSE.
- *
- * @param[in] radioIndex The index of radio.
- * @param[out] enable output of the radio state.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioStatus()
- */
-INT wifi_setRadioEnable(INT radioIndex, BOOL enable);
 
 //Device.WiFi.Radio.{i}.Status
 
@@ -874,27 +838,9 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string); //Tr18
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioSupportedStandards() wifi_setRadioChannelMode()
+ * @see wifi_getRadioSupportedStandards()
  */
 INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);
-
-/**
- * @brief Set the radio operating mode and pure mode flag.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] channelMode the channel mode.
- * @param[in] gOnlyFlag   the g-only mode.
- * @param[in] nOnlyFlag   the n-only mode.
- * @param[in] acOnlyFlag  the ac-only mode.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioStandard()
- */
-INT wifi_setRadioChannelMode(INT radioIndex, CHAR *channelMode, BOOL gOnlyFlag, BOOL nOnlyFlag, BOOL acOnlyFlag);
 
 //Device.WiFi.Radio.{i}.PossibleChannels
 
@@ -949,24 +895,8 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioChannel()
  */
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
-
-/**
- * @brief Set the running channel number.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] channel  Channel number to be set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioChannel()
- */
-INT wifi_setRadioChannel(INT radioIndex, ULONG channel);
 
 //Device.WiFi.Radio.{i}.AutoChannelSupported
 
@@ -1001,21 +931,6 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool); //Tr18
  */
 INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
-/**
- * @brief Set the Auto Channel Selection / Dynamic channel selection enable status.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] enable Boolean value to enable or disable the Auto Channel Selection / Dynamic channel selection.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioAutoChannelEnable()
- */
-INT wifi_setRadioAutoChannelEnable(INT radioIndex, BOOL enable);
-
 //Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod
 
 /**
@@ -1030,25 +945,23 @@ INT wifi_setRadioAutoChannelEnable(INT radioIndex, BOOL enable);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre "output_ulong" buffer must be preallocated by the caller.
- * @see wifi_setRadioAutoChannelRefreshPeriod()
  */
 
 INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong); //Tr181
 
+//Device.WiFi.Radio.{i}.GuardInterval
+
 /**
- * @brief Set the Auto Channel Selection / Dynamic channel selection refresh period in seconds.
+ * @brief Get the guard interval value. eg "400nsec" or "800nsec".
  *
- * @param[in] radioIndex The index of the radio
- * @param[in] seconds The number of seconds of Auto Channel Selection / Dynamic channel selection refresh period.
+ * @param[in] radioIndex The index of the radio.
+ * @param[out] output_string Returns the guard interval value.
  *
  * @return The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioAutoChannelRefreshPeriod()
  */
-INT wifi_setRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG seconds); //Tr181
+INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);	//Tr181
 
 //Device.WiFi.Radio.{i}.OperatingChannelBandwidth
 /**
@@ -1066,24 +979,8 @@ INT wifi_setRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG seconds); //Tr18
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre "output_string" buffer must be preallocated by the caller.
- * @see wifi_setRadioOperatingChannelBandwidth()
  */
 INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string); //Tr181
-
-/**
- * @brief Set the Operating Channel Bandwidth.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] bandwidth The bandwidth to be set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioOperatingChannelBandwidth()
- */
-INT wifi_setRadioOperatingChannelBandwidth(INT radioIndex, CHAR *bandwidth); //Tr181	//AP only
 
 //Device.WiFi.Radio.{i}.ExtensionChannel
 
@@ -1103,57 +1000,8 @@ INT wifi_setRadioOperatingChannelBandwidth(INT radioIndex, CHAR *bandwidth); //T
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre "output_string" buffer must be preallocated by the caller.
- * @see wifi_setRadioExtChannel()
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string); //Tr181
-
-/**
- * @brief Set the extension channel.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] string The extension channel to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioExtChannel()
- */
-INT wifi_setRadioExtChannel(INT radioIndex, CHAR *string); //Tr181	//AP only
-
-//Device.WiFi.Radio.{i}.GuardInterval
-
-/**
- * @brief Get the guard interval value. eg "400nsec" or "800nsec".
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] output_string Returns the guard interval value.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @pre "output_string" buffer must be preallocated by the caller.
- * @see wifi_setRadioGuardInterval()
- */
-INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);	//Tr181
-
-/**
- * @brief Set the guard interval value.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] string The guard interval value to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioGuardInterval()
- */
-INT wifi_setRadioGuardInterval(INT radioIndex, CHAR *string);	//Tr181
 
 //Device.WiFi.Radio.{i}.MCS
 
@@ -1168,24 +1016,8 @@ INT wifi_setRadioGuardInterval(INT radioIndex, CHAR *string);	//Tr181
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioMCS()
  */
 INT wifi_getRadioMCS(INT radioIndex, INT *output_INT); //Tr181
-
-/**
- * @brief Set the Modulation Coding Scheme index.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] MCS  The mcs index to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioMCS()
- */
-INT wifi_setRadioMCS(INT radioIndex, INT MCS); //Tr181
 
 //Device.WiFi.Radio.{i}.TransmitPowerSupported
 
@@ -1220,25 +1052,9 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list); //Tr
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioTransmitPower() wifi_getRadioTransmitPowerSupported()
+ * @see wifi_getRadioTransmitPowerSupported()
  */
 INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
-
-/**
- * @brief Set the transmit power.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] TransmitPower The transmit power to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioTransmitPower()
- */
-
-INT wifi_setRadioTransmitPower(INT radioIndex, ULONG TransmitPower);
 
 //Device.WiFi.Radio.{i}.IEEE80211hSupported
 
@@ -1272,24 +1088,8 @@ int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);  //Tr181
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioIEEE80211hEnabled()
  */
 int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);  //Tr181
-
-/**
- * @brief Set 80211h feature enable.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] enable Boolean value to enable/disable the feature.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioIEEE80211hEnabled()
- */
-int wifi_setRadioIEEE80211hEnabled(INT radioIndex, BOOL enable);  //Tr181
 
 //Device.WiFi.Radio.{i}.RegulatoryDomain
 
@@ -1310,150 +1110,6 @@ int wifi_setRadioIEEE80211hEnabled(INT radioIndex, BOOL enable);  //Tr181
  * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
-
-//Device.WiFi.Radio.{i}.X_COMCAST-COM_CarrierSenseThresholdRange
-
-/**
- * @brief Gets the carrier sense ranges supported by the radio, measured in dBm.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] output The carrier sense ranges in dBm.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_getRadioCarrierSenseThresholdRange(INT radioIndex, INT *output);  //P3
-
-//Device.WiFi.Radio.{i}.X_COMCAST-COM_CarrierSenseThresholdInUse
-
-/**
- * @brief Get carrier sense threshold.
- *
- * The RSSI signal level at which CS/CCA detects a busy condition.
- * This attribute enables APs to increase minimum sensitivity to avoid detecting busy condition from
- * multiple/weak Wi-Fi sources in dense Wi-Fi environments. It is measured in dBm.
- *
- * @param[in] radioIndex The index of the radio
- * @param[out] output The carrier sense ranges in dBm.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioCarrierSenseThresholdInUse()
- */
-INT wifi_getRadioCarrierSenseThresholdInUse(INT radioIndex, INT *output);	//P3
-
-/**
- * @brief Set carrier sense threshold.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] threshold  The carrier sense threshold to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioCarrierSenseThresholdInUse()
- */
-INT wifi_setRadioCarrierSenseThresholdInUse(INT radioIndex, INT threshold);	//P3
-
-//Device.WiFi.Radio.{i}.X_COMCAST-COM_ChannelSwitchingCount
-
-/**
- * @brief Function returns the total number of channel changes.
- *
- * Reset the parameter every 24 hrs or reboot.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] output  The channel switch count.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_getRadioChannelSwitchingCount(INT radioIndex, INT *output); 	//P3
-
-//Device.WiFi.Radio.{i}.BeaconPeriod
-
-/**
- * @brief Gets the time interval between transmitting beacons (expressed in milliseconds).
- *
- * This parameter is based ondot11BeaconPeriod from [802.11-2012].
- *
- * @param[in] radioIndex The index of the radio
- * @param[out] output  Outputs the beacon period
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioBeaconPeriod()
- */
-INT wifi_getRadioBeaconPeriod(INT radioIndex, UINT *output);
-
-/**
- * @brief Sets the BeaconPeriod.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] BeaconPeriod  The beacon period to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioBeaconPeriod()
- */
-INT wifi_setRadioBeaconPeriod(INT radioIndex, UINT BeaconPeriod);
-
-//Device.WiFi.Radio.{i}.BasicDataTransmitRates
-//Comma-separated list of strings. The set of data rates, in Mbps, that have to be supported by all stations that desire to join this BSS. The stations have to be able to receive and transmit at each of the data rates listed inBasicDataTransmitRates. For example, a value of "1,2", indicates that stations support 1 Mbps and 2 Mbps. Most control packets use a data rate in BasicDataTransmitRates.
-
-/**
- * @brief Gets the basic data transmit rate
- *
- * Comma-separated list of strings.
- * The set of data rates, in Mbps, that have to be supported by all stations that desire to join this BSS.
- * The stations have to be able to receive and transmit at each of the data rates listed inBasicDataTransmitRates.
- * For example, a value of "1,2", indicates that stations support 1 Mbps and 2 Mbps.
- * Most control packets use a data rate in BasicDataTransmitRates.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] output The output string of basic data transmit rate.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioBasicDataTransmitRates()
- */
-INT wifi_getRadioBasicDataTransmitRates(INT radioIndex, CHAR *output);
-
-/**
- * @brief The set basic data transmit rate.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[out] TransmitRates The transmit rate to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioBasicDataTransmitRates()
- */
-
-INT wifi_setRadioBasicDataTransmitRates(INT radioIndex, CHAR *TransmitRates);
 
 //---------------------------------------------------------------------------------------------------
 //Device.WiFi.Radio.{i}.Stats.
@@ -1491,106 +1147,8 @@ INT wifi_setRadioBasicDataTransmitRates(INT radioIndex, CHAR *TransmitRates);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRadioTrafficStatsMeasure()
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct); //Tr181
-
-//Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_RadioStatisticsMeasuringRate
-//Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_RadioStatisticsMeasuringInterval
-
-/**
- * @brief Set radio traffic static Measuring rules.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] input_struct Structure that contains the measuring rules to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRadioTrafficStats
- */
-INT wifi_setRadioTrafficStatsMeasure(INT radioIndex, wifi_radioTrafficStatsMeasure_t *input_struct); //Tr181
-
-
-//-----------------------------------------------------------------------------------------------
-//Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_ReceivedSignalLevel.{i}.
-
-//Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_ReceivedSignalLevel.{i}.ReceivedSignalLevel
-
-/**
- * @brief Set radio traffic static Measuring rules.
- *
- * Clients associated with the AP over a specific interval.
- * The histogram MUST have a range from -110 to 0 dBm and MUST be divided in bins of 3 dBM, with bins aligning on the -110 dBm
- * end of the range.  Received signal levels equal to or greater than the smaller boundary of a bin and less than the larger
- * boundary are included in the respective bin.
- *
- * The bin associated with the clients current received signal level MUST be incremented when a client associates with the AP.
- * Additionally, the respective bins associated with each connected clients current received signal level MUST be
- * incremented at the interval defined by "Radio Statistics Measuring Rate".
- *
- * The histogram bins MUST NOT be incremented at any other time.
- *
- * The histogram data collected during the interval MUST be published to the parameter only at the end of the interval defined
- * by "Radio Statistics Measuring Interval".
- *
- * The underlying histogram data MUST be cleared at the start of each interval defined by Radio Statistics Measuring
- * Interval.
- *
- * If any of the parameter's representing this histogram is queried before the histogram has been updated with an initial set
- * of data, it MUST return -1.
- *
- * @param[in] radioIndex The index of the radio.
- * @param[in] signalIndex The index of the signal.
- * @param[in] SignalLevel The strength of Wi-Fi signal.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_getRadioStatsReceivedSignalLevel(INT radioIndex, INT signalIndex, INT *SignalLevel); //Tr181
-
-//-----------------------------------------------------------------------------------------------------
-
-/**
- * @brief This API is used to apply (push) all previously set radio level variables and make
- * these settings active in the hardware.
- *
- * @param[in] radioIndex The index of the radio.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_applyRadioSettings(INT radioIndex);
-
-//---------------------------------------------------------------------------------------------------
-//
-// Wifi SSID level APIs common to Client and Access Point devices.
-//
-//---------------------------------------------------------------------------------------------------
-
-//Device.WiFi.SSID.{i}.
-
-/**
- * @brief Get the radio index assocated with the SSID entry
- *
- * @param[in] ssidIndex The index of the ssid.
- * @param[in] radioIndex The index of the Radio.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- * 
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_getSSIDRadioIndex(INT ssidIndex, INT *radioIndex);
 
 //Device.WiFi.SSID.{i}.Enable
 
@@ -1607,38 +1165,6 @@ INT wifi_getSSIDRadioIndex(INT ssidIndex, INT *radioIndex);
  * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool); //Tr181
-
-/**
- * @brief Set SSID enable configuration parameters.
- *
- * @param[in] ssidIndex The index of the ssid.
- * @param[in] enable Boolean value to enable/disable the SSID.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getSSIDStatus()
- */
-INT wifi_setSSIDEnable(INT ssidIndex, BOOL enable); //Tr181
-
-//Device.WiFi.SSID.{i}.Status
-
-/**
- * @brief Get the SSID enable status.
- *
- * @param[in] ssidIndex The index of the radio.
- * @param[out] output_string The ssid enable/disable status.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setSSIDEnable()
- */
-INT wifi_getSSIDStatus(INT ssidIndex, CHAR *output_string); //Tr181
 
 //Device.WiFi.SSID.{i}.Alias
 
@@ -1660,30 +1186,6 @@ INT wifi_getSSIDStatus(INT ssidIndex, CHAR *output_string); //Tr181
  * @pre "output_string" buffer must be preallocated by the caller.
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
-
-/**
- * @brief Set SSID name.
- *
- * Accepts a max 32 byte string and sets an internal variable to the SSID name.
- *
- * @param[in] apIndex The index of the access point.
- * @param[in] ssid_string The SSID name to set.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_setSSIDName(INT apIndex, CHAR *ssid_string);
-
-//INT wifi_pushSSIDName(INT apIndex, CHAR *ssid);                         // push the ssid name to the hardware //repleaced by wifi_applySSIDSettings
-
-//Device.WiFi.SSID.{i}.LastChange
-
-//Device.WiFi.SSID.{i}.LowerLayers
-
-//Device.WiFi.SSID.{i}.BSSID
 
 /**
  * @brief Get the BSSID.
@@ -1758,24 +1260,6 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string); //Tr181
  * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct); //Tr181
-
-/**
- * @brief This API is used to apply SSID settings to the hardware.
- *
- * Apply SSID and AP (in the case of Acess Point devices) to the hardware.
- *
- * @param[in] ssidIndex  The index of the SSID
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_applySSIDSettings(INT ssidIndex);
-
-
-
 
 //-----------------------------------------------------------------------------------------------
 //Device.WiFi.NeighboringWiFiDiagnostic.

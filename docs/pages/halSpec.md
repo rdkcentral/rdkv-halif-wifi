@@ -217,14 +217,13 @@ and to perform actions such as:
 
 #### Operational call sequences
 
-##### Wi-Fi init
-
 ```mermaid
 sequenceDiagram
     participant Caller
     participant WiFi_HAL
     participant WiFi_Driver
 
+    par for Wi-Fi init
     Caller->>WiFi_HAL: wifi_init
     activate WiFi_HAL
     WiFi_HAL->>WiFi_Driver: wifi driver init
@@ -235,16 +234,7 @@ sequenceDiagram
     WiFi_HAL-->>Caller: Wi-Fi init status
     deactivate WiFi_HAL
     Note over WiFi_HAL: System is up and running
-```
-
-##### Get Wi-Fi stats
-
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant WiFi_HAL
-    participant WiFi_Driver
-
+    and get Wi-Fi stats
     Caller->>WiFi_HAL: wifi_getStats
     activate WiFi_HAL
     loop for each Wi-Fi stat
@@ -255,16 +245,7 @@ sequenceDiagram
     end
     WiFi_HAL-->>Caller: Wi-Fi stats
     deactivate WiFi_HAL
-```
-
-##### Get Wi-Fi scan results
-
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant WiFi_HAL
-    participant WiFi_Driver
-
+    and Get Wi-Fi scan results
     Caller->>WiFi_HAL: wifi_getNeighboringWiFiDiagnosticResult
     activate WiFi_HAL
     WiFi_HAL->>WiFi_Driver: Wi-Fi scan request
@@ -281,13 +262,9 @@ sequenceDiagram
     WiFi_Driver-->>WiFi_HAL: 
     WiFi_HAL-->>Caller: Wi-Fi scan results
     deactivate WiFi_HAL
-```
-
-##### Wi-Fi disconnected event
-
-```mermaid
-sequenceDiagram
+    and Wi-Fi disconnected event
     Caller->>WiFi_HAL: wifi_disconnectEndpoint_callback_register(callback_function)
     WiFi_Driver->>WiFi_HAL: Wi-Fi disconnected event
     WiFi_HAL->>Caller: callback_function()
+    end
 ```

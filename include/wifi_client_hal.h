@@ -316,18 +316,6 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
  */
 INT wifi_setCliWpsButtonPush(INT ssidIndex);
 
-/**
- * @brief Stop the WPS process.
- *
- * @param[in] ssidIndex The index of SSID array.
- *
- * @return The status of the operation.
- * @retval RETURN_OK   - success. 
- * @retval RETURN_ERR  - fail.
- */
-INT wifi_cancelCliWPS(INT ssidIndex);
-
-
 //2. Directly pairing method
 /**
  * @brief This API starts the connection process from client with an AP.
