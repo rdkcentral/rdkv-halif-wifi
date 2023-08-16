@@ -224,7 +224,7 @@ sequenceDiagram
     participant WiFi_Driver
 
 
-    Caller->>WiFi_HAL: wifi_init
+    Caller->>WiFi_HAL: wifi_init()
     activate WiFi_HAL
     WiFi_HAL->>WiFi_Driver: wifi driver init
     activate WiFi_Driver
@@ -235,7 +235,7 @@ sequenceDiagram
     deactivate WiFi_HAL
     Note over WiFi_HAL: System is up and running
     par get Wi-Fi stats
-    Caller->>WiFi_HAL: wifi_getStats
+    Caller->>WiFi_HAL: wifi_getStats()
     activate WiFi_HAL
     loop for each Wi-Fi stat
     WiFi_HAL->>WiFi_Driver: get Wi-Fi property
@@ -246,7 +246,7 @@ sequenceDiagram
     WiFi_HAL-->>Caller: Wi-Fi stats
     deactivate WiFi_HAL
     and Get Wi-Fi scan results
-    Caller->>WiFi_HAL: wifi_getNeighboringWiFiDiagnosticResult
+    Caller->>WiFi_HAL: wifi_getNeighboringWiFiDiagnosticResult()
     activate WiFi_HAL
     WiFi_HAL->>WiFi_Driver: Wi-Fi scan request
     activate WiFi_Driver
