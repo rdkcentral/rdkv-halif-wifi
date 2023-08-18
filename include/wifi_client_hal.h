@@ -142,6 +142,18 @@ typedef struct _wifi_roamingCtrl_t
 
 }wifi_roamingCtrl_t;
 
+/**
+ * @struct _wifi_telemetry_ops_t wifi_client_hal.h "include/wifi_client_hal.h"
+ * 
+ * @brief Structure for Telemetry callback functions
+ */
+typedef struct _wifi_telemetry_ops_t
+{
+    void (*init)(char* name);                   //!< init telemetry callback function
+    void (*event_s)(char* marker, char* value); //!< callback funtion event_s
+    void (*event_d)(char* marker, int value);   //!< callback funtion event_d
+} wifi_telemetry_ops_t;
+
 /** @} */ //End of WIFI_HAL_TYPES
 
 
@@ -158,7 +170,7 @@ typedef struct _wifi_roamingCtrl_t
  * @param[in]  ssidIndex The index of the SSID array.
  * @param[out] output_bool Boolean value which indicates the wps enabled status.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -173,7 +185,7 @@ INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
  * @param[in] ssidIndex The index of the SSID array.
  * @param[in] enableValue  Boolean value to enable or disable WPS.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - If successfully sets WPS ebanle value. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -189,7 +201,7 @@ INT wifi_setCliWpsEnable(INT ssidIndex, BOOL enableValue);
  * @param[out] output_ulong  Output parameter which saves the Device PIN.
  * This value is to be printed on the device.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -204,7 +216,7 @@ INT wifi_getCliWpsDevicePIN(INT ssidIndex, ULONG *output_ulong);
  * @param[in] ssidIndex The index of the SSID array.
  * @param[in] pin The PIN code to set.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if generate and set WPS PIN. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -233,7 +245,7 @@ INT wifi_setCliWpsDevicePIN(INT ssidIndex, ULONG pin);
  * @param[in]  ssidIndex The index of SSID array.
  * @param[out] methods  The WPS supported methods.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods supported. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -250,7 +262,7 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
  * @param[in]  ssidIndex The index of SSID array.
  * @param[out] output_string  The current WPS method.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods enabled. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -265,7 +277,7 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] methodString The method to enable.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if set WPS config methods enabled. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -280,7 +292,7 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
  * @param[in] ssidIndex The index of SSID array
  * @param[in] output_string  The output paramter which holds the wps config status.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -295,7 +307,7 @@ INT wifi_getCliWpsConfigurationState(INT ssidIndex, CHAR *output_string);
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] EnrolleePin PIN code to connect to the access point.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - WPS PIN call success. 
  * @retval RETURN_ERR  - WPS PIN call fail.
  * 
@@ -308,7 +320,7 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
  *
  * @param[in] ssidIndex The index of SSID array.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if WPS Push sent successfully. 
  * @retval RETURN_ERR  - fail.
  * 
@@ -335,7 +347,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @param[in] clientcert client cert
  * @param[in]  privatekey private key
  *
- * @return The status of the operation. 
+ * @return INT - The status of the operation. 
  * @retval RETURN_OK   - Successfully connect. 
  * @retval RETURN_ERR  - Fail.
  * 
@@ -351,7 +363,7 @@ INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_sec
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] AP_SSID  The ssid to disconnect.
  *
- * @return The status of the operation. 
+ * @return INT - The status of the operation. 
  * @retval RETURN_OK   - Successfully disconnect. 
  * @retval RETURN_ERR  - Fail.
  * 
@@ -366,7 +378,7 @@ INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
  *
  * @param[in] ssidIndex The index of SSID array.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - Successfully clears SSID info. 
  * @retval RETURN_ERR  - Fail.
  * 
@@ -420,18 +432,6 @@ typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiS
 void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callback_proc);
 
 /**
- * @struct _wifi_telemetry_ops_t wifi_client_hal.h "include/wifi_client_hal.h"
- * 
- * @brief Structure for Telemetry callback functions
- */
-typedef struct _wifi_telemetry_ops_t
-{
-    void (*init)(char* name);                   //!< init telemetry callback function
-    void (*event_s)(char* marker, char* value); //!< callback funtion event_s
-    void (*event_d)(char* marker, int value);   //!< callback funtion event_d
-} wifi_telemetry_ops_t;
-
-/**
  * @brief Telemetry Callbacks registration function.
  * 
  * @param[in] telemetry_ops Telemetry callback functions
@@ -445,7 +445,7 @@ void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
  *
  * @param[out] pairedSSIDInfo Structure which holds the last connected access point information.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK   - Successfully gets the laconnected SSID info. 
  * @retval RETURN_ERR  - Failure if No SSID in wpa_supplicant.conf.
  * 
@@ -459,7 +459,7 @@ INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
  * @param[in] ssidIndex this is used to validate the ssid
  * @param[in] pRoamingCtrl_data this is the structure with values to be set
  *
- * @returns SET status of the pRoamingCtrl data
+ * @returns int - SET status of the pRoamingCtrl data
  * @retval RETURN_OK   - Successfully sets the values. 
  * @retval RETURN_ERR  - Failure in setting roaming control data.
  * 
@@ -474,7 +474,7 @@ int wifi_setRoamingControl (int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data
  * @param[in] ssidIndex to validate the interface
  * @param[out] pRoamingCtrl_data Roaming control configuration
  *
- * @returns GET status
+ * @returns int - GET status
  * @retval RETURN_OK   - Successfully gets the Roaming control data. 
  * @retval RETURN_ERR  - Failure in getting roaming control data.
  * 
@@ -486,7 +486,7 @@ int wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
 /**
  * @brief This API gets the current wifi status
  *
- * @returns wifi status code
+ * @returns WiFiHalStatus_t - wifi status code
  * @retval WIFISTATUS_HAL_DISCONNECTED          - Disconnected to the AP
  * @retval WIFISTATUS_HAL_INTERFACE_DISABLED    - Interface disabled
  * @retval WIFISTATUS_HAL_INACTIVE              - Inactive
@@ -506,7 +506,7 @@ WiFiHalStatus_t getwifiStatusCode();
 /**
  * @brief This API will cancel any in progress WPS operaiotn
  *
- * @returns WPS cancel status.
+ * @returns INT - WPS cancel status.
  * @retval RETURN_OK   - success. 
  * @retval RETURN_ERR  - fail.
  * 

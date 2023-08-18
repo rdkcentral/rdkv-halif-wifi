@@ -201,6 +201,11 @@
 #define WIFI_HAL_MAINTENANCE_VERSION 0   //!<  This is the maintenance version of the HAL.
 
 /**
+ * @brief Defines for iface name size
+ */
+#define WLAN_IFNAMSIZ 32
+
+/**
  * @brief Enumerators for Wifi RSSI Levels
  */
 typedef enum {
@@ -269,7 +274,6 @@ typedef enum {
  * primary security algorithms.
  * WEP is the oldest and has proven to be vulnerable as more and more security flaws have been discovered.
  * WPA improved security, but is now also considered vulnerable to intrusion.
- * WPA2 is currently used and the most secure one.
  *
  */
 typedef enum
@@ -330,17 +334,6 @@ typedef struct _wifi_radioTrafficStats
 } wifi_radioTrafficStats_t;	//for radio only
 
 /**
- * @struct _wifi_radioTrafficStatsMeasure wifi_common_hal.h "include/wifi_common_hal.h"
- * @brief structure for radioTrafficStatsMeasure
- */
-
-typedef struct _wifi_radioTrafficStatsMeasure
-{
-    INT   radio_RadioStatisticsMeasuringRate;     //!< Input //"The rate at which radio related statistics are periodically collected.  Only statistics that explicitly indicate the use of this parameter MUST use the rate set in this parameter  Other parameter's are assumed to collect data in real-time or nearly real-time. Default value is 30 seconds.  This parameter MUST be persistent across reboots. If this parameter is changed,  then use of the new rate MUST be deferred until the start of the next interval and all metrics using this rate MUST return -1 until the completion of the next full interval Units in Seconds"
-    INT   radio_RadioStatisticsMeasuringInterval; //!< Input //The interval for which radio data MUST be retained in order and at the end of which appropriate calculations are executed and reflected in the associated radio object's.  Only statistics that explicitly indicate the use of this parameter MUST use the interval set in this parameter  Default value is 30 minutes.  This parameter MUST be persistent across reboots.   If this item is modified, then all metrics leveraging this interval as well as the metrics “Total number 802.11 packet of TX” and “Total number 802.11 packet of RX“ MUST be re-initialized immediately.  Additionally, the “Statistics Start Time” must be reset to the current time. Units in Seconds
-} wifi_radioTrafficStatsMeasure_t;	//for radio only
-
-/**
  * @struct _wifi_ssidTrafficStats wifi_common_hal.h "include/wifi_common_hal.h"
  * @brief structure for ssidTrafficStats
  */
@@ -382,7 +375,6 @@ typedef struct _wifi_ssidTrafficStats
 
 typedef struct _wifi_neighbor_ap
 {
-    //CHAR  ap_Radio[64];	                    //!< The value MUST be the path name of a row in the Device.WiFi.Radio table. The Radio that detected the neighboring WiFi SSID.
     CHAR  ap_SSID[64];	                        //!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
     CHAR  ap_BSSID[64];	                        //!< [MACAddress] The BSSID used for the neighboring WiFi SSID.
     CHAR  ap_Mode[64];	                        //!< The mode the neighboring WiFi radio is operating in. Enumeration of: AdHoc, Infrastructure
@@ -404,38 +396,6 @@ typedef struct _wifi_neighbor_ap
 } wifi_neighbor_ap_t;	//COSA_DML_NEIGHTBOURING_WIFI_RESULT
 
 /**
- * @struct _wifi_diag_ipping_setting wifi_common_hal.h "include/wifi_common_hal.h"
- * @brief structure for Diagnostics settings of ip ping
- */
-
-typedef struct _wifi_diag_ipping_setting
-{
-    CHAR  ipping_Interface[256];	    //!< The value MUST be the path name of a row in the IP.Interface table. The IP-layer interface over which the test is to be performed. This identifies the source IP address to use when performing the test. Example: Device.IP.Interface.1. If an empty string is specified, the CPE MUST use the interface as directed by its routing policy (Forwarding table entries) to determine the appropriate interface.
-    CHAR  ipping_Host[256];	            //!< Host name or address of the host to ping. In the case where Host is specified by name, and the name resolves to more than one address, it is up to the device implementation to choose which address to use.
-    UINT  ipping_NumberOfRepetitions;	//!< Number of repetitions of the ping test to perform before reporting the results.
-    UINT  ipping_Timeout;	            //!< Timeout in milliseconds for the ping test.
-    UINT  ipping_DataBlockSize;	        //!< Size of the data block in bytes to be sent for each ping.
-    UINT  ipping_DSCP;	                //!< DiffServ codepoint to be used for the test packets. By default the CPE SHOULD set this value to zero.
-
-} wifi_diag_ipping_setting_t;
-
-/**
- * @struct _wifi_diag_ipping_result wifi_common_hal.h "include/wifi_common_hal.h"
- * @brief structure for Diagnostics result of ip ping
- */
-
-typedef struct _wifi_diag_ipping_result
-{
-    CHAR  ipping_DiagnosticsState[64];	//!<Indicates availability of diagnostic data. Enumeration of:	Complete, Error_CannotResolveHostName, 	Error_Internal, Error_Other
-    UINT  ipping_SuccessCount;	        //!<Result parameter indicating the number of successful pings (those in which a successful response was received prior to the timeout) in the most recent ping test.
-    UINT  ipping_FailureCount;	        //!<Result parameter indicating the number of failed pings in the most recent ping test.
-    UINT  ipping_AverageResponseTime;	//!<Result parameter indicating the average response time in milliseconds over all repetitions with successful responses of the most recent ping test. If there were no successful responses, this value MUST be zero.
-    UINT  ipping_MinimumResponseTime;	//!<Result parameter indicating the minimum response time in milliseconds over all repetitions with successful responses of the most recent ping test. If there were no successful responses, this value MUST be zero.
-    UINT  ipping_MaximumResponseTime;	//!<Result parameter indicating the maximum response time in milliseconds over all repetitions with successful responses of the most recent ping test. If there were no successful responses, this value MUST be zero.
-
-} wifi_diag_ipping_result_t;
-
-/**
  * @struct _wifi_sta_stats wifi_common_hal.h "include/wifi_common_hal.h"
  * @brief structure for AP info
  */
@@ -455,13 +415,24 @@ typedef struct _wifi_sta_stats
     UINT  sta_LastDataUplinkRate;		//!< The data transmit rate in kbps that was most recently used for transmission from the end point to the access point device.
     UINT  sta_Retransmissions;			//!< The number of packets that had to be re-transmitted, from the last 100 packets sent to the access point. Multiple re-transmissions of the same packet count as one.
 } wifi_sta_stats_t;
+
+/**
+ * @struct _wifi_halSettings wifi_common_hal.h "include/wifi_common_hal.h"
+ * @brief structure for halSettings
+ */
+
+typedef struct _wifi_halSettings
+{
+  char wlan_Interface[WLAN_IFNAMSIZ];  //!< Name of the wireless interface ex: "wlan0", "wlan1" 
+} wifi_halConfig_t;
+
 /** @} */ //End of WIFI_HAL_TYPES
 
 /**
  * @brief Get the wifi hal version in string, eg "2.0.0".  WIFI_HAL_MAJOR_VERSION.WIFI_HAL_MINOR_VERSION.WIFI_HAL_MAINTENANCE_VERSION
  *
  * @param[out] output_string it contains HAL version
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected. 
  */
@@ -478,56 +449,6 @@ INT wifi_getHalVersion(CHAR *output_string);
  */
 
 /**
- * @brief Implements factory reset of the Wi-Fi subsystem.
- *
- * Factory reset of the Wi-Fi subsystem is done by unloading the WLAN driver
- * and wpa_supplicant and restores factory wpa_supplicant configuration file.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @note This function must not suspend and must not invoke any blocking system 
- * calls. It should probably just send a message to a driver event handler task. 
- */
-INT wifi_factoryReset();
-
-/**
- * @brief Reset all radio parameters.
- *
- * Restore all radio parameters without touching access point parameters.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @note This function must not suspend and must not invoke any blocking system
- * calls. It should probably just send a message to a driver event handler task.
- */
-INT wifi_factoryResetRadios();
-
-/**
- * @brief Reset specified radio parameter.
- *
- * Restore selected radio parameters without touch access point parameters.
- *
- * @param[in] radioIndex The index of the radio.
- * First radio is index 0. 2nd radio is index 1.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @note This function must not suspend and must not invoke any blocking system
- * calls. It should probably just send a message to a driver event handler task.
- *
- */
-INT wifi_factoryResetRadio(int radioIndex); 
-
-//Set the system LED status
-//INT wifi_setLED(INT apIndex, BOOL enable);
-
-/**
  * @brief Initializes the wifi subsystem.
  *
  * Steps involved in a wifi_init operation
@@ -537,7 +458,8 @@ INT wifi_factoryResetRadio(int radioIndex);
  * - Opening up communication channels for monitoring and control interfaces
  * - Invoking the event monitoring thread.
  *
- * @return The status of the operation.
+ * @todo Change all API's retun tag type(ex: INT)
+ * @return INT - The status of the operation. 
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -548,25 +470,10 @@ INT wifi_factoryResetRadio(int radioIndex);
 INT wifi_init(); 
 
 /**
- * @brief Defines for iface name size
- */
-#define WLAN_IFNAMSIZ 32
-
-/**
- * @struct _wifi_halSettings wifi_common_hal.h "include/wifi_common_hal.h"
- * @brief structure for halSettings
- */
-
-typedef struct _wifi_halSettings
-{
-  char wlan_Interface[WLAN_IFNAMSIZ];  //!< wlan interface
-} wifi_halConfig_t;
-
-/**
  * @brief Initializes the wifi subsystem.
  *
- * @param[in] conf The index of the radio.
- * @return The status of the operation.
+ * @param[in] conf conatians wlan interface name.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -576,22 +483,9 @@ typedef struct _wifi_halSettings
 INT wifi_initWithConfig(wifi_halConfig_t * conf);
 
 /**
- * @brief Deletes all the saved access point configuration details.
- *
- * @return The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @pre wifi_init() should  be called  before calling this API.
- * @note This function must not suspend and must not invoke any blocking system
- * calls. It should probably just send a message to a driver event handler task.
- */
-INT wifi_reset();
-
-/**
  * @brief Turns off transmit power for the entire Wifi subsystem, for all radios.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -604,7 +498,7 @@ INT wifi_down();
 /**
  * @brief Uninitilizes wifi module.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -623,9 +517,9 @@ INT wifi_uninit();
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre "wifi_sta_stats" must be preallocated by the caller.
+ * @todo To check if there is any telemetry requirement
  */
 void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
-
 
 //---------------------------------------------------------------------------------------------------
 //Wifi Tr181 API
@@ -639,7 +533,7 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  *
  * @param[out] output Outputs the number of radios in string.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected. 
  * 
@@ -654,20 +548,13 @@ INT wifi_getRadioNumberOfEntries(ULONG *output); //Tr181
  *
  * @param[out] output Outputs the number of SSID entries in string.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected. 
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
-
-
-//Device.WiFi.AccessPointNumberOfEntries
-
-//Device.WiFi.EndPointNumberOfEntries
-//End points are managed by RDKB
-//INT wifi_getEndPointNumberOfEntries(INT radioIndex, ULONG *output); //Tr181
 
 //---------------------------------------------------------------------------------------------------
 //
@@ -688,7 +575,7 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
  * @param[in] radioIndex The index of radio.
  * @param[out] output_bool output of the radio state.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -707,7 +594,7 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  * @param[in] radioIndex The index of radio.
  * @param[out] output_string output of the radio status.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -726,7 +613,7 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @param[in] radioIndex The index of radio.
  * @param[out] output_string Output string which stores the radio interface name.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -753,7 +640,7 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string); //Tr181
  * @param[in] radioIndex The index of radio.
  * @param[out] output_string Output string which stores the maximum bit rate value.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -772,7 +659,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores the supported freq band.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -792,7 +679,7 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores current operating band.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -812,7 +699,7 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string); //
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores the supported freq band.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -833,7 +720,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string); //Tr18
  * @param[in] nOnly   the n-only mode.
  * @param[in] acOnly  the ac-only mode.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -872,7 +759,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores the list of used channels.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -890,7 +777,7 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_ulong Variable which stores the currently used channel number.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -906,7 +793,7 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection support status.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -927,7 +814,7 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool); //Tr18
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre "output_bool" buffer must be preallocated by the caller.
- * @see wifi_setRadioAutoChannelEnable() wifi_getRadioAutoChannelSupported()
+ * @see wifi_getRadioAutoChannelSupported()
  */
 INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
@@ -939,7 +826,7 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_ulong Output variable that stores the Auto Channel Selection / Dynamic channel selection refresh period.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -957,7 +844,7 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong); 
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Returns the guard interval value.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  */
@@ -973,7 +860,7 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);	//Tr181
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output variable stores the bandwidth of the operating channel.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -994,7 +881,7 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output of the secondary extension channel.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1011,7 +898,7 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string); //Tr181
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_INT  The mcs index value.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1027,7 +914,7 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT); //Tr181
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_list  Output string stores the transmit power list.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1047,7 +934,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list); //Tr
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_INT  Output string stores the current transmit power.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1066,7 +953,7 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
  * @param[in] radioIndex The index of the radio.
  * @param[out] Supported The Boolean value, indicates the 80211h support.
  *
- * @return The status of the operation.
+ * @return int - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1083,7 +970,7 @@ int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);  //Tr181
  * @param[in] radioIndex The index of the radio.
  * @param[out] enable The 80211h enable status.
  *
- * @return The status of the operation.
+ * @return int - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1102,7 +989,7 @@ int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);  //Tr181
  * @param[in] radioIndex The index of the radio.
  * @param[in] output_string Stores the regulatory domain string.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1142,7 +1029,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_struct Structure that saves the traffic statistics.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1158,7 +1045,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  * @param[in] ssidIndex The index of the ssid.
  * @param[out] output_bool The SSID enable status.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -1178,7 +1065,7 @@ INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool); //Tr181
  * @param[in] apIndex The index of the access point.
  * @param[out] output_string String which holds the SSID name.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -1194,7 +1081,7 @@ INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
  * @param[in] ssidIndex  The index of the SSID
  * @param[out] output_string Output variable that contains the BSSID
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -1211,7 +1098,7 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
  * @param[in] ssidIndex  The index of the SSID.
  * @param[out] output_string Output variable that holds the mac address.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -1253,7 +1140,7 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string); //Tr181
  * @param[in] ssidIndex  The index of the SSID.
  * @param[out] output_struct Output structure that holds the ssid traffic stats.
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -1297,7 +1184,7 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @param[in] neighbor_ap_array The neighbor access point matrix
  * @param[out] output_array_size The size of the access point list
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
@@ -1317,7 +1204,7 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * @param[in] filtered_ap_array The filtered access point list
  * @param[out] output_array_size output array size
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1331,7 +1218,7 @@ INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_nei
  * @param[in] radioIndex  radio index
  * @param[in] freqList frequency list
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  * 
@@ -1342,7 +1229,7 @@ INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
 /**
  * @brief Get Dual band support
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval 1 if dual band support enabled.
  * @retval 0 if dual band support disabled.
  * 
@@ -1356,7 +1243,7 @@ INT wifi_getDualBandSupport();
  * Wait for scan results if scan is in progress,
  * otherwise start a scan, complete the scan and wait for scan results
  *
- * @return The status of the operation.
+ * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
