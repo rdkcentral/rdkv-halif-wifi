@@ -507,8 +507,6 @@ INT wifi_down();
  */
 INT wifi_uninit();
 
-// log wifi parameters  format SSID:   BSSID:  ulChan: Noise:  RSSI:
-
 /**
  * @brief Gets current station connection status bssid,ssid,rssi,phyrate,noise,Band.
  *
@@ -521,7 +519,6 @@ INT wifi_uninit();
  */
 void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
 
-//---------------------------------------------------------------------------------------------------
 //Wifi Tr181 API
 
 //Device.WiFi.
@@ -538,6 +535,7 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  * @retval RETURN_ERR if any error is detected. 
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @todo to check if anyone using it.
  */
 INT wifi_getRadioNumberOfEntries(ULONG *output); //Tr181
 
@@ -553,6 +551,7 @@ INT wifi_getRadioNumberOfEntries(ULONG *output); //Tr181
  * @retval RETURN_ERR if any error is detected. 
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @todo to check if anyone using it.
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
 
@@ -570,7 +569,7 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output); //Tr181
 /**
  * @brief Get the Radio enable config parameter.
  *
- * If the radio is enable, return TRUE, otherwise FALSE.
+ * If the radio is enabled, return TRUE, otherwise FALSE.
  *
  * @param[in] radioIndex The index of radio.
  * @param[out] output_bool output of the radio state.
@@ -633,7 +632,6 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string); //Tr181
 /**
  * @brief Get the maximum PHY bit rate supported by the interface.
  *
- * Can use netlink APIs to retrieve the maximum bit rate value
  * Output is of the format "X.X Mb/s", "X.X Gb/s"
  * Eg. "216.7 Mb/s", "1.3 Gb/s"
  *
@@ -654,10 +652,10 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 /**
  * @brief Get Supported frequency bands at which the radio can operate.
  *
- * Output is comma seperated Values. Eg: 2.4Ghz,5Ghz.
+ * Output is comma separated Values. Eg: 2.4Ghz,5Ghz.
  *
  * @param[in] radioIndex The index of the radio.
- * @param[out] output_string Output string which stores the supported freq band.
+ * @param[out] output_string Output string which stores the supported freq bands.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
@@ -673,7 +671,7 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 /**
  * @brief Get the frequency band at which the radio is operating.
  *
- * RKD-V support STATION interface only.
+ * RDK-V supports STATION interface only.
  * Output format: Example: "2.4GHz", NULL if not connected.
  *
  * @param[in] radioIndex The index of the radio.
@@ -694,7 +692,7 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string); //
 /**
  * @brief Get radio supported standards.
  *
- * Output is comma seperated Values. Eg: b,g,n or a,n,ac.
+ * Output is comma separated Values. Eg: "b,g,n" or "a,n,ac".
  *
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores the supported freq band.
@@ -716,9 +714,9 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string); //Tr18
  *
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string the output string.
- * @param[in] gOnly   the g-only mode.
- * @param[in] nOnly   the n-only mode.
- * @param[in] acOnly  the ac-only mode.
+ * @param[out] gOnly   the g-only mode.
+ * @param[out] nOnly   the n-only mode.
+ * @param[out] acOnly  the ac-only mode.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
@@ -734,10 +732,9 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
 /**
  * @brief Gets the supported channel list.
  *
- * Can use netlink APIs to  retrieve the supported channel list.
- * Output Format: Comma seperated range / values
+ * Output Format: Comma separated range / values
  *
- * Example: 1-11,36-48,149-161
+ * Example: "1-11","36-48,149-161"
 
  * @param[in] radioIndex The index of the radio
  * @param[out] output_string Output string which stores the supported channels.
@@ -756,6 +753,9 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the list of channels currently in use.
  *
+ * Output Format: Comma separated range / values
+ *
+ * Example: "1"
  * @param[in] radioIndex The index of the radio.
  * @param[out] output_string Output string which stores the list of used channels.
  *
