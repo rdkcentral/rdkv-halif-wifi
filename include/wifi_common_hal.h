@@ -97,7 +97,8 @@
  * @ingroup HPK
  *
  * @defgroup WIFI_HAL_COMMON_API Wi-Fi Common HAL API List
- * @brief Refer https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html for data-model parameters.
+ * @section Data-Model
+ * Refer https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html for data-model parameters
  * @ingroup WIFI_HAL
  *
  * @defgroup WIFI_HAL_TYPES Wi-Fi HAL Data Structure
@@ -514,8 +515,8 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  * @retval RETURN_ERR if any error is detected. 
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @note @ref Data-Model Parameter Device.WiFi.RadioNumberOfEntries
  * @todo to check if anyone using it.
- * @note Data model parameter - Device.WiFi.RadioNumberOfEntries
  */
 INT wifi_getRadioNumberOfEntries(ULONG *output);
 
@@ -529,7 +530,7 @@ INT wifi_getRadioNumberOfEntries(ULONG *output);
  * @retval RETURN_ERR if any error is detected. 
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.SSIDNumberOfEntries
+ * @note @ref Data-Model Parameter Device.WiFi.SSIDNumberOfEntries
  * @todo to check if anyone using it.
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output);
@@ -551,7 +552,7 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.Enable
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Enable
  */
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 
@@ -568,7 +569,7 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.Status
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Status
  */
 INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
 
@@ -583,7 +584,7 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
  */
 INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
 
@@ -598,7 +599,7 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.MaxBitRate
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.MaxBitRate
  */
 INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 
@@ -613,7 +614,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.SupportedFrequencyBands
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedFrequencyBands
  */
 INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 
@@ -629,7 +630,7 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioSupportedFrequencyBands()
- * @note Data model parameter - Device.WiFi.Radio.{i}.OperatingFrequencyBand
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingFrequencyBand
  */
 INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
 
@@ -644,7 +645,7 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.SupportedStandards
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedStandards
  */
 INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
 
@@ -664,7 +665,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioSupportedStandards()
- * @note Data model parameter - Device.WiFi.Radio.{i}.OperatingStandards
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingStandards
  */
 INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);
 
@@ -679,7 +680,7 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.PossibleChannels
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.PossibleChannels
  */
 INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 
@@ -695,7 +696,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioPossibleChannels()
- * @note Data model parameter - Device.WiFi.Radio.{i}.ChannelsInUse
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.ChannelsInUse
  */
 INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 
@@ -710,7 +711,7 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.Channel
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Channel
  */
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 
@@ -725,7 +726,7 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.AutoChannelSupported 
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelSupported 
  */
 INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
 
@@ -741,7 +742,7 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioAutoChannelSupported()
- * @note Data model parameter - Device.WiFi.Radio.{i}.AutoChannelEnable
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelEnable
  */
 INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
@@ -756,7 +757,7 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see Data model parameter - Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod
  */
 INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
 
@@ -769,7 +770,7 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
  * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
- * @note Data model parameter - Device.WiFi.Radio.{i}.GuardInterval
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.GuardInterval
  */
 INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
 
@@ -784,7 +785,7 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.OperatingChannelBandwidth
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingChannelBandwidth
  * @todo add data model parameter
  * @todo output_string ex:Auto need to check
  */
@@ -805,7 +806,7 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.ExtensionChannel
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
 
@@ -820,7 +821,7 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.MCS
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.MCS
  */
 INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
 
@@ -835,7 +836,7 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.TransmitPowerSupported
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPowerSupported
  */
 INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
 
@@ -853,7 +854,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioTransmitPowerSupported()
- * @note Data model parameter - Device.WiFi.Radio.{i}.TransmitPower
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPower
  */
 INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 
@@ -870,7 +871,7 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.IEEE80211hSupported
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hSupported
  */
 int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
 
@@ -885,7 +886,7 @@ int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.IEEE80211hEnabled
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
  */
 int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
 
@@ -903,7 +904,7 @@ int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.Radio.{i}.RegulatoryDomain
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.RegulatoryDomain
  */
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 
@@ -918,7 +919,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html#D.Device:2.Device.WiFi.Radio.Stats.
+ * @note @ref Data-Model Parameter Device.WiFi.Radio.Stats.
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
 
@@ -933,7 +934,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  * @retval RETURN_ERR if any error is detected.
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.SSID.{i}.Enable
+ * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Enable
  */
 INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool);
 
@@ -950,7 +951,7 @@ INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool);
  * @retval RETURN_ERR if any error is detected.
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
+ * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
 
@@ -980,7 +981,7 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - Device.WiFi.SSID.{i}.MACAddress
+ * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.MACAddress
  */
 INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
 
@@ -995,7 +996,7 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note Data model parameter - https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html#D.Device:2.Device.WiFi.SSID.Stats.
+ * @note @ref Data-Model Parameter Device.WiFi.SSID.Stats.
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct);
 
@@ -1015,7 +1016,7 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  *
  * @pre wifi_init() should be called  before calling this API.
  * @note HAL function should allocate an data structure array, and return to caller with "neighbor_ap_array".
- * @note Data model parameter - https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html#D.Device:2.Device.WiFi.NeighboringWiFiDiagnostic., https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html#D.Device:2.Device.WiFi.NeighboringWiFiDiagnostic.Result.
+ * @note @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size); //Tr181
 
