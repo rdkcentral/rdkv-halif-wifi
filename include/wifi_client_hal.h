@@ -168,7 +168,7 @@ typedef struct _wifi_telemetry_ops_t
  * @brief This API checks WPS(Wi-Fi Protected Setup) functionality is enabled for this access point.
  *
  * @param[in]  ssidIndex The index of the SSID array.
- * @param[out] output_bool Boolean value which indicates the wps enabled status.
+ * @param[out] output_bool Boolean value which indicates the wps enabled status{0-disabled, 1-enabled}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success. 
@@ -183,7 +183,7 @@ INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
  * @brief This API enables or disables WPS functionality for this access point.
  *
  * @param[in] ssidIndex The index of the SSID array.
- * @param[in] enableValue  Boolean value to enable or disable WPS.
+ * @param[in] enableValue  Boolean value to enable or disable WPS{0-disabled, 1-enabled}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - If successfully sets WPS ebanle value. 
@@ -243,7 +243,7 @@ INT wifi_setCliWpsDevicePIN(INT ssidIndex, ULONG pin);
  * Device must support PushButton and PIN methods.
  *
  * @param[in]  ssidIndex The index of SSID array.
- * @param[out] methods  The WPS supported methods.
+ * @param[out] methods  The WPS supported methods{Ex:"Push and Pin"}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods supported. 
@@ -260,7 +260,7 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
  * Each list item MUST be a member of the list reported by the ConfigMethodsSupported parameter.
  *
  * @param[in]  ssidIndex The index of SSID array.
- * @param[out] output_string  The current WPS method.
+ * @param[out] output_string  The current WPS method{Ex:"Push and Pin"}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods enabled. 
@@ -275,7 +275,7 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @brief This API sets the active WPS method.
  *
  * @param[in] ssidIndex The index of SSID array.
- * @param[in] methodString The method to enable.
+ * @param[in] methodString The method to enable{Ex:"Push and Pin"}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if set WPS config methods enabled. 
@@ -345,7 +345,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @param[in] eapIdentity EAP identity.
  * @param[in] carootcert CA root cert
  * @param[in] clientcert client cert
- * @param[in]  privatekey private key
+ * @param[in] privatekey private key
  *
  * @return INT - The status of the operation. 
  * @retval RETURN_OK   - Successfully connect. 
