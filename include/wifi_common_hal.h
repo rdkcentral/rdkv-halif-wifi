@@ -807,6 +807,7 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
+ * @todo This needs to be investigated, to understand the purpose and requirement of this API.
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
 
@@ -886,15 +887,13 @@ int wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
  * @retval RETURN_ERR if any error is detected.
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_getRadioIEEE80211hSupported() should return TRUE
  * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
  */
 int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
 
 /**
- * @brief Gets the Access Point regulatory domain.
- *
- * Default regulatory domain is set as "Global" by wpa_supplicant.
- * This can be changed to a country specific regulatory.
+ * @brief Gets the regulatory domain.
  *
  * @param[in] radioIndex The index of the radio.
  * @param[in] output_string Stores the regulatory domain string{Ex:"US", "DE"}.
@@ -909,10 +908,10 @@ int wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 
 /**
- * @brief Get detail radio traffic statistics information.
+ * @brief Get detailed radio traffic statistics information.
  *
  * @param[in] radioIndex The index of the radio.
- * @param[out] output_struct Structure that saves the radio traffic statistics.
+ * @param[out] output_struct Structure of type wifi_radioTrafficStats_t that saves the radio traffic statistics.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
@@ -924,7 +923,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
 
 /**
- * @brief Get SSID enable configuration parameters.
+ * @brief Get SSID enabled/disabled status.
  *
  * @param[in] ssidIndex The index of the ssid.
  * @param[out] output_bool The SSID enable status{0-disabled, 1-enabled}.
@@ -935,6 +934,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  *
  * @pre wifi_init() should be called  before calling this API.
  * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Enable
+ * @todo Remove this API or return RETURN_UNSUPPORTED
  */
 INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool);
 
@@ -952,6 +952,7 @@ INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool);
  *
  * @pre wifi_init() should be called  before calling this API.
  * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
+ * @todo Remove this API or return RETURN_UNSUPPORTED
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
 
@@ -967,6 +968,7 @@ INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected.
  *
  * @pre wifi_init() should be called  before calling this API.
+ * @todo Remove this API or return RETURN_UNSUPPORTED
  */
 INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 
@@ -982,6 +984,7 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
  *
  * @pre wifi_init() should be called  before calling this API.
  * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.MACAddress
+ * @todo Remove this API or return RETURN_UNSUPPORTED
  */
 INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
 
@@ -989,25 +992,25 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
  * @brief Get the basic SSID traffic statistics info.
  *
  * @param[in] ssidIndex  The index of the SSID.
- * @param[out] output_struct Output structure that holds the ssid traffic stats.
+ * @param[out] output_struct structure of type wifi_ssidTrafficStats_t that holds the ssid traffic stats.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK if successful.
  * @retval RETURN_ERR if any error is detected.
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.SSID.Stats.
+ * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Stats.
+ * @todo Remove this API or return RETURN_UNSUPPORTED
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct);
 
 /**
  * @brief Get neighbor wifi diagnostics.
  *
- * Start the wifi scan and get the result into output buffer for RDKV to parser.
- * The result will be used to manage endpoint list.
+ * Start the wifi scan and get the result into output buffer.
  *
  * @param[in] radioIndex  The index of the radio
- * @param[in] neighbor_ap_array The neighbor access point matrix
+ * @param[in] neighbor_ap_array structure of type wifi_neighbor_ap_t the neighbor access point matrix
  * @param[out] output_array_size The size of the access point list
  *
  * @return INT - The status of the operation.
@@ -1017,8 +1020,9 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @pre wifi_init() should be called  before calling this API.
  * @note HAL function should allocate an data structure array, and return to caller with "neighbor_ap_array".
  * @note @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
+ * @todo To clarify if it is relevant for only client
  */
-INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size); //Tr181
+INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size);
 
 /**
  * @brief Get Specific SSID Info.
