@@ -175,55 +175,8 @@ typedef struct _wifi_telemetry_ops_t
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setCliWpsEnable()
  */
 INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
-
-/**
- * @brief This API enables or disables WPS functionality for this access point.
- *
- * @param[in] ssidIndex The index of the SSID array.
- * @param[in] enableValue  Boolean value to enable or disable WPS{0-disabled, 1-enabled}.
- *
- * @return INT - The status of the operation.
- * @retval RETURN_OK   - If successfully sets WPS ebanle value. 
- * @retval RETURN_ERR  - fail.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getCliWpsEnable()
- */
-INT wifi_setCliWpsEnable(INT ssidIndex, BOOL enableValue);
-
-/**
- * @brief This API is used to read the device PIN required for making a WPS connection.
- *
- * @param[in] ssidIndex The index of the SSID array.
- * @param[out] output_ulong  Output parameter which saves the Device PIN.
- * This value is to be printed on the device.
- *
- * @return INT - The status of the operation.
- * @retval RETURN_OK   - success. 
- * @retval RETURN_ERR  - fail.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setCliWpsDevicePIN()
- */
-INT wifi_getCliWpsDevicePIN(INT ssidIndex, ULONG *output_ulong);
-
-/**
- * @brief This API sets the WPS Device pin to the Wi-Fi hal.
- *
- * @param[in] ssidIndex The index of the SSID array.
- * @param[in] pin The PIN code to set.
- *
- * @return INT - The status of the operation.
- * @retval RETURN_OK   - success if generate and set WPS PIN. 
- * @retval RETURN_ERR  - fail.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getCliWpsDevicePIN()
- */
-INT wifi_setCliWpsDevicePIN(INT ssidIndex, ULONG pin);
 
 /**
  * @brief This API is used to get WPS configuration  methods supported by the device.
@@ -285,20 +238,6 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @see wifi_getCliWpsConfigMethodsEnabled()
  */
 INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
-
-/**
- * @brief This API is used to get the WPS config status, whether WPS "configured" or "not configured"
- *
- * @param[in] ssidIndex The index of SSID array
- * @param[in] output_string  The output paramter which holds the wps config status.
- *
- * @return INT - The status of the operation.
- * @retval RETURN_OK   - success. 
- * @retval RETURN_ERR  - fail.
- * 
- * @pre wifi_init() should be called  before calling this API.
- */
-INT wifi_getCliWpsConfigurationState(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief This API sets the PIN to connect.

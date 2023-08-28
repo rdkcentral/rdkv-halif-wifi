@@ -923,22 +923,6 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
 
 /**
- * @brief Get SSID enabled/disabled status.
- *
- * @param[in] ssidIndex The index of the ssid.
- * @param[out] output_bool The SSID enable status{0-disabled, 1-enabled}.
- *
- * @return INT - The status of the operation.
- * @retval RETURN_OK if successful.
- * @retval RETURN_ERR if any error is detected.
- *
- * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Enable
- * @todo Remove this API or return RETURN_UNSUPPORTED
- */
-INT wifi_getSSIDEnable(INT ssidIndex, BOOL *output_bool);
-
-/**
  * @brief Get SSID name.
  *
  * Outputs a 32 byte or less string indicating the SSID name.
