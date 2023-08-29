@@ -170,13 +170,13 @@ typedef struct _wifi_telemetry_ops_t
  * @param[in]  ssidIndex The index of the SSID array.
  * @param[out] output_bool Boolean value which indicates the wps enabled status{0-disabled, 1-enabled}.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - success. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
-INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
+WifiReturnCodes_t wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
 
 /**
  * @brief This API is used to get WPS configuration  methods supported by the device.
@@ -198,13 +198,13 @@ INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
  * @param[in]  ssidIndex The index of SSID array.
  * @param[out] methods  The WPS supported methods{Ex:"Push and Pin"}.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods supported. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
-INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
+WifiReturnCodes_t wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
 
 /**
  * @brief This function indicates WPS configuration methods enabled on the device.
@@ -215,14 +215,14 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
  * @param[in]  ssidIndex The index of SSID array.
  * @param[out] output_string  The current WPS method{Ex:"Push and Pin"}.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods enabled. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getCliWpsConfigMethodsSupported() wifi_setCliWpsConfigMethodsEnabled()
  */
-INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
+WifiReturnCodes_t wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief This API sets the active WPS method.
@@ -230,14 +230,14 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] methodString The method to enable{Ex:"Push and Pin"}.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - success if set WPS config methods enabled. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getCliWpsConfigMethodsEnabled()
  */
-INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
+WifiReturnCodes_t wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
 /**
  * @brief This API sets the PIN to connect.
@@ -246,26 +246,26 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] EnrolleePin PIN code to connect to the access point.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - WPS PIN call success. 
  * @retval RETURN_ERR  - WPS PIN call fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
-INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
+WifiReturnCodes_t wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 
 /**
  * @brief Start the Push button pairing.
  *
  * @param[in] ssidIndex The index of SSID array.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - success if WPS Push sent successfully. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
-INT wifi_setCliWpsButtonPush(INT ssidIndex);
+WifiReturnCodes_t wifi_setCliWpsButtonPush(INT ssidIndex);
 
 //2. Directly pairing method
 /**
@@ -286,7 +286,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @param[in] clientcert client cert
  * @param[in] privatekey private key
  *
- * @return INT - The status of the operation. 
+ * @return WifiReturnCodes_t - The status of the operation. 
  * @retval RETURN_OK   - Successfully connect. 
  * @retval RETURN_ERR  - Fail.
  * 
@@ -294,7 +294,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @see wifi_disconnectEndpoint()
  * @todo Need to cahnge saveSSID datat type to INT from int.
  */
-INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,int saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);	//Tr181
+WifiReturnCodes_t wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,int saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);	//Tr181
 
 /**
  * @brief This API disconnects the access point specified.
@@ -302,14 +302,14 @@ INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_sec
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] AP_SSID  The ssid to disconnect.
  *
- * @return INT - The status of the operation. 
+ * @return WifiReturnCodes_t - The status of the operation. 
  * @retval RETURN_OK   - Successfully disconnect. 
  * @retval RETURN_ERR  - Fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_connectEndpoint()
  */
-INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
+WifiReturnCodes_t wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
 
 // Clear SSID information
 /**
@@ -317,13 +317,13 @@ INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
  *
  * @param[in] ssidIndex The index of SSID array.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - Successfully clears SSID info. 
  * @retval RETURN_ERR  - Fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
-INT wifi_clearSSIDInfo(INT ssidIndex);
+WifiReturnCodes_t wifi_clearSSIDInfo(INT ssidIndex);
 
 /**
  * @brief This call back should be registered by Wi-Fi manager to receive status updates from HAL in case of a
@@ -333,11 +333,11 @@ INT wifi_clearSSIDInfo(INT ssidIndex);
  * @param[in]  AP_SSID  The ssid to disconnect.
  * @param[out] error Indicates the Wi-Fi connection sttaus.
  *
- * @return The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - Success. 
  * @retval RETURN_ERR  - Fail.
  */
-typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
+typedef WifiReturnCodes_t (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
 /**
  * @brief Disconnect Callback registration function.
@@ -355,11 +355,11 @@ void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback 
  * @param[in]  AP_SSID  The ssid to disconnect.
  * @param[out] error Indicates the Wi-Fi connection status.
  *
- * @return The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - Success. 
  * @retval RETURN_ERR  - Fail.
  */
-typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
+typedef WifiReturnCodes_t (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
 /**
  * @brief Connect Callback registration function.
@@ -384,13 +384,13 @@ void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
  *
  * @param[out] pairedSSIDInfo Structure which holds the last connected access point information.
  *
- * @return INT - The status of the operation.
+ * @return WifiReturnCodes_t - The status of the operation.
  * @retval RETURN_OK   - Successfully gets the laconnected SSID info. 
  * @retval RETURN_ERR  - Failure if No SSID in wpa_supplicant.conf.
  * 
  * @pre wifi_init() should be called  before calling this API.
  */
-INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
+WifiReturnCodes_t wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
 
 /**
  * @brief This API will set the Roaming control data for a client
@@ -398,14 +398,14 @@ INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
  * @param[in] ssidIndex this is used to validate the ssid
  * @param[in] pRoamingCtrl_data this is the structure with values to be set
  *
- * @returns int - SET status of the pRoamingCtrl data
+ * @returns WifiReturnCodes_t - SET status of the pRoamingCtrl data
  * @retval RETURN_OK   - Successfully sets the values. 
  * @retval RETURN_ERR  - Failure in setting roaming control data.
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRoamingControl()
  */
-int wifi_setRoamingControl (int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
+WifiReturnCodes_t wifi_setRoamingControl (int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
  * @brief This API gets the Roaming control data
@@ -413,14 +413,14 @@ int wifi_setRoamingControl (int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data
  * @param[in] ssidIndex to validate the interface
  * @param[out] pRoamingCtrl_data Roaming control configuration
  *
- * @returns int - GET status
+ * @returns WifiReturnCodes_t - GET status
  * @retval RETURN_OK   - Successfully gets the Roaming control data. 
  * @retval RETURN_ERR  - Failure in getting roaming control data.
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_setRoamingControl()
  */
-int wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
+WifiReturnCodes_t wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
  * @brief This API gets the current wifi status
@@ -445,14 +445,14 @@ WiFiHalStatus_t getwifiStatusCode();
 /**
  * @brief This API will cancel any in progress WPS operaiotn
  *
- * @returns INT - WPS cancel status.
+ * @returns WifiReturnCodes_t - WPS cancel status.
  * @retval RETURN_OK   - success. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_setCliWpsButtonPush()
  */
-INT wifi_cancelWpsPairing();
+WifiReturnCodes_t wifi_cancelWpsPairing();
 
 /** @} */ // End of WIFI_HAL_CLIENT_API
 #else
