@@ -287,7 +287,7 @@ typedef enum
 **********************************************************************/
 
 /**
- * @struct _wifi_radioTrafficStats wifi_common_hal.h "include/wifi_common_hal.h"
+ * @struct _wifi_radioTrafficStats
  * @brief structure for radioTrafficStats
  */
 
@@ -316,10 +316,10 @@ typedef struct _wifi_radioTrafficStats
     INT   radio_MedianNoiseFloorOnChannel;       //!< Median Noise on the channel during the measuring interval.   The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected in the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm
     ULONG radio_StatisticsStartTime; 	         //!< The date and time at which the collection of the current set of statistics started.  This time must be updated whenever the radio statistics are reset.
 
-} wifi_radioTrafficStats_t;	//for radio only
+} wifi_radioTrafficStats_t;
 
 /**
- * @struct _wifi_ssidTrafficStats wifi_common_hal.h "include/wifi_common_hal.h"
+ * @struct _wifi_ssidTrafficStats
  * @brief structure for ssidTrafficStats
  */
 
@@ -349,10 +349,10 @@ typedef struct _wifi_ssidTrafficStats
     ULONG ssid_BroadcastPacketsRecevied;   //!< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent.
     ULONG ssid_UnknownPacketsReceived;     //!< The total number of packets received via the interface which were discarded because of an unknown or unsupported protocol.
 
-} wifi_ssidTrafficStats_t;  //for ssid only
+} wifi_ssidTrafficStats_t;
 
 /**
- * @struct _wifi_ssidTrafficStats wifi_common_hal.h "include/wifi_common_hal.h"
+ * @struct _wifi_ssidTrafficStats
  * @brief structure for neighbor_ap
  *
  * @note Please do not edit the elements for this data structure
@@ -378,11 +378,11 @@ typedef struct _wifi_neighbor_ap
     UINT  ap_DTIMPeriod;	                    //!< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012]
     UINT  ap_ChannelUtilization[64];	        //!< Indicates the fraction of the time AP senses that the channel is in use by the neighboring AP for transmissions.
 
-} wifi_neighbor_ap_t;	//COSA_DML_NEIGHTBOURING_WIFI_RESULT
+} wifi_neighbor_ap_t;
 
 /**
- * @struct _wifi_sta_stats wifi_common_hal.h "include/wifi_common_hal.h"
- * @brief structure for AP info
+ * @struct _wifi_sta_stats
+ * @brief structure for Access Point info
  */
 
 typedef struct _wifi_sta_stats
@@ -402,7 +402,7 @@ typedef struct _wifi_sta_stats
 } wifi_sta_stats_t;
 
 /**
- * @struct _wifi_halSettings wifi_common_hal.h "include/wifi_common_hal.h"
+ * @struct _wifi_halSettings
  * @brief structure for halSettings
  */
 

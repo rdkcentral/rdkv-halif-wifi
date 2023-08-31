@@ -84,12 +84,6 @@
 //Device.WiFi.EndPoint.{i}.Profile.{i}.Security.PreSharedKey
 //Device.WiFi.EndPoint.{i}.Profile.{i}.Security.KeyPassphrase
 //----------------------------------------------------------------------------------------------------
-//Device.WiFi.EndPoint.{i}.WPS
-//Device.WiFi.EndPoint.{i}.WPS.Enable
-//Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsSupported
-//Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
-
-//-----------------------------------------------------------------------------------------------------
 
 /**
  * @addtogroup WIFI_HAL_TYPES
@@ -105,9 +99,9 @@
  */
 typedef struct _wifi_pairedSSIDInfo
 {
-  CHAR  ap_ssid[64];	      //!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
-  CHAR  ap_bssid[64];	      //!< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID.
-  CHAR  ap_security[64];	  //!< Security mode of AP
+  CHAR  ap_ssid[64];          //!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
+  CHAR  ap_bssid[64];         //!< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID.
+  CHAR  ap_security[64];      //!< Security mode of AP
   CHAR  ap_passphrase[128];   //!< Passphrase of AP
   CHAR  ap_wep_key[128];      //!< wep_key of AP incase of WEP security
 }wifi_pairedSSIDInfo_t;
@@ -169,6 +163,7 @@ typedef struct _wifi_telemetry_ops_t
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.Enable
  */
 INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
 
@@ -197,8 +192,9 @@ INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsSupported
  */
-INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
+INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
 
 /**
  * @brief This function indicates WPS configuration methods enabled on the device.
@@ -215,6 +211,7 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);		//OEM
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getCliWpsConfigMethodsSupported() wifi_setCliWpsConfigMethodsEnabled()
+ * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
  */
 INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 
@@ -230,6 +227,7 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getCliWpsConfigMethodsEnabled()
+ * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
  */
 INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
@@ -245,6 +243,7 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
  * @retval RETURN_ERR  - WPS PIN call fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.PIN
  */
 INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 
@@ -287,7 +286,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_disconnectEndpoint()
  */
-INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);	//Tr181
+INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);
 
 /**
  * @brief This API disconnects the access point specified.
@@ -432,7 +431,7 @@ INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * @pre wifi_init() should be called  before calling this API.
  * @todo Need to change the function name to wifi_getwifiStatusCode() from getwifiStatusCode()
  */
-INT getwifiStatusCode();
+WiFiHalStatus_t getwifiStatusCode();
 
 /**
  * @brief This API will cancel any in progress WPS operaiotn
