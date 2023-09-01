@@ -25,7 +25,7 @@ HAL_GENERATOR_VERSION=master
 
 # This will look up the last tag in the git repo, depending on the project this may require modification
 PROJECT_VERSION=$(git describe --tags | head -n1)
-DOXYGEN_REPO=$(git remote -vv | head -n1 | awk -F ' ' '{print $2}' | sed 's/hal.*/hal-doxygen.git/g')
+DOXYGEN_REPO=git@github.com:rdkcentral/hal-doxygen.git
 
 # Check if the common document configuration is present, if not clone it
 if [ -d "./build" ]; then
