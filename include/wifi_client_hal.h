@@ -54,36 +54,6 @@
  */
 
 #include <wifi_common_hal.h>
-//----------------------------------------------------------------------------------------------------
-//Device.WiFi.EndPoint //EndPoint list is mananged by RDKB wifi agent
-//Device.WiFi.EndPoint.{i}.Enable
-//Device.WiFi.EndPoint.{i}.Status
-//Device.WiFi.EndPoint.{i}.Alias
-//Device.WiFi.EndPoint.{i}.ProfileReference
-//Device.WiFi.EndPoint.{i}.SSIDReference
-//Device.WiFi.EndPoint.{i}.ProfileNumberOfEntries
-//----------------------------------------------------------------------------------------------------
-//Device.WiFi.EndPoint.{i}.Stats.LastDataDownlinkRate
-//Device.WiFi.EndPoint.{i}.Stats.LastDataUplinkRate
-//Device.WiFi.EndPoint.{i}.Stats.SignalStrength
-//Device.WiFi.EndPoint.{i}.Stats.Retransmissions
-//----------------------------------------------------------------------------------------------------
-//Device.WiFi.EndPoint.{i}.Security
-//Device.WiFi.EndPoint.{i}.Security.ModesSupported
-//----------------------------------------------------------------------------------------------------
-//Device.WiFi.EndPoint.{i}.Profile
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Enable
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Status
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Alias
-//Device.WiFi.EndPoint.{i}.Profile.{i}.SSID
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Location
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Priority
-//----------------------------------------------------------------------------------------------------
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Security.ModeEnabled
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Security.WEPKey
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Security.PreSharedKey
-//Device.WiFi.EndPoint.{i}.Profile.{i}.Security.KeyPassphrase
-//----------------------------------------------------------------------------------------------------
 
 /**
  * @addtogroup WIFI_HAL_TYPES
@@ -108,9 +78,7 @@ typedef struct _wifi_pairedSSIDInfo
 
 /**
  * @struct _wifi_roamingCtrl_t
- * @brief Structure for Roaming Control information (pre assoc data structure)
- *
- * Thi structure stores the pre association information.
+ * @brief Structure for Roaming Control information
  */
 typedef struct _wifi_roamingCtrl_t
 {
@@ -124,7 +92,7 @@ typedef struct _wifi_roamingCtrl_t
   INT postAssnSelfSteerThreshold;              //!<  postAssnSelfSteerThreshold
   INT postAssnSelfSteerTimeframe;              //!<  postAssnSelfSteerTimeframe
   INT postAssnBackOffTime;                     //!<  postAssnBackOffTime
-  //INT postAssnSelfSteerBeaconsMissedTime;
+  //INT postAssnSelfSteerBeaconsMissedTime;    //!< @note postAssnSelfSteerBeaconsMissedTime will be removed
   INT postAssnAPctrlThreshold;                 //!<  postAssnAPctrlThreshold control threshold
   INT postAssnAPctrlTimeframe;                 //!<  postAssnAPctrlTimeframe control time frame
 
@@ -144,48 +112,28 @@ typedef struct _wifi_telemetry_ops_t
 
 /** @} */ //End of WIFI_HAL_TYPES
 
-
-//1. WPS method
-
 /**
  * @addtogroup WIFI_HAL_CLIENT_API
  * @{
  */
 
 /**
- * @brief This API checks WPS(Wi-Fi Protected Setup) functionality is enabled for this access point.
- *
- * @param[in]  ssidIndex The index of the SSID array.
- * @param[out] output_bool Boolean value which indicates the wps enabled status{0-disabled, 1-enabled}.
- *
- * @return INT - The status of the operation.
- * @retval RETURN_OK   - success. 
- * @retval RETURN_ERR  - fail.
- * 
- * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.Enable
- */
-INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
-
-/**
  * @brief This API is used to get WPS configuration  methods supported by the device.
  *
- * This function provides the comma-separated list of strings, each list item is an enumeration of:
- * - USBFlashDrive - User uses a USB flash drive to transfer data between the new client device and
+ * This function provides the comma-separated list of strings. For example:
+ * - "USBFlashDrive" - User uses a USB flash drive to transfer data between the new client device and
  * the network's access point.
- * - Ethernet - If there is no WPS button, user can configure the wireless settings using ethernet on a wifi-extender
- * - ExternalNFCToken - NFC Tag contains a password token to authenticate Wi-Fi connection.
+ * - "Ethernet" - If there is no WPS button, user can configure the wireless settings using ethernet on a wifi-extender
+ * - "ExternalNFCToken" - NFC Tag contains a password token to authenticate Wi-Fi connection.
  * Uses external program to write  * NDEF encapsulation data to the NFC tag using an external program.
- * - IntegratedNFCToken - The NFC Tag is integrated in the device.
- * - NFCInterface - User has to bring the client close to AP allowing a near field communication between the devices.
- * - PushButton - User has to push a button, either an actual or virtual one,
+ * - "IntegratedNFCToken" - The NFC Tag is integrated in the device.
+ * - "NFCInterface" - User has to bring the client close to AP allowing a near field communication between the devices.
+ * - "PushButton" - User has to push a button, either an actual or virtual one,
  * on both the access point and the new wireless * client device.
- * - PIN - User has to be read the PIN from either a sticker or display on the new wireless device.
- *
- * Device must support PushButton and PIN methods.
+ * - "PIN" - User has to be read the PIN from either a sticker or display on the new wireless device.
  *
  * @param[in]  ssidIndex The index of SSID array.
- * @param[out] methods  The WPS supported methods{Ex:"Push and Pin"}.
+ * @param[out] methods  The WPS supported methods as comma-separated string, please refer data-model items for complete set of supported methods{Ex:"PushButton, PIN"}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods supported. 
@@ -193,6 +141,7 @@ INT wifi_getCliWpsEnable(INT ssidIndex, BOOL *output_bool);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsSupported
+ * @todo Need more review
  */
 INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
 
@@ -203,37 +152,36 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
  * Each list item MUST be a member of the list reported by the ConfigMethodsSupported parameter.
  *
  * @param[in]  ssidIndex The index of SSID array.
- * @param[out] output_string  The current WPS method{Ex:"Push and Pin"}.
+ * @param[out] output_string  The current WPS methods{Ex:"PushButton, PIN"}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if get WPS config methods enabled. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getCliWpsConfigMethodsSupported() wifi_setCliWpsConfigMethodsEnabled()
+ * @see wifi_getCliWpsConfigMethodsSupported(), wifi_setCliWpsConfigMethodsEnabled()
  * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
  */
 INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 
 /**
- * @brief This API sets the active WPS method.
+ * @brief This API sets the active WPS methods.
  *
  * @param[in] ssidIndex The index of SSID array.
- * @param[in] methodString The method to enable{Ex:"Push and Pin"}.
+ * @param[in] methodString The methods to enable{Ex:"PushButton, PIN"}.
  *
  * @return INT - The status of the operation.
  * @retval RETURN_OK   - success if set WPS config methods enabled. 
  * @retval RETURN_ERR  - fail.
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getCliWpsConfigMethodsEnabled()
+ * @see wifi_getCliWpsConfigMethodsSupported(), wifi_getCliWpsConfigMethodsEnabled()
  * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
  */
 INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
 /**
- * @brief This API sets the PIN to connect.
- * User get the EnrolleePin (device pin from AP device) give to hostapd for pairing.
+ * @brief This API sets the WPS PIN to pair with Access Point.
  *
  * @param[in] ssidIndex The index of SSID array.
  * @param[in] EnrolleePin PIN code to connect to the access point.
@@ -248,7 +196,7 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 
 /**
- * @brief Start the Push button pairing.
+ * @brief Start the WPS Push button pairing with Access Point.
  *
  * @param[in] ssidIndex The index of SSID array.
  *
