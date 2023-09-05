@@ -126,7 +126,7 @@ typedef struct _wifi_telemetry_ops_t
  * - "PIN" - User has to be read the PIN from either a sticker or display on the new wireless device.
  *
  * @param[in]  ssidIndex The index of SSID array
- * @param[out] methods  The WPS supported methods as comma-separated string, please refer data-model items for complete set of supported methods{Ex:"PushButton, PIN"}
+ * @param[out] methods   The WPS supported methods as comma-separated string, please refer data-model items for complete set of supported methods{Ex:"PushButton, PIN"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK   - success if get WPS config methods supported
@@ -144,7 +144,7 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
  * The API provides the comma-separated list of strings.
  * Each list item MUST be a member of the list reported by the ConfigMethodsSupported parameter.
  *
- * @param[in]  ssidIndex The index of SSID array
+ * @param[in]  ssidIndex      The index of SSID array
  * @param[out] output_string  The current WPS methods{Ex:"PushButton, PIN"}
  *
  * @return INT - The status of the operation
@@ -160,7 +160,7 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 /**
  * @brief This API sets the active WPS methods.
  *
- * @param[in] ssidIndex The index of SSID array
+ * @param[in] ssidIndex    The index of SSID array
  * @param[in] methodString The methods to enable{Ex:"PushButton, PIN"}
  *
  * @return INT - The status of the operation
@@ -170,13 +170,14 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getCliWpsConfigMethodsSupported(), wifi_getCliWpsConfigMethodsEnabled()
  * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
+ * @todo ssidIndex will be deprecated in next phase
  */
 INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
 /**
  * @brief This API sets the WPS PIN to pair with Access Point.
  *
- * @param[in] ssidIndex The index of SSID array
+ * @param[in] ssidIndex   The index of SSID array
  * @param[in] EnrolleePin PIN code to connect to the access point
  *
  * @return INT - The status of the operation
@@ -185,6 +186,7 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @note @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.PIN
+ * @todo ssidIndex will be deprecated in next phase
  */
 INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 
@@ -198,50 +200,53 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
  * @retval RETURN_ERR  - fail
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @todo ssidIndex will be deprecated in next phase
+ * @todo add proper description for param
  */
 INT wifi_setCliWpsButtonPush(INT ssidIndex);
 
-//2. Directly pairing method
 /**
  * @brief This API starts the connection process from client with an Access Point.
  *
- * It uses the input parameters to connect using a supported security method and encryption standard.
- * The security methods can make use of passphrase, public/private key pairs etc.
- *
- * @param[in] ssidIndex The index of SSID array
- * @param[in] AP_SSID  The ssid to connect
- * @param[in] AP_security_mode   The security mode to use
- * @param[in] AP_security_WEPKey The wep key
- * @param[in] AP_security_PreSharedKey The pre shared key
+ * @param[in] ssidIndex                 The index of SSID array
+ * @param[in] AP_SSID                   The ssid to connect
+ * @param[in] AP_security_mode          The security mode to use
+ * @param[in] AP_security_WEPKey        The wep key
+ * @param[in] AP_security_PreSharedKey  The pre shared key
  * @param[in] AP_security_KeyPassphrase The key passphrase
- * @param[in] saveSSID Option to save profile in wpa supplicant
- * @param[in] eapIdentity EAP identity
- * @param[in] carootcert CA root cert
- * @param[in] clientcert client cert
- * @param[in] privatekey private key
+ * @param[in] saveSSID                  Option to save the wifi connection parameters{0-false,1-true}
+ * @param[in] eapIdentity               EAP identity
+ * @param[in] carootcert                CA root cert
+ * @param[in] clientcert                client cert
+ * @param[in] privatekey                private key
  *
  * @return INT - The status of the operation
- * @retval RETURN_OK   - Successfully connect
+ * @retval RETURN_OK   - Successfully started the connection process
  * @retval RETURN_ERR  - Fail
- * 
- * @see wifiSecurityMode_t
+ *  
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_disconnectEndpoint()
+ * @pre wifi_connectEndpoint_callback_register() should be called  before calling this API.
+ * @see wifiSecurityMode_t, wifi_disconnectEndpoint()
+ * @todo review the description of param saveSSID
+ * @todo Need to add this in persistance model in halspec.md
+ * @todo mention the callback and the event that will be delivered to the caller when this operation finishes.
  */
 INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);
 
 /**
- * @brief This API disconnects the access point specified.
+ * @brief This API starts the disconnect of the client from the access point.
  *
  * @param[in] ssidIndex The index of SSID array
- * @param[in] AP_SSID  The ssid to disconnect
+ * @param[in] AP_SSID   The ssid to disconnect
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK   - Successfully disconnect
  * @retval RETURN_ERR  - Fail
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_disconnectEndpoint_callback_register() should be called  before calling this API.
  * @see wifi_connectEndpoint()
+ * @todo mention the callback and the event that will be delivered to the caller when this operation finishes.
  */
 INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
 
@@ -255,21 +260,27 @@ INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
  * @retval RETURN_ERR  - Fail
  * 
  * @pre wifi_init() should be called  before calling this API.
+ * @todo description need to update once after fixing saveSSID
  */
 INT wifi_clearSSIDInfo(INT ssidIndex);
 
 /**
- * @brief This call back should be registered by Wi-Fi manager to receive status updates from HAL in case of a
+ * @brief This call back should be registered by caller to receive status updates from HAL in case of a
  * disconnection event.
  *
  * @param[in]  ssidIndex The index of SSID array
- * @param[in]  AP_SSID  The ssid to disconnect
- * @param[out] error Indicates the Wi-Fi connection sttaus
+ * @param[in]  AP_SSID   The ssid to disconnect
+ * @param[out] error     An enum variable that indicates the Wi-Fi connection status
  *
- * @see wifiStatusCode_t
+ * possible error values:
+ * - WIFI_HAL_ERROR_NOT_FOUND
+ * - WIFI_HAL_SUCCESS
+ * - WIFI_HAL_ERROR_SSID_CHANGED
+ * 
  * @return INT - The status of the operation
  * @retval RETURN_OK   - Success
  * @retval RETURN_ERR  - Fail
+ * @see wifiStatusCode_t, wifi_disconnectEndpoint_callback_register()
  */
 typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
@@ -286,13 +297,20 @@ void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback 
  * @brief This call back will be invoked when client automatically connect to Access Point.
  *
  * @param[in]  ssidIndex The index of SSID array
- * @param[in]  AP_SSID  The ssid to disconnect
- * @param[out] error Indicates the Wi-Fi connection status
+ * @param[in]  AP_SSID   The ssid to disconnect
+ * @param[out] error     An enum variable that indicates the Wi-Fi connection status
+ * 
+ * possible error values:
+ * - WIFI_HAL_CONNECTING
+ * - WIFI_HAL_SUCCESS
+ * - WIFI_HAL_ERROR_CONNECTION_FAILED
+ * - WIFI_HAL_ERROR_INVALID_CREDENTIALS
+ * - WIFI_HAL_ERROR_AUTH_FAILED
  *
- * @see wifiStatusCode_t
  * @return INT - The status of the operation
  * @retval RETURN_OK   - Success
  * @retval RETURN_ERR  - Fail
+ * @see wifiStatusCode_t, wifi_connectEndpoint_callback_register()
  */
 typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
@@ -324,7 +342,7 @@ void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
  * @retval RETURN_OK   - Successfully gets the laconnected SSID info
  * @retval RETURN_ERR  - Failure if No SSID in wpa_supplicant.conf
  * 
- * @see wifi_pairedSSIDInfo_t
+ * @see wifi_pairedSSIDInfo_t, wifi_connectEndpoint()
  * @pre wifi_init() should be called  before calling this API.
  */
 INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
@@ -339,25 +357,23 @@ INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
  * @retval RETURN_OK   - Successfully sets the values
  * @retval RETURN_ERR  - Failure in setting roaming control data
  * 
- * @see wifi_roamingCtrl_t
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_getRoamingControl()
+ * @see wifi_roamingCtrl_t, wifi_getRoamingControl()
  */
 INT wifi_setRoamingControl (int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
  * @brief This API gets the Roaming control data
  *
- * @param[in] ssidIndex to validate the interface
+ * @param[in] ssidIndex          To validate the interface
  * @param[out] pRoamingCtrl_data Roaming control configuration
  *
  * @returns INT - GET status
  * @retval RETURN_OK   - Successfully gets the Roaming control data
  * @retval RETURN_ERR  - Failure in getting roaming control data
  * 
- * @see wifi_roamingCtrl_t
  * @pre wifi_init() should be called  before calling this API.
- * @see wifi_setRoamingControl()
+ * @see wifi_roamingCtrl_t, wifi_setRoamingControl()
  */
 INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
