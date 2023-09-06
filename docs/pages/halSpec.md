@@ -132,8 +132,9 @@ All `API`s must return errors synchronously as a return argument. The interface 
 
 `Wi-Fi` `HAL` is expected to persist the following configurations:
 - `Wi-Fi` roaming controls
+- `Wi-Fi` configuration parameters 
 
-<!-- @todo Wi-Fi HAL should not be responsible for persisting Wi-Fi roaming controls. This should be done from outside the Wi-Fi HAL. -->
+<!-- @todo Wi-Fi HAL should not be responsible for persisting Wi-Fi roaming controls. This should be done from outside the Wi-Fi HAL. In next phase -->
 
 These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations.
 

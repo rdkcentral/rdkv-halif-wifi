@@ -98,7 +98,7 @@
  *
  * @defgroup WIFI_HAL_COMMON_API Wi-Fi Common HAL API List
  * @section Data-Model
- * Refer https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html for data-model parameters
+ * <a href="https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html">Refer for Data-Model Parameters</a>
  * @ingroup WIFI_HAL
  */
 
@@ -153,7 +153,7 @@
  *
  * RETURN_OK Return value for the success case
  * RETURN_ERR Return value for the failure case
- * @todo add possible return codes as an enum and include RETURN_UNSUPPORTED for unsupported API
+ * @todo add possible return codes as an enum and include RETURN_UNSUPPORTED for unsupported API next phase
  *
  */
 #ifndef RETURN_OK
@@ -404,18 +404,13 @@ typedef struct _wifi_halSettings
 /**
  * @brief Get the wifi hal version in string, eg "2.0.0".  WIFI_HAL_MAJOR_VERSION.WIFI_HAL_MINOR_VERSION.WIFI_HAL_MAINTENANCE_VERSION
  *
- * @param[out] output_string it contains HAL version
+ * @param[out] output_string It contains HAL version
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected 
  */
 INT wifi_getHalVersion(CHAR *output_string);
 
-//---------------------------------------------------------------------------------------------------
-//
-// Wifi subsystem level APIs that are common to Client and Access Point devices.
-//
-//---------------------------------------------------------------------------------------------------
 /**
  * @addtogroup WIFI_HAL_COMMON_API
  * @{
@@ -483,7 +478,7 @@ INT wifi_uninit();
 /**
  * @brief Gets current station connection status bssid,ssid,rssi,phyrate,noise,Band.
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex      The index of the radio
  * @param[out] wifi_sta_stats Station status data
  * 
  * @see wifi_sta_stats_t
@@ -502,7 +497,7 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API
- * @note @ref Data-Model Parameter Device.WiFi.RadioNumberOfEntries
+ * @see @ref Data-Model Parameter Device.WiFi.RadioNumberOfEntries
  */
 INT wifi_getRadioNumberOfEntries(ULONG *output);
 
@@ -516,28 +511,22 @@ INT wifi_getRadioNumberOfEntries(ULONG *output);
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.SSIDNumberOfEntries
+ * @see @ref Data-Model Parameter Device.WiFi.SSIDNumberOfEntries
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output);
-
-//---------------------------------------------------------------------------------------------------
-//
-// Wifi radio level APIs that are common to Client and Access Point devices
-//
-//---------------------------------------------------------------------------------------------------
 
 /**
  * @brief Gets the Radio enable config parameter.
  *
- * @param[in] radioIndex The index of radio
- * @param[out] output_bool output of the radio state{0-disabled, 1-enabled}
+ * @param[in] radioIndex   The index of radio
+ * @param[out] output_bool The radio state {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Enable
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Enable
  */
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 
@@ -546,68 +535,68 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  *
  * Wi-Fi is up when the driver is loaded, and control/monitoring socket is open between HAL and wpa_supplicant.
  *
- * @param[in] radioIndex The index of radio
- * @param[out] output_string output of the radio status{Ex:"UP", "DOWN"}
+ * @param[in] radioIndex     The index of radio
+ * @param[out] output_string The radio status {Ex: "UP", "DOWN"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Status
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Status
  */
 INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the Radio Interface name from platform.
  *
- * @param[in] radioIndex The index of radio
- * @param[out] output_string Output string which stores the radio interface name
+ * @param[in] radioIndex     The index of radio
+ * @param[out] output_string The string which stores the radio interface name
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
  */
 INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the maximum PHY bit rate supported by the interface.
  *
- * @param[in] radioIndex The index of radio
- * @param[out] output_string Output string which stores the maximum bit rate value{Ex:"216.7 Mb/s", "1.3 Gb/s"}
+ * @param[in] radioIndex     The index of radio
+ * @param[out] output_string The string which stores the maximum bit rate value {Ex: "216.7 Mb/s", "1.3 Gb/s"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.MaxBitRate
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.MaxBitRate
  */
 INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets Supported frequency bands at which the radio can operate.
  * 
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output string which stores the supported freq bands{Ex:"2.4Ghz,5Ghz"}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The string which stores the supported freq bands {Ex: "2.4Ghz,5Ghz"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedFrequencyBands
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedFrequencyBands
  */
 INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the frequency band at which the radio is operating.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output string which stores current operating band{Ex: "2.4GHz", NULL if not connected}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The string which stores current operating band {Ex: "2.4GHz", NULL if not connected}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -615,7 +604,7 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioSupportedFrequencyBands()
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingFrequencyBand
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingFrequencyBand
  */
 INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
 
@@ -623,14 +612,14 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  * @brief Gets radio supported standards.
  *
  * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output string which stores the supported freq band{Ex: "b,g,n" or "a,n,ac"}
+ * @param[out] output_string The string which stores the supported freq band {Ex: "b,g,n" or "a,n,ac"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedStandards
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedStandards
  */
 INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
 
@@ -638,11 +627,11 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * @brief Gets the radio operating mode and pure mode flag.
  * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string the output string{Ex: "b,g,n" or "a,n,ac"}
- * @param[out] gOnly   the g-only mode
- * @param[out] nOnly   the n-only mode
- * @param[out] acOnly  the ac-only mode
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The string which stores the radio operating mode {Ex: "b,g,n" or "a,n,ac"}
+ * @param[out] gOnly         The g-only mode
+ * @param[out] nOnly         The n-only mode
+ * @param[out] acOnly        The ac-only mode
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -650,30 +639,30 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioSupportedStandards()
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingStandards
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingStandards
  */
 INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);
 
 /**
  * @brief Gets the supported channel list.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output string which stores the supported channels{Ex: "1-11","36-48,149-161"}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The string which stores the supported channels {Ex: "1-11","36-48,149-161"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.PossibleChannels
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.PossibleChannels
  */
 INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the list of channels currently in use.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output string which stores the list of used channels{Ex: "1"}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The string which stores the list of used channels {Ex: "1"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -681,14 +670,14 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioPossibleChannels()
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.ChannelsInUse
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ChannelsInUse
  */
 INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the running channel number.
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex    The index of the radio
  * @param[out] output_ulong Variable which stores the currently used channel number
  *
  * @return INT - The status of the operation
@@ -696,30 +685,30 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.Channel
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Channel
  */
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 
 /**
  * @brief Check if the driver supports the Auto Channel Selection / Dynamic channel selection.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection support status{0-disabled, 1-enabled}
+ * @param[in] radioIndex   The index of the radio
+ * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection support status {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelSupported 
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelSupported 
  */
 INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
 
 /**
  * @brief Gets the Auto Channel Selection / Dynamic channel selection enable status.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection status{0-disabled, 1-enabled}
+ * @param[in] radioIndex   The index of the radio
+ * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection status {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -727,14 +716,14 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioAutoChannelSupported()
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelEnable
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelEnable
  */
 INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
 /**
  * @brief Gets the Auto Channel Selection / Dynamic channel selection refresh period in seconds.
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex    The index of the radio
  * @param[out] output_ulong Output variable that stores the Auto Channel Selection / Dynamic channel selection refresh period
  *
  * @return INT - The status of the operation
@@ -749,28 +738,28 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
 /**
  * @brief Gets the guard interval value.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Returns the guard interval value{Ex: "400nsec" or "800nsec"}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string Returns the guard interval value {Ex: "400nsec" or "800nsec"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.GuardInterval
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.GuardInterval
  */
 INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the Operating Channel Bandwidth.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output variable stores the bandwidth of the operating channel{Ex:"20MHz", "40MHz", "80MHz", "160MHz" / NULL if not connected}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The variable stores the bandwidth of the operating channel {Ex: "20MHz", "40MHz", "80MHz", "160MHz" / NULL if not connected}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingChannelBandwidth
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingChannelBandwidth
  */
 INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
 
@@ -781,15 +770,15 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * combined to create a wide channel which can provide more data rate.
  * Position of secondary channel may be either above or below the primary.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_string Output of the secondary extension channel{Ex:"Auto"}
+ * @param[in] radioIndex     The index of the radio
+ * @param[out] output_string The string which stores the secondary extension channel {Ex: "Auto"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
  * @todo This needs to be investigated, to understand the purpose and requirement of this API.
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
@@ -797,7 +786,7 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the Modulation Coding Scheme index.
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex   The index of the radio
  * @param[out] output_INT  The mcs index value
  *
  * @return INT - The status of the operation
@@ -805,22 +794,22 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.MCS
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.MCS
  */
 INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
 
 /**
  * @brief Gets supported Transmit Power list.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_list  Output string stores the transmit power list
+ * @param[in] radioIndex    The index of the radio
+ * @param[out] output_list  The string stores the transmit power list
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPowerSupported
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPowerSupported
  */
 INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
 
@@ -829,8 +818,8 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
  *
  * The transmit power level is in units of full power for this radio.
  *
- * @param[in] radioIndex The index of the radio
- * @param[out] output_INT  Output string stores the current transmit power
+ * @param[in] radioIndex   The index of the radio
+ * @param[out] output_INT  The string stores the current transmit power
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -838,7 +827,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @see wifi_getRadioTransmitPowerSupported()
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPower
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPower
  */
 INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 
@@ -848,14 +837,14 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
  * 80211h solves interference with satellites and radar using the same 5 GHz frequency band.
  *
  * @param[in] radioIndex The index of the radio
- * @param[out] Supported The Boolean value, indicates the 80211h support{0-Not supported, 1- supported}
+ * @param[out] Supported The Boolean value, indicates the 80211h support {Ex: 0-Not supported, 1- supported}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hSupported
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hSupported
  */
 INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
 
@@ -863,7 +852,7 @@ INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
  * @brief Gets the 80211h feature enable.
  *
  * @param[in] radioIndex The index of the radio
- * @param[out] enable The 80211h enable status{0-disabled, 1-enabled}
+ * @param[out] enable    The 80211h enable status {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -871,29 +860,29 @@ INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
  * 
  * @pre wifi_init() should be called  before calling this API.
  * @pre wifi_getRadioIEEE80211hSupported() should return TRUE
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
  */
 INT wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
 
 /**
  * @brief Gets the regulatory domain.
  *
- * @param[in] radioIndex The index of the radio
- * @param[in] output_string Stores the regulatory domain string{Ex:"US", "DE"}
+ * @param[in] radioIndex    The index of the radio
+ * @param[in] output_string Stores the regulatory domain string {Ex: "US", "DE"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.{i}.RegulatoryDomain
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.RegulatoryDomain
  */
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 
 /**
  * @brief Gets detailed radio traffic statistics information.
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex     The index of the radio
  * @param[out] output_struct Structure of type wifi_radioTrafficStats_t that saves the radio traffic statistics
  *
  * @return INT - The status of the operation
@@ -902,7 +891,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * 
  * @see wifi_radioTrafficStats_t
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.Radio.Stats.
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.Stats.
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
 
@@ -911,7 +900,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  *
  * Outputs a 32 byte or less string indicating the SSID name.
  *
- * @param[in] apIndex The index of the access point
+ * @param[in] apIndex        The index of the access point
  * @param[out] output_string String which holds the SSID name
  *
  * @return INT - The status of the operation
@@ -919,7 +908,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  * @retval RETURN_ERR if any error is detected
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
+ * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
 
@@ -927,8 +916,8 @@ INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
  * @brief Gets the BSSID.
  * Basic Service Set Identifier (BSSID) is the mac addresss of the wireless access point.
  *
- * @param[in] ssidIndex  The index of the SSID
- * @param[out] output_string Output variable that contains the BSSID
+ * @param[in] ssidIndex      The index of the SSID
+ * @param[out] output_string The variable that contains the BSSID
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -941,23 +930,23 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 /**
  * @brief Gets the MAC address associated with the Wifi SSID.
  *
- * @param[in] ssidIndex  The index of the SSID
- * @param[out] output_string Output variable that holds the mac address
+ * @param[in] ssidIndex      The index of the SSID
+ * @param[out] output_string The variable that holds the mac address
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.MACAddress
+ * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.MACAddress
  */
 INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief Gets the basic SSID traffic statistics info.
  *
- * @param[in] ssidIndex  The index of the SSID
- * @param[out] output_struct structure of type wifi_ssidTrafficStats_t that holds the ssid traffic stats
+ * @param[in] ssidIndex      The index of the SSID
+ * @param[out] output_struct Structure of type wifi_ssidTrafficStats_t that holds the ssid traffic status
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -965,18 +954,16 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
  *
  * @see wifi_ssidTrafficStats_t
  * @pre wifi_init() should be called  before calling this API.
- * @note @ref Data-Model Parameter Device.WiFi.SSID.{i}.Stats.
+ * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Stats.
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct);
 
 /**
- * @brief Gets neighbor wifi diagnostics.
+ * @brief Starts a wifi scan and gets the scan results.
  *
- * Start the wifi scan and get the result into output buffer.
- *
- * @param[in] radioIndex  The index of the radio
- * @param[in] neighbor_ap_array structure of type wifi_neighbor_ap_t the neighbor access point matrix
- * @param[out] output_array_size The size of the access point list
+ * @param[in] radioIndex          The index of the radio
+ * @param[out] neighbor_ap_array  Array of neighboring access points found by the wifi scan. To be allocated by this function and de-allocated by the caller.
+ * @param[out] output_array_size  Size of neighbor_ap_array
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -984,21 +971,17 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  *
  * @see wifi_neighbor_ap_t
  * @pre wifi_init() should be called  before calling this API.
- * @note HAL function should allocate an data structure array, and return to caller with "neighbor_ap_array".
- * @note @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
- * @todo To clarify if it is relevant for only client
+ * @see @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size);
 
 /**
- * @brief Gets Specific SSID Info.
+ * @brief Starts a wifi scan and gets the scan results that match the given SSID name and frequency band.
  *
- * Start the wifi scan for specific SSID and band get the matching result into output buffer.
- *
- * @param[in] SSID  SSID name
- * @param[in] band frequency band
- * @param[out] ap_array The list of APs with SSID name
- * @param[out] output_array_size output array size
+ * @param[in] SSID               SSID name
+ * @param[in] band               frequency band
+ * @param[out] ap_array          Array of neighboring access points with the given SSID name and frequency band that were found by the wifi scan. To be allocated by this function and de-allocated by the caller.
+ * @param[out] output_array_size Size of ap_array
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -1006,16 +989,14 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * 
  * @see wifi_neighbor_ap_t, WIFI_HAL_FREQ_BAND
  * @pre wifi_init() should be called  before calling this API.
- * @note HAL function should allocate an data structure array, and return to caller with "ap_array".
- * @todo to review the API implementation
  */
 INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
 
 /**
  * @brief Sets the list of frequencies to scan over.
  *
- * @param[in] radioIndex  radio index
- * @param[in] freqList frequency list. An empty list implies that a normal, full scan is performed
+ * @param[in] radioIndex  Radio index
+ * @param[in] freqList    Frequency list. An empty list implies that a normal, full scan is performed
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
