@@ -27,20 +27,20 @@
 
         This header file gives the function call prototypes and
         structure definitions used for the RDK-Video
-        Wifi radio hardware abstraction layer
+        WiFi radio hardware abstraction layer
 
     ---------------------------------------------------------------
 
     environment:
 
-        This HAL layer is intended to support Wifi drivers
+        This HAL layer is intended to support WiFi drivers
         through an open API.
 
     ---------------------------------------------------------------
 
     HAL version:
 
-        The version of the Wifi HAL is specified in #defines below.
+        The version of the WiFi HAL is specified in #defines below.
 
 **********************************************************************/
 
@@ -92,11 +92,11 @@
  * TKIP | The Temporal Key Integrity Protocol was developed as a replacement for WEP but is no longer considered secure and has been removed from 802.11 standards
  * TLS | Transport Layer Security is a protocol designed to encrypt and authenticate all kinds of network traffic at the trans port layer, and is the successor to SSL
  *
- * @defgroup WIFI_HAL Wi-Fi HAL
+ * @defgroup WIFI_HAL WiFi HAL
  *
  * @ingroup HPK
  *
- * @defgroup WIFI_HAL_COMMON_API Wi-Fi Common HAL API List
+ * @defgroup WIFI_COMMON_HAL WiFi Common HAL
  * @section Data-Model
  * <a href="https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html">Refer for Data-Model Parameters</a>
  * @ingroup WIFI_HAL
@@ -161,27 +161,27 @@
 #endif
 
 #ifndef RETURN_ERR
-#define RETURN_ERR   -1 //!< return err
+#define RETURN_ERR   -1 //!< return error
 #endif
 
 #ifndef RADIO_INDEX_1
 #define RADIO_INDEX_1 1 //!< radio index 1
 #define RADIO_INDEX_2 2 //!< radio index 2
-#define AP_INDEX_1 1 //!< AP index 1
-#define AP_INDEX_2 2 //!< AP index 2
-#define AP_INDEX_3 3 //!< AP index 3
-#define AP_INDEX_4 4 //!< AP index 4
-#define AP_INDEX_5 5 //!< AP index 5
-#define AP_INDEX_6 6 //!< AP index 6
-#define AP_INDEX_7 7 //!< AP index 7
-#define AP_INDEX_8 8 //!< AP index 8
-#define AP_INDEX_9 9 //!< AP index 9
-#define AP_INDEX_10 10 //!< AP index 10
-#define AP_INDEX_11 11 //!< AP index 11
-#define AP_INDEX_12 12 //!< AP index 12
-#define AP_INDEX_13 13 //!< AP index 13
-#define AP_INDEX_14 14 //!< AP index 14
-#define AP_INDEX_15 15 //!< AP index 15
+#define AP_INDEX_1 1    //!< AP index 1
+#define AP_INDEX_2 2    //!< AP index 2
+#define AP_INDEX_3 3    //!< AP index 3
+#define AP_INDEX_4 4    //!< AP index 4
+#define AP_INDEX_5 5    //!< AP index 5
+#define AP_INDEX_6 6    //!< AP index 6
+#define AP_INDEX_7 7    //!< AP index 7
+#define AP_INDEX_8 8    //!< AP index 8
+#define AP_INDEX_9 9    //!< AP index 9
+#define AP_INDEX_10 10  //!< AP index 10
+#define AP_INDEX_11 11  //!< AP index 11
+#define AP_INDEX_12 12  //!< AP index 12
+#define AP_INDEX_13 13  //!< AP index 13
+#define AP_INDEX_14 14  //!< AP index 14
+#define AP_INDEX_15 15  //!< AP index 15
 #define AP_INDEX_16 16  //!< AP index 16
 #endif
 
@@ -198,7 +198,7 @@
 #define WLAN_IFNAMSIZ 32
 
 /**
- * @brief Enumerators for Wifi RSSI Levels
+ * @brief Enumerators for WiFi RSSI levels
  */
 typedef enum {
     WIFI_RSSI_NONE = 0,      //!< No signal (0 bar)
@@ -230,7 +230,7 @@ typedef enum {
     /* Failure/Error Codes*/
     WIFI_HAL_ERROR_NOT_FOUND = 20,           /**< Device/AP not found*/
     WIFI_HAL_ERROR_TIMEOUT_EXPIRED,          /**< Timeout expired */
-    WIFI_HAL_ERROR_DEV_DISCONNECT,           /**< Failed/Error in Device/AP Disconnect */
+    WIFI_HAL_ERROR_DEV_DISCONNECT,           /**< Failed/Error in Device/AP disconnect */
     WIFI_HAL_ERROR_SSID_CHANGED,             /**< the SSID of the network changed */
     WIFI_HAL_ERROR_CONNECTION_LOST,          /**< the connection to the network was lost */
     WIFI_HAL_ERROR_CONNECTION_FAILED,        /**< the connection failed for an unknown reason */
@@ -242,14 +242,13 @@ typedef enum {
 } wifiStatusCode_t;
 
 /**
- * @brief Wifi Security modes
+ * @brief WiFi Security modes
  *
  * Security modes are used to prevent the unauthorized access or damage to computers using wireless networks.
  * Wired Equivalent Privacy (WEP), Wi-Fi Protected Access (WPA), and Wi-Fi Protected Access II (WPA2) are the
  * primary security algorithms.
  * WEP is the oldest and has proven to be vulnerable as more and more security flaws have been discovered.
  * WPA improved security, but is now also considered vulnerable to intrusion.
- *
  */
 typedef enum
 {
@@ -260,7 +259,7 @@ typedef enum
     WIFI_SECURITY_WPA_PSK_AES,            //!< WPA(Pre-Shared Key) with AES (Advanced Encryption Standard) encryption
     WIFI_SECURITY_WPA2_PSK_TKIP,          //!< WPA2(Pre-Shared Key) with TKIP (Temporal Key Integrity Protocol) encryption
     WIFI_SECURITY_WPA2_PSK_AES,           //!< WPA2(Pre-Shared Key) with AES (Advanced Encryption Standard) encryption
-    WIFI_SECURITY_WPA_ENTERPRISE_TKIP,    //!< WPA Enterprise  with  TKIP (Temporal Key Integrity Protocol) encryption
+    WIFI_SECURITY_WPA_ENTERPRISE_TKIP,    //!< WPA Enterprise with TKIP (Temporal Key Integrity Protocol) encryption
     WIFI_SECURITY_WPA_ENTERPRISE_AES,     //!< WPA Enterprise with AES (Advanced Encryption Standard) encryption
     WIFI_SECURITY_WPA2_ENTERPRISE_TKIP,   //!< WPA2 Enterprise with TKIP (Temporal Key Integrity Protocol) encryption
     WIFI_SECURITY_WPA2_ENTERPRISE_AES,    //!< WPA2 Enterprise with AES (Advanced Encryption Standard) encryption
@@ -272,10 +271,6 @@ typedef enum
     WIFI_SECURITY_NOT_SUPPORTED = 99,     //!< Security mode not supported
 } wifiSecurityMode_t;
 
-/**********************************************************************
-                STRUCTURE DEFINITIONS
-**********************************************************************/
-
 /**
  * @struct _wifi_radioTrafficStats
  * @brief structure for radioTrafficStats
@@ -283,28 +278,28 @@ typedef enum
 
 typedef struct _wifi_radioTrafficStats
 {
-    ULONG radio_BytesSent;	                     //!< The total number of bytes transmitted out of the interface, including framing characters.
-    ULONG radio_BytesReceived;	                 //!< The total number of bytes received on the interface, including framing characters.
-    ULONG radio_PacketsSent;	                 //!< The total number of packets transmitted out of the interface.
+    ULONG radio_BytesSent;                       //!< The total number of bytes transmitted out of the interface, including framing characters.
+    ULONG radio_BytesReceived;                   //!< The total number of bytes received on the interface, including framing characters.
+    ULONG radio_PacketsSent;                     //!< The total number of packets transmitted out of the interface.
     ULONG radio_PacketsReceived;                 //!< The total number of packets received on the interface.
     
-    ULONG radio_ErrorsSent;	                     //!< The total number of outbound packets that could not be transmitted because of errors.
+    ULONG radio_ErrorsSent;                      //!< The total number of outbound packets that could not be transmitted because of errors.
     ULONG radio_ErrorsReceived;                  //!< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol.
     ULONG radio_DiscardPacketsSent;              //!< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space.
     ULONG radio_DiscardPacketsReceived;          //!< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space.
-    ULONG radio_PLCPErrorCount;	                 //!< The number of packets that were received with a detected Physical Layer Convergence Protocol (PLCP) header error.
-    ULONG radio_FCSErrorCount;	                 //!< The number of packets that were received with a detected FCS error. This parameter is based on dot11FCSErrorCount from [Annex C/802.11-2012].
-    ULONG radio_InvalidMACCount;	             //!< The number of packets that were received with a detected invalid MAC header error.
-    ULONG radio_PacketsOtherReceived;	         //!< The number of packets that were received, but which were destined for a MAC address that is not associated with this interface.
-    INT   radio_NoiseFloor; 	                 //!< The noise floor for this radio channel where a recoverable signal can be obtained. Expressed as a signed integer in the range (-110:0).  Measurement should capture all energy (in dBm) from sources other than Wi-Fi devices as well as interference from Wi-Fi devices too weak to be decoded. Measured in dBm
-    ULONG radio_ChannelUtilization;              //!< Percentage of time the channel was occupied by the radio’s own activity (Activity Factor) or the activity of other radios.  Channel utilization MUST cover all user traffic, management traffic, and time the radio was unavailable for CSMA activities, including DIFS intervals, etc.  The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected from the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1.  Units in Percentage
-    INT   radio_ActivityFactor;                  //!< Percentage of time that the radio was transmitting or receiving Wi-Fi packets to/from associated clients. Activity factor MUST include all traffic that deals with communication between the radio and clients associated to the radio as well as management overhead for the radio, including NAV timers, beacons, probe responses,time for receiving devices to send an ACK, SIFC intervals, etc.  The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected from the just completed interval.   If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage
-    INT   radio_CarrierSenseThreshold_Exceeded;  //!< Percentage of time that the radio was unable to transmit or receive Wi-Fi packets to/from associated clients due to energy detection (ED) on the channel or clear channel assessment (CCA). The metric is calculated and updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected from the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage
-    INT   radio_RetransmissionMetirc;            //!< Percentage of packets that had to be re-transmitted. Multiple re-transmissions of the same packet count as one.  The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval".   The calculation of this metric MUST only use the data collected from the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units  in percentage
-    INT   radio_MaximumNoiseFloorOnChannel;      //!< Maximum Noise on the channel during the measuring interval.  The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected in the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1.  Units in dBm
-    INT   radio_MinimumNoiseFloorOnChannel;      //!< Minimum Noise on the channel. The metric is updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected in the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm
-    INT   radio_MedianNoiseFloorOnChannel;       //!< Median Noise on the channel during the measuring interval.   The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval".  The calculation of this metric MUST only use the data collected in the just completed interval.  If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm
-    ULONG radio_StatisticsStartTime; 	         //!< The date and time at which the collection of the current set of statistics started.  This time must be updated whenever the radio statistics are reset.
+    ULONG radio_PLCPErrorCount;                  //!< The number of packets that were received with a detected Physical Layer Convergence Protocol (PLCP) header error.
+    ULONG radio_FCSErrorCount;                   //!< The number of packets that were received with a detected FCS error. This parameter is based on dot11FCSErrorCount from [Annex C/802.11-2012].
+    ULONG radio_InvalidMACCount;                 //!< The number of packets that were received with a detected invalid MAC header error.
+    ULONG radio_PacketsOtherReceived;            //!< The number of packets that were received, but which were destined for a MAC address that is not associated with this interface.
+    INT   radio_NoiseFloor;                      //!< The noise floor for this radio channel where a recoverable signal can be obtained. Expressed as a signed integer in the range (-110:0). Measurement should capture all energy (in dBm) from sources other than Wi-Fi devices as well as interference from Wi-Fi devices too weak to be decoded. Measured in dBm
+    ULONG radio_ChannelUtilization;              //!< Percentage of time the channel was occupied by the radio’s own activity (Activity Factor) or the activity of other radios. Channel utilization MUST cover all user traffic, management traffic, and time the radio was unavailable for CSMA activities, including DIFS intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage
+    INT   radio_ActivityFactor;                  //!< Percentage of time that the radio was transmitting or receiving Wi-Fi packets to/from associated clients. Activity factor MUST include all traffic that deals with communication between the radio and clients associated to the radio as well as management overhead for the radio, including NAV timers, beacons, probe responses,time for receiving devices to send an ACK, SIFC intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage
+    INT   radio_CarrierSenseThreshold_Exceeded;  //!< Percentage of time that the radio was unable to transmit or receive Wi-Fi packets to/from associated clients due to energy detection (ED) on the channel or clear channel assessment (CCA). The metric is calculated and updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage
+    INT   radio_RetransmissionMetirc;            //!< Percentage of packets that had to be re-transmitted. Multiple re-transmissions of the same packet count as one. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in percentage
+    INT   radio_MaximumNoiseFloorOnChannel;      //!< Maximum Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm
+    INT   radio_MinimumNoiseFloorOnChannel;      //!< Minimum Noise on the channel. The metric is updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm
+    INT   radio_MedianNoiseFloorOnChannel;       //!< Median Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm
+    ULONG radio_StatisticsStartTime;             //!< The date and time at which the collection of the current set of statistics started. This time must be updated whenever the radio statistics are reset.
 
 } wifi_radioTrafficStats_t;
 
@@ -315,21 +310,21 @@ typedef struct _wifi_radioTrafficStats
 
 typedef struct _wifi_ssidTrafficStats
 {
-    ULONG ssid_BytesSent;	               //!< The total number of bytes transmitted out of the interface, including framing characters.
-    ULONG ssid_BytesReceived;	           //!< The total number of bytes received on the interface, including framing characters.
-    ULONG ssid_PacketsSent;	               //!< The total number of packets transmitted out of the interface.
+    ULONG ssid_BytesSent;                  //!< The total number of bytes transmitted out of the interface, including framing characters.
+    ULONG ssid_BytesReceived;              //!< The total number of bytes received on the interface, including framing characters.
+    ULONG ssid_PacketsSent;                //!< The total number of packets transmitted out of the interface.
     ULONG ssid_PacketsReceived;            //!< The total number of packets received on the interface.
 
-    ULONG ssid_RetransCount;	           //!< The total number of transmitted packets which were retransmissions. Two retransmissions of the same packet results in this counter incrementing by two.
+    ULONG ssid_RetransCount;               //!< The total number of transmitted packets which were retransmissions. Two retransmissions of the same packet results in this counter incrementing by two.
     ULONG ssid_FailedRetransCount;         //!< The number of packets that were not transmitted successfully due to the number of retransmission attempts exceeding an 802.11 retry limit. This parameter is based on dot11FailedCount from [802.11-2012].
     ULONG ssid_RetryCount;                 //!< The number of packets that were successfully transmitted after one or more retransmissions. This parameter is based on dot11RetryCount from [802.11-2012].
     ULONG ssid_MultipleRetryCount;         //!< The number of packets that were successfully transmitted after more than one retransmission. This parameter is based on dot11MultipleRetryCount from [802.11-2012].
     ULONG ssid_ACKFailureCount;            //!< The number of expected ACKs that were never received. This parameter is based on dot11ACKFailureCount from [802.11-2012].
     ULONG ssid_AggregatedPacketCount;      //!< The number of aggregated packets that were transmitted. This applies only to 802.11n and 802.11ac.
 
-    ULONG ssid_ErrorsSent;	               //!< The total number of outbound packets that could not be transmitted because of errors.
+    ULONG ssid_ErrorsSent;                 //!< The total number of outbound packets that could not be transmitted because of errors.
     ULONG ssid_ErrorsReceived;             //!< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol.
-    ULONG ssid_UnicastPacketsSent;	       //!< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol.
+    ULONG ssid_UnicastPacketsSent;         //!< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol.
     ULONG ssid_UnicastPacketsReceived;     //!< The total number of received packets, delivered by this layer to a higher layer, which were not addressed to a multicast or broadcast address at this layer.
     ULONG ssid_DiscardedPacketsSent;       //!< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space.
     ULONG ssid_DiscardedPacketsReceived;   //!< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space.
@@ -350,23 +345,23 @@ typedef struct _wifi_ssidTrafficStats
 
 typedef struct _wifi_neighbor_ap
 {
-    CHAR  ap_SSID[64];	                        //!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
-    CHAR  ap_BSSID[64];	                        //!< [MACAddress] The BSSID used for the neighboring WiFi SSID.
-    CHAR  ap_Mode[64];	                        //!< The mode the neighboring WiFi radio is operating in. Enumeration of: AdHoc, Infrastructure
-    UINT  ap_Channel;	                        //!< The current radio channel used by the neighboring WiFi radio.
-    INT   ap_SignalStrength;	                //!< An indicator of radio signal strength (RSSI) of the neighboring WiFi radio measured in dBm, as an average of the last 100 packets received.
-    CHAR  ap_SecurityModeEnabled[64];	        //!< The type of encryption the neighboring WiFi SSID advertises. Enumeration of:None, WPA-WPA2 etc.
-    CHAR  ap_EncryptionMode[64];	            //!< Comma-separated list of strings. The type of encryption the neighboring WiFi SSID advertises. Each list item is an enumeration of: TKIP, AES
-    CHAR  ap_OperatingFrequencyBand[16];	    //!< Indicates the frequency band at which the radio this SSID instance is operating. Enumeration of:2.4GHz, 5GHz
-    CHAR  ap_SupportedStandards[64];	        //!< Comma-separated list of strings. List items indicate which IEEE 802.11 standards this Result instance can support simultaneously, in the frequency band specified by OperatingFrequencyBand. Each list item is an enumeration of:
-    CHAR  ap_OperatingStandards[16];	        //!< Comma-separated list of strings. Each list item MUST be a member of the list reported by theSupportedStandards parameter. List items indicate which IEEE 802.11 standard that is detected for thisResult.
-    CHAR  ap_OperatingChannelBandwidth[16];	    //!< Indicates the bandwidth at which the channel is operating. Enumeration of:
-    UINT  ap_BeaconPeriod;	                    //!< Time interval (in ms) between transmitting beacons.
-    INT   ap_Noise;	                            //!< Indicator of average noise strength (in dBm) received from the neighboring WiFi radio.
-    CHAR  ap_BasicDataTransferRates[256];	    //!< Comma-separated list (maximum list length 256) of strings. Basic data transmit rates (in Mbps) for the SSID. For example, if BasicDataTransferRates is "1,2", this indicates that the SSID is operating with basic rates of 1 Mbps and 2 Mbps.
-    CHAR  ap_SupportedDataTransferRates[256];	//!< Comma-separated list (maximum list length 256) of strings. Data transmit rates (in Mbps) for unicast frames at which the SSID will permit a station to connect. For example, if SupportedDataTransferRates is "1,2,5.5", this indicates that the SSID will only permit connections at 1 Mbps, 2 Mbps and 5.5 Mbps.
-    UINT  ap_DTIMPeriod;	                    //!< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012]
-    UINT  ap_ChannelUtilization[64];	        //!< Indicates the fraction of the time AP senses that the channel is in use by the neighboring AP for transmissions.
+    CHAR  ap_SSID[64];                          //!< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs.
+    CHAR  ap_BSSID[64];                         //!< [MACAddress] The BSSID used for the neighboring WiFi SSID.
+    CHAR  ap_Mode[64];                          //!< The mode the neighboring WiFi radio is operating in. Enumeration of: AdHoc, Infrastructure
+    UINT  ap_Channel;                           //!< The current radio channel used by the neighboring WiFi radio.
+    INT   ap_SignalStrength;                    //!< An indicator of radio signal strength (RSSI) of the neighboring WiFi radio measured in dBm, as an average of the last 100 packets received.
+    CHAR  ap_SecurityModeEnabled[64];           //!< The type of encryption the neighboring WiFi SSID advertises. Enumeration of:None, WPA-WPA2 etc.
+    CHAR  ap_EncryptionMode[64];                //!< Comma-separated list of strings. The type of encryption the neighboring WiFi SSID advertises. Each list item is an enumeration of: TKIP, AES
+    CHAR  ap_OperatingFrequencyBand[16];        //!< Indicates the frequency band at which the radio this SSID instance is operating. Enumeration of:2.4GHz, 5GHz
+    CHAR  ap_SupportedStandards[64];            //!< Comma-separated list of strings. List items indicate which IEEE 802.11 standards this Result instance can support simultaneously, in the frequency band specified by OperatingFrequencyBand. Each list item is an enumeration of:
+    CHAR  ap_OperatingStandards[16];            //!< Comma-separated list of strings. Each list item MUST be a member of the list reported by theSupportedStandards parameter. List items indicate which IEEE 802.11 standard that is detected for thisResult.
+    CHAR  ap_OperatingChannelBandwidth[16];     //!< Indicates the bandwidth at which the channel is operating. Enumeration of:
+    UINT  ap_BeaconPeriod;                      //!< Time interval (in ms) between transmitting beacons.
+    INT   ap_Noise;                             //!< Indicator of average noise strength (in dBm) received from the neighboring WiFi radio.
+    CHAR  ap_BasicDataTransferRates[256];       //!< Comma-separated list (maximum list length 256) of strings. Basic data transmit rates (in Mbps) for the SSID. For example, if BasicDataTransferRates is "1,2", this indicates that the SSID is operating with basic rates of 1 Mbps and 2 Mbps.
+    CHAR  ap_SupportedDataTransferRates[256];   //!< Comma-separated list (maximum list length 256) of strings. Data transmit rates (in Mbps) for unicast frames at which the SSID will permit a station to connect. For example, if SupportedDataTransferRates is "1,2,5.5", this indicates that the SSID will only permit connections at 1 Mbps, 2 Mbps and 5.5 Mbps.
+    UINT  ap_DTIMPeriod;                        //!< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012]
+    UINT  ap_ChannelUtilization[64];            //!< Indicates the fraction of the time AP senses that the channel is in use by the neighboring AP for transmissions.
 
 } wifi_neighbor_ap_t;
 
@@ -381,14 +376,14 @@ typedef struct _wifi_sta_stats
     CHAR  sta_BSSID[64];                //!< The BSSID used for connected SSID.
     CHAR  sta_BAND[16];                 //!< The BAND used for connected SSID.
     CHAR  sta_SecMode[64];              //!< WiFi Security Mode WPA2-PSK , WPA2-EAP etc..
-    CHAR  sta_Encryption[64];           //!< WiFi Encryption Type AES, TKIP, etc.
+    CHAR  sta_Encryption[64];           //!< WiFi Encryption Type AES, TKIP etc..
     FLOAT sta_PhyRate;                  //!< Indicates the Physical rate (Mbps)
-    FLOAT sta_Noise;                    //!< Indicator of average noise strength (in dBm) received from the connected WiFi radio.
+    FLOAT sta_Noise;                    //!< Indicator of average noise strength (in dBm) received from the connected Wi-Fi radio.
     FLOAT sta_RSSI;                     //!< RSSI value in dBm
     UINT  sta_Frequency;                //!< Current Operating Frequency.
-    UINT  sta_LastDataDownlinkRate;		//!< The data transmit rate in kbps that was most recently used for transmission from the access point to the end point device.
-    UINT  sta_LastDataUplinkRate;		//!< The data transmit rate in kbps that was most recently used for transmission from the end point to the access point device.
-    UINT  sta_Retransmissions;			//!< The number of packets that had to be re-transmitted, from the last 100 packets sent to the access point. Multiple re-transmissions of the same packet count as one.
+    UINT  sta_LastDataDownlinkRate;     //!< The data transmit rate in kbps that was most recently used for transmission from the access point to the end point device.
+    UINT  sta_LastDataUplinkRate;       //!< The data transmit rate in kbps that was most recently used for transmission from the end point to the access point device.
+    UINT  sta_Retransmissions;          //!< The number of packets that had to be re-transmitted, from the last 100 packets sent to the access point. Multiple re-transmissions of the same packet count as one.
 } wifi_sta_stats_t;
 
 /**
@@ -398,11 +393,20 @@ typedef struct _wifi_sta_stats
 
 typedef struct _wifi_halSettings
 {
-  char wlan_Interface[WLAN_IFNAMSIZ];  //!< Name of the wireless interface ex: "wlan0", "wlan1" 
+  char wlan_Interface[WLAN_IFNAMSIZ];  //!< Name of the wireless interface {Ex: "wlan0", "wlan1"}
 } wifi_halConfig_t;
 
 /**
- * @brief Get the wifi hal version in string, eg "2.0.0".  WIFI_HAL_MAJOR_VERSION.WIFI_HAL_MINOR_VERSION.WIFI_HAL_MAINTENANCE_VERSION
+ * @defgroup WIFI_COMMON_HAL_APIs WiFi Common HAL APIs 
+ * @{
+ * @ingroup WIFI_COMMON_HAL
+ */
+
+/**
+ * @brief Gets the Wi-Fi HAL version in string {Ex: "2.0.0"}
+ * - WIFI_HAL_MAJOR_VERSION
+ * - WIFI_HAL_MINOR_VERSION
+ * - WIFI_HAL_MAINTENANCE_VERSION
  *
  * @param[out] output_string It contains HAL version
  * @return INT - The status of the operation
@@ -412,15 +416,10 @@ typedef struct _wifi_halSettings
 INT wifi_getHalVersion(CHAR *output_string);
 
 /**
- * @addtogroup WIFI_HAL_COMMON_API
- * @{
- */
-
-/**
- * @brief Initializes the wifi subsystem.
+ * @brief Initializes the WiFi subsystem
  *
  * Steps involved in a wifi_init operation
- * - Creating default configuration file in a firsttime boot.
+ * - Creating default configuration file in a first time boot.
  * - Reset the state machine.
  * - Starting of wpa_supplicant daemon.
  * - Opening up communication channels for monitoring and control interfaces
@@ -437,58 +436,58 @@ INT wifi_getHalVersion(CHAR *output_string);
 INT wifi_init(); 
 
 /**
- * @brief Initializes the wifi subsystem.
+ * @brief Initializes the WiFi subsystem
  *
- * @param[in] conf contains wlan interface name
+ * @param[in] conf It contains WLAN interface name
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @see wifi_halConfig_t
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  */
 
 INT wifi_initWithConfig(wifi_halConfig_t * conf);
 
 /**
- * @brief Turns off transmit power for the entire Wifi subsystem for all radios.
+ * @brief Turns off transmit power for the entire WiFi subsystem for all radios
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @note This function must not suspend and must not invoke any blocking system
  * calls. It should probably just send a message to a driver event handler task.
  */
 INT wifi_down(); 
 
 /**
- * @brief Uninitilizes wifi module.
- *
+ * @brief Uninitilizes WiFi module.
+ * 
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see wifi_init()
  */
 INT wifi_uninit();
 
 /**
- * @brief Gets current station connection status bssid,ssid,rssi,phyrate,noise,Band.
+ * @brief Gets current station connection status bssid,ssid,rssi,phyrate,noise,band
  *
  * @param[in] radioIndex      The index of the radio
  * @param[out] wifi_sta_stats Station status data
  * 
  * @see wifi_sta_stats_t
- * @pre wifi_init() should be called  before calling this API.
- * @pre "wifi_sta_stats" must be preallocated by the caller.
+ * @pre wifi_init() should be called before calling this API
+ * @pre Memory for "wifi_sta_stats" must be pre-allocated by the caller
  */
 void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
 
 /**
- * @brief Gets total number of radios in the wifi subsystem.
+ * @brief Gets the total number of radios in the WiFi subsystem
  *
  * @param[out] output The number of radios in string
  *
@@ -496,13 +495,13 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.RadioNumberOfEntries
  */
 INT wifi_getRadioNumberOfEntries(ULONG *output);
 
 /**
- * @brief Gets the total number of SSID entries in the wifi subsystem.
+ * @brief Gets the total number of SSID entries in the WiFi subsystem
  *
  * @param[out] output The number of SSID entries in string
  *
@@ -510,13 +509,13 @@ INT wifi_getRadioNumberOfEntries(ULONG *output);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSIDNumberOfEntries
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output);
 
 /**
- * @brief Gets the Radio enable config parameter.
+ * @brief Gets the radio enable config parameter
  *
  * @param[in] radioIndex   The index of radio
  * @param[out] output_bool The radio state {Ex: 0-disabled, 1-enabled}
@@ -525,15 +524,15 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Enable
  */
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 
 /**
- * @brief Gets the Radio enable status.
+ * @brief Gets the Radio enable status
  *
- * Wi-Fi is up when the driver is loaded, and control/monitoring socket is open between HAL and wpa_supplicant.
+ * WiFi is up when the driver is loaded, and control/monitoring socket is open between HAL and wpa_supplicant.
  *
  * @param[in] radioIndex     The index of radio
  * @param[out] output_string The radio status {Ex: "UP", "DOWN"}
@@ -542,13 +541,13 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Status
  */
 INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the Radio Interface name from platform.
+ * @brief Gets the radio interface name from platform
  *
  * @param[in] radioIndex     The index of radio
  * @param[out] output_string The string which stores the radio interface name
@@ -557,13 +556,13 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
  */
 INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the maximum PHY bit rate supported by the interface.
+ * @brief Gets the maximum PHY bit rate supported by the interface
  *
  * @param[in] radioIndex     The index of radio
  * @param[out] output_string The string which stores the maximum bit rate value {Ex: "216.7 Mb/s", "1.3 Gb/s"}
@@ -572,13 +571,13 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.MaxBitRate
  */
 INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets Supported frequency bands at which the radio can operate.
+ * @brief Gets the supported frequency bands at which the radio can operate
  * 
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The string which stores the supported freq bands {Ex: "2.4Ghz,5Ghz"}
@@ -587,13 +586,13 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedFrequencyBands
  */
 INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the frequency band at which the radio is operating.
+ * @brief Gets the frequency band at which the radio is operating
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The string which stores current operating band {Ex: "2.4GHz", NULL if not connected}
@@ -602,7 +601,7 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see wifi_getRadioSupportedFrequencyBands()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingFrequencyBand
  */
@@ -618,13 +617,13 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedStandards
  */
 INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the radio operating mode and pure mode flag.
+ * @brief Gets the radio operating mode and pure mode flag
  * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported.
  *
  * @param[in] radioIndex     The index of the radio
@@ -637,29 +636,29 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see wifi_getRadioSupportedStandards()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingStandards
  */
 INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL *nOnly, BOOL *acOnly);
 
 /**
- * @brief Gets the supported channel list.
+ * @brief Gets the supported channel list
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the supported channels {Ex: "1-11","36-48,149-161"}
+ * @param[out] output_string The string which stores the supported channels {Ex: "1-11", "36-48,149-161"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.PossibleChannels
  */
 INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the list of channels currently in use.
+ * @brief Gets the list of channels currently in use
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The string which stores the list of used channels {Ex: "1"}
@@ -668,14 +667,14 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called  before calling this API
  * @see wifi_getRadioPossibleChannels()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ChannelsInUse
  */
 INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the running channel number.
+ * @brief Gets the running channel number
  *
  * @param[in] radioIndex    The index of the radio
  * @param[out] output_ulong Variable which stores the currently used channel number
@@ -684,59 +683,59 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Channel
  */
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 
 /**
- * @brief Check if the driver supports the Auto Channel Selection / Dynamic channel selection.
+ * @brief Check if the driver supports the auto channel selection / dynamic channel selection
  *
  * @param[in] radioIndex   The index of the radio
- * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection support status {Ex: 0-disabled, 1-enabled}
+ * @param[out] output_bool Stores the auto channel selection / dynamic channel selection support status {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelSupported 
  */
 INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
 
 /**
- * @brief Gets the Auto Channel Selection / Dynamic channel selection enable status.
+ * @brief Gets the auto channel selection / dynamic channel selection enable status
  *
  * @param[in] radioIndex   The index of the radio
- * @param[out] output_bool Stores the Auto Channel Selection / Dynamic channel selection status {Ex: 0-disabled, 1-enabled}
+ * @param[out] output_bool Stores the auto channel selection / dynamic channel selection status {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see wifi_getRadioAutoChannelSupported()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelEnable
  */
 INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
 /**
- * @brief Gets the Auto Channel Selection / Dynamic channel selection refresh period in seconds.
+ * @brief Gets the auto channel selection / dynamic channel selection refresh period in seconds
  *
  * @param[in] radioIndex    The index of the radio
- * @param[out] output_ulong Output variable that stores the Auto Channel Selection / Dynamic channel selection refresh period
+ * @param[out] output_ulong Stores the auto channel selection / dynamic channel selection refresh period
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod
  */
 INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
 
 /**
- * @brief Gets the guard interval value.
+ * @brief Gets the guard interval value
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string Returns the guard interval value {Ex: "400nsec" or "800nsec"}
@@ -744,12 +743,14 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
+ * 
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.GuardInterval
  */
 INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the Operating Channel Bandwidth.
+ * @brief Gets the operating channel bandwidth
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The variable stores the bandwidth of the operating channel {Ex: "20MHz", "40MHz", "80MHz", "160MHz" / NULL if not connected}
@@ -758,13 +759,13 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingChannelBandwidth
  */
 INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the secondary extension channel position.
+ * @brief Gets the secondary extension channel position
  *
  * A secondary channel helps in channel bonding where primary and secondary channels can be
  * combined to create a wide channel which can provide more data rate.
@@ -777,14 +778,14 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
  * @todo This needs to be investigated, to understand the purpose and requirement of this API.
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the Modulation Coding Scheme index.
+ * @brief Gets the Modulation Coding Scheme index
  *
  * @param[in] radioIndex   The index of the radio
  * @param[out] output_INT  The mcs index value
@@ -793,13 +794,13 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.MCS
  */
 INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
 
 /**
- * @brief Gets supported Transmit Power list.
+ * @brief Gets the supported transmit power list
  *
  * @param[in] radioIndex    The index of the radio
  * @param[out] output_list  The string stores the transmit power list
@@ -808,13 +809,13 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPowerSupported
  */
 INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
 
 /**
- * @brief Gets the current transmit Power.
+ * @brief Gets the current transmit Power
  *
  * The transmit power level is in units of full power for this radio.
  *
@@ -825,31 +826,31 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see wifi_getRadioTransmitPowerSupported()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPower
  */
 INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 
 /**
- * @brief Function to check 80211h is supported or not.
+ * @brief Function to checks the 80211h is supported or not.
  *
  * 80211h solves interference with satellites and radar using the same 5 GHz frequency band.
  *
  * @param[in] radioIndex The index of the radio
- * @param[out] Supported The Boolean value, indicates the 80211h support {Ex: 0-Not supported, 1- supported}
+ * @param[out] Supported The boolean value, indicates the 80211h support {Ex: 0-Not supported, 1- supported}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hSupported
  */
 INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
 
 /**
- * @brief Gets the 80211h feature enable.
+ * @brief Gets the 80211h feature enable
  *
  * @param[in] radioIndex The index of the radio
  * @param[out] enable    The 80211h enable status {Ex: 0-disabled, 1-enabled}
@@ -858,14 +859,14 @@ INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @pre wifi_getRadioIEEE80211hSupported() should return TRUE
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
  */
 INT wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
 
 /**
- * @brief Gets the regulatory domain.
+ * @brief Gets the regulatory domain
  *
  * @param[in] radioIndex    The index of the radio
  * @param[in] output_string Stores the regulatory domain string {Ex: "US", "DE"}
@@ -874,13 +875,13 @@ INT wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.RegulatoryDomain
  */
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
 
 /**
- * @brief Gets detailed radio traffic statistics information.
+ * @brief Gets detailed radio traffic statistics information
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_struct Structure of type wifi_radioTrafficStats_t that saves the radio traffic statistics
@@ -890,13 +891,13 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * @retval RETURN_ERR if any error is detected
  * 
  * @see wifi_radioTrafficStats_t
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.Stats.
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
 
 /**
- * @brief Gets SSID name.
+ * @brief Gets the SSID name
  *
  * Outputs a 32 byte or less string indicating the SSID name.
  *
@@ -907,13 +908,13 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
 
 /**
- * @brief Gets the BSSID.
+ * @brief Gets the BSSID
  * Basic Service Set Identifier (BSSID) is the mac addresss of the wireless access point.
  *
  * @param[in] ssidIndex      The index of the SSID
@@ -923,12 +924,12 @@ INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called  before calling this API
  */
 INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 
 /**
- * @brief Gets the MAC address associated with the Wifi SSID.
+ * @brief Gets the MAC address associated with the WiFi SSID
  *
  * @param[in] ssidIndex      The index of the SSID
  * @param[out] output_string The variable that holds the mac address
@@ -937,13 +938,13 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.MACAddress
  */
 INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
 
 /**
- * @brief Gets the basic SSID traffic statistics info.
+ * @brief Gets the basic SSID traffic statistics info
  *
  * @param[in] ssidIndex      The index of the SSID
  * @param[out] output_struct Structure of type wifi_ssidTrafficStats_t that holds the ssid traffic status
@@ -953,16 +954,16 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected
  *
  * @see wifi_ssidTrafficStats_t
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Stats.
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct);
 
 /**
- * @brief Starts a wifi scan and gets the scan results.
+ * @brief Starts a WiFi scan and gets the scan results
  *
  * @param[in] radioIndex          The index of the radio
- * @param[out] neighbor_ap_array  Array of neighboring access points found by the wifi scan. To be allocated by this function and de-allocated by the caller.
+ * @param[out] neighbor_ap_array  Array of neighboring access points found by the WiFi scan. To be allocated by this function and de-allocated by the caller.
  * @param[out] output_array_size  Size of neighbor_ap_array
  *
  * @return INT - The status of the operation
@@ -970,17 +971,17 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @retval RETURN_ERR if any error is detected
  *
  * @see wifi_neighbor_ap_t
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size);
 
 /**
- * @brief Starts a wifi scan and gets the scan results that match the given SSID name and frequency band.
+ * @brief Starts a WiFi scan and gets the scan results that match the given SSID name and frequency band
  *
  * @param[in] SSID               SSID name
  * @param[in] band               frequency band
- * @param[out] ap_array          Array of neighboring access points with the given SSID name and frequency band that were found by the wifi scan. To be allocated by this function and de-allocated by the caller.
+ * @param[out] ap_array          Array of neighboring access points with the given SSID name and frequency band that were found by the WiFi scan. To be allocated by this function and de-allocated by the caller.
  * @param[out] output_array_size Size of ap_array
  *
  * @return INT - The status of the operation
@@ -988,12 +989,12 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * @retval RETURN_ERR if any error is detected
  * 
  * @see wifi_neighbor_ap_t, WIFI_HAL_FREQ_BAND
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  */
 INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
 
 /**
- * @brief Sets the list of frequencies to scan over.
+ * @brief Sets the list of frequencies to scan over
  *
  * @param[in] radioIndex  Radio index
  * @param[in] freqList    Frequency list. An empty list implies that a normal, full scan is performed
@@ -1002,7 +1003,7 @@ INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_nei
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  */
 INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
 
@@ -1013,7 +1014,7 @@ INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
  * @retval 1 if dual band support enabled
  * @retval 0 if dual band support disabled
  * 
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() should be called before calling this API
  */
 INT wifi_getDualBandSupport();
 
@@ -1031,5 +1032,5 @@ INT wifi_getDualBandSupport();
  * @todo review the implementation of this API
  */
 INT wifi_waitForScanResults(void);
-/** @} */ // End of WIFI_HAL_COMMON_API
+/** @} */ // End of WIFI_COMMON_HAL_APIs
 #endif
