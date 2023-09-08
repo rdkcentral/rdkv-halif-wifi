@@ -122,7 +122,7 @@ Callback functions must originate in a thread that's separate from `caller` cont
 
 ### Blocking calls
 
-This interface is required to have no blocking calls.
+This interface has 3 blocking calls, namely `wifi_getNeighboringWiFiDiagnosticResult()`, `wifi_waitForScanResults()` and `wifi_getSpecificSSIDInfo()`, which will block until scan results are obtained or a timeout occurs, whichever happens earlier.
 
 ### Internal Error Handling
 
