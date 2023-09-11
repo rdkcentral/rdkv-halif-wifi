@@ -49,7 +49,7 @@
 
 /**
  * @addtogroup HPK HPK
- *
+ * @{
  * @section WIFI_GLOSSARY Glossary of terms
  *
  * Abbreviations | Description
@@ -93,13 +93,11 @@
  * TLS | Transport Layer Security is a protocol designed to encrypt and authenticate all kinds of network traffic at the trans port layer, and is the successor to SSL
  *
  * @defgroup WIFI_HAL WiFi HAL
- *
- * @ingroup HPK
- *
+ * @{
  * @defgroup WIFI_COMMON_HAL WiFi Common HAL
+ * @{
  * @section Data-Model
  * <a href="https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html">Refer for Data-Model Parameters</a>
- * @ingroup WIFI_HAL
  */
 
 /**
@@ -164,27 +162,6 @@
 #define RETURN_ERR   -1 //!< return error
 #endif
 
-#ifndef RADIO_INDEX_1
-#define RADIO_INDEX_1 1 //!< radio index 1
-#define RADIO_INDEX_2 2 //!< radio index 2
-#define AP_INDEX_1 1    //!< AP index 1
-#define AP_INDEX_2 2    //!< AP index 2
-#define AP_INDEX_3 3    //!< AP index 3
-#define AP_INDEX_4 4    //!< AP index 4
-#define AP_INDEX_5 5    //!< AP index 5
-#define AP_INDEX_6 6    //!< AP index 6
-#define AP_INDEX_7 7    //!< AP index 7
-#define AP_INDEX_8 8    //!< AP index 8
-#define AP_INDEX_9 9    //!< AP index 9
-#define AP_INDEX_10 10  //!< AP index 10
-#define AP_INDEX_11 11  //!< AP index 11
-#define AP_INDEX_12 12  //!< AP index 12
-#define AP_INDEX_13 13  //!< AP index 13
-#define AP_INDEX_14 14  //!< AP index 14
-#define AP_INDEX_15 15  //!< AP index 15
-#define AP_INDEX_16 16  //!< AP index 16
-#endif
-
 /**
  * @brief Defines for HAL version 2.0.0
  */
@@ -213,7 +190,7 @@ typedef enum {
  * @brief WiFi Bands
  */
 typedef enum {
-    WIFI_HAL_FREQ_BAND_ERROR,     //!< No frequency band 
+    WIFI_HAL_FREQ_BAND_NONE,       //!< No frequency band 
     WIFI_HAL_FREQ_BAND_24GHZ,     //!< 2.4Ghz frequency band
     WIFI_HAL_FREQ_BAND_5GHZ,      //!< 5Ghz frequency band
 } WIFI_HAL_FREQ_BAND;
@@ -397,18 +374,13 @@ typedef struct _wifi_halSettings
 } wifi_halConfig_t;
 
 /**
- * @defgroup WIFI_COMMON_HAL_APIs WiFi Common HAL APIs 
- * @{
- * @ingroup WIFI_COMMON_HAL
- */
-
-/**
  * @brief Gets the Wi-Fi HAL version in string {Ex: "2.0.0"}
  * - WIFI_HAL_MAJOR_VERSION
  * - WIFI_HAL_MINOR_VERSION
  * - WIFI_HAL_MAINTENANCE_VERSION
  *
  * @param[out] output_string It contains HAL version
+ * 
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected 
@@ -443,8 +415,8 @@ INT wifi_init();
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @see wifi_halConfig_t
  * @pre wifi_init() should be called before calling this API
+ * @see wifi_halConfig_t
  */
 
 INT wifi_initWithConfig(wifi_halConfig_t * conf);
@@ -532,8 +504,6 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 /**
  * @brief Gets the Radio enable status
  *
- * WiFi is up when the driver is loaded, and control/monitoring socket is open between HAL and wpa_supplicant.
- *
  * @param[in] radioIndex     The index of radio
  * @param[out] output_string The radio status {Ex: "UP", "DOWN"}
  *
@@ -565,7 +535,7 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
  * @brief Gets the maximum PHY bit rate supported by the interface
  *
  * @param[in] radioIndex     The index of radio
- * @param[out] output_string The string which stores the maximum bit rate value {Ex: "216.7 Mb/s", "1.3 Gb/s"}
+ * @param[out] output_string The string which stores the maximum bit rate value {Ex: "216.7 Mbps", "1300 Mbps"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -580,7 +550,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @brief Gets the supported frequency bands at which the radio can operate
  * 
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the supported freq bands {Ex: "2.4Ghz,5Ghz"}
+ * @param[out] output_string The string which stores the comma separates supported frequency bands {Valid values: "2.4Ghz,5Ghz"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -593,6 +563,8 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the frequency band at which the radio is operating
+ * 
+ * The value MUST be a member of the list reported by the #wifi_getRadioSupportedFrequencyBands()
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The string which stores current operating band {Ex: "2.4GHz", NULL if not connected}
@@ -689,7 +661,7 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 
 /**
- * @brief Check if the driver supports the auto channel selection / dynamic channel selection
+ * @brief Checks if the driver supports the auto channel selection / dynamic channel selection
  *
  * @param[in] radioIndex   The index of the radio
  * @param[out] output_bool Stores the auto channel selection / dynamic channel selection support status {Ex: 0-disabled, 1-enabled}
@@ -803,7 +775,7 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
  * @brief Gets the supported transmit power list
  *
  * @param[in] radioIndex    The index of the radio
- * @param[out] output_list  The string stores the transmit power list
+ * @param[out] output_list  The string stores the comma-sperated list of supported transmit power levels as percentage of full power {Ex: “0,25,50,75,100”} 
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -817,7 +789,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
 /**
  * @brief Gets the current transmit Power
  *
- * The transmit power level is in units of full power for this radio.
+ * The transmit power level is in units of full power for this radio. The value MUST be a member of the list reported by the #wifi_getRadioTransmitPowerSupported()
  *
  * @param[in] radioIndex   The index of the radio
  * @param[out] output_INT  The string stores the current transmit power
@@ -833,7 +805,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
 INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 
 /**
- * @brief Function to checks the 80211h is supported or not.
+ * @brief Checks whether 80211h is supported or not
  *
  * 80211h solves interference with satellites and radar using the same 5 GHz frequency band.
  *
@@ -850,7 +822,7 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
 
 /**
- * @brief Gets the 80211h feature enable
+ * @brief Checks whether the 80211h feature enabled or not
  *
  * @param[in] radioIndex The index of the radio
  * @param[out] enable    The 80211h enable status {Ex: 0-disabled, 1-enabled}
@@ -961,6 +933,8 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
 
 /**
  * @brief Starts a WiFi scan and gets the scan results
+ * 
+ * Starts a scan and, after the scan completes or a timeout of 8s occurs, collects scan results.
  *
  * @param[in] radioIndex          The index of the radio
  * @param[out] neighbor_ap_array  Array of neighboring access points found by the WiFi scan. To be allocated by this function and de-allocated by the caller.
@@ -979,6 +953,8 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
 /**
  * @brief Starts a WiFi scan and gets the scan results that match the given SSID name and frequency band
  *
+ * Starts a scan and, after the scan completes or a timeout of 8s occurs, collects scan results that match the given SSID name and frequency band.
+ * 
  * @param[in] SSID               SSID name
  * @param[in] band               frequency band
  * @param[out] ap_array          Array of neighboring access points with the given SSID name and frequency band that were found by the WiFi scan. To be allocated by this function and de-allocated by the caller.
@@ -1022,7 +998,7 @@ INT wifi_getDualBandSupport();
  * @brief Wait for scan results.
  *
  * Wait for scan results if scan is in progress,
- * otherwise start a scan, complete the scan and wait for scan results
+ * otherwise start a scan, complete the scan and wait for scan results or a timeout of 8s occurs, whichever happens earlier
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -1032,5 +1008,7 @@ INT wifi_getDualBandSupport();
  * @todo review the implementation of this API
  */
 INT wifi_waitForScanResults(void);
-/** @} */ // End of WIFI_COMMON_HAL_APIs
+/** @} */ // End of WIFI_COMMON_HAL
+/** @} */ // End of WIFI_HAL
+/** @} */ // End of HPK
 #endif

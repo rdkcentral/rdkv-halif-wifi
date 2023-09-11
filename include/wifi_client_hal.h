@@ -43,12 +43,11 @@
 
 /**
  * @addtogroup WIFI_HAL WiFi HAL
- * @ingroup HPK
- *
+ * @{
  * @defgroup WIFI_CLIENT_HAL WiFi Client HAL
+ * @{
  * WiFi Client HAL provides an interface (data structures and API) to interact with underlying WiFi driver and
  * enabling the client to be connected with an access point.
- * @ingroup WIFI_HAL
  */
 
 #include <wifi_common_hal.h>
@@ -71,6 +70,7 @@ typedef struct _wifi_pairedSSIDInfo
 /**
  * @struct _wifi_roamingCtrl_t
  * @brief Structure for roaming control information
+ * @todo Need to add comments for each variables including the ranges
  */
 typedef struct _wifi_roamingCtrl_t
 {
@@ -102,12 +102,6 @@ typedef struct _wifi_telemetry_ops_t
     void (*event_s)(char* marker, char* value); //!< callback funtion to event a string telemetry marker
     void (*event_d)(char* marker, int value);   //!< callback funtion to event an integer telemetry marker
 } wifi_telemetry_ops_t;
-
-/**
- * @defgroup WIFI_CLIENT_HAL_APIs WiFi Client HAL APIs 
- * @{
- * @ingroup WIFI_CLIENT_HAL
- */
 
 /**
  * @brief This API is used to get WPS configuration methods supported by the device
@@ -375,6 +369,9 @@ INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * 
  * @pre wifi_init() should be called before calling this API
  * @see wifi_roamingCtrl_t, wifi_setRoamingControl()
+ * @note ssidIndex will be deprecated in future versions
+ * @todo ssidIndex to be removed in next phase
+ * @todo check if ssidIndex/apIndex/radioIndex can be deprecated for all APIs in both files
  */
 INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
@@ -396,6 +393,7 @@ INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * @pre wifi_init() should be called before calling this API
  * @todo Need to change the function name to wifi_getwifiStatusCode() from getwifiStatusCode()
  * @todo This is used only by RDKC need to be revisited with RDKC team 
+ * @note Implementation of this API is not required as it is currently being used only by end-of-development cameras
  */
 WiFiHalStatus_t getwifiStatusCode();
 
@@ -408,10 +406,12 @@ WiFiHalStatus_t getwifiStatusCode();
  * 
  * @pre wifi_init() should be called before calling this API
  * @see wifi_setCliWpsButtonPush()
+ * @todo check whether disconnect callbck is to be called as part of this API implementation
  */
 INT wifi_cancelWpsPairing();
 
-/** @} */ // End of WIFI_CLIENT_HAL_APIs
+/** @} */ // End of WIFI_CLIENT_HAL
+/** @} */ // End of WIFI_HAL
 #else
 #error "! __WIFI_CLIENT_HAL_H__"
 #endif
