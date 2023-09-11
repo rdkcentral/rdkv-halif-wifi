@@ -264,7 +264,40 @@ sequenceDiagram
     WiFi_HAL-->>Caller: Wi-Fi scan results
     deactivate WiFi_HAL
     end
-    Caller->>WiFi_HAL: wifi_disconnectEndpoint_callback_register(callback_function)
+```
+
+Callback Registrations and Asynchronous Notifications
+
+```mermaid
+sequenceDiagram
+    participant Caller
+    participant WiFi_HAL
+    participant WiFi_Driver
+
+    par Callback Registrations
+    Caller->>WiFi_HAL: wifi_connectEndpoint_callback_register(connect_callback_function)
+    Caller->>WiFi_HAL: wifi_disconnectEndpoint_callback_register(disconnect_callback_function)
+    end
+
+    Caller->>WiFi_HAL: wifi_connectEndpoint()
+    activate WiFi_HAL
+    WiFi_HAL->>WiFi_Driver: Wi-Fi connect request
+    activate WiFi_Driver
+    WiFi_Driver-->>WiFi_HAL: 
+    WiFi_HAL->>Caller: connect_callback_function(WIFI_HAL_CONNECTING)
+    WiFi_HAL-->>Caller: 
+    deactivate WiFi_HAL
+    WiFi_Driver->>WiFi_HAL: Wi-Fi scan started event
+    WiFi_Driver->>WiFi_HAL: Wi-Fi scan results event
+    alt network not found in scan results
+    WiFi_Driver->>WiFi_HAL: Wi-Fi network not found event
+    WiFi_HAL->>Caller: disconnect_callback_function(WIFI_HAL_ERROR_NOT_FOUND)
+    else connect to network unsuccessful
     WiFi_Driver->>WiFi_HAL: Wi-Fi disconnected event
-    WiFi_HAL->>Caller: callback_function()
+    WiFi_HAL->>Caller: disconnect_callback_function(WIFI_HAL_SUCCESS)
+    else connect to network successful
+    WiFi_Driver->>WiFi_HAL: Wi-Fi connected event
+    deactivate WiFi_Driver
+    WiFi_HAL->>Caller: connect_callback_function(WIFI_HAL_SUCCESS)
+    end
 ```
