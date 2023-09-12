@@ -42,7 +42,7 @@
 ## Acronyms
 
 - `RDK-V` - Reference Design Kit for Video devices
-- `Wi-Fi` - Wireless Radio Networking
+- `Wi-Fi` - Wireless Fidelity
 - `HAL` - Hardware Abstraction Layer
 - `API` - Application Programming Interface
 - `Caller` - Any user of the interface via the `API`s
@@ -131,8 +131,8 @@ All `API`s must return errors synchronously as a return argument. The interface 
 ### Persistence Model
 
 `Wi-Fi` `HAL` is expected to persist the following configurations:
-- `Wi-Fi` roaming controls
-- `Wi-Fi` configuration parameters 
+- `Wi-Fi` roaming controls (set using `wifi_setRoamingControl()`)
+- `Wi-Fi` configuration parameters (specified as arguments to `wifi_connectEndpoint()`)
 
 <!-- @todo Wi-Fi HAL should not be responsible for persisting Wi-Fi roaming controls. This should be done from outside the Wi-Fi HAL. In next phase -->
 
@@ -167,7 +167,7 @@ This interface is required to be released under the Apache License 2.0.
 
 ### Build Requirements
 
-This interface is required to build into shared library. The shared library must be named libwifihal.so. The building mechanism must be independent of Yocto.
+This interface is required to build into shared library. The shared library must be named `libwifihal.so`. The building mechanism must be independent of Yocto.
 
 ### Variability Management
 
@@ -175,7 +175,7 @@ Any change to the interface must be reviewed and approved by component architect
 
 ### Platform or Product Customization
 
-`Wi-Fi` `HAL` must not have any product-specific dependencies or customizations.
+`Wi-Fi` `HAL` should not have any product-specific dependencies or customizations.
 
 ## Interface API Documentation
 
@@ -206,13 +206,13 @@ Any change to the interface must be reviewed and approved by component architect
 
 and to perform actions such as:
 
-- Get `Wi-Fi` scan results
-- Connect to a `Wi-Fi` network using password
-- Connect to a `Wi-Fi` network using `WPS` Push Button / `WPS` PIN
-- Disconnect from a `Wi-Fi` network
-- Cancel an in-progress `WPS`
-- Clear current `Wi-Fi` network configuration
-- Get/Set `Wi-Fi` roaming controls
+- Get `Wi-Fi` scan results (`wifi_getNeighboringWiFiDiagnosticResult()` / `wifi_getSpecificSSIDInfo()`)
+- Connect to a `Wi-Fi` network using password (`wifi_connectEndpoint()`)
+- Connect to a `Wi-Fi` network using `WPS` Push Button / `WPS` PIN (`wifi_setCliWpsButtonPush()` / `wifi_setCliWpsEnrolleePin()`)
+- Disconnect from a `Wi-Fi` network (`wifi_disconnectEndpoint()`)
+- Cancel an in-progress `WPS` (`wifi_cancelWpsPairing()`)
+- Clear current `Wi-Fi` network configuration (`wifi_clearSSIDInfo()`)
+- Get/Set `Wi-Fi` roaming controls (`wifi_getRoamingControl()` / `wifi_setRoamingControl()`)
 
 ### Diagrams
 
