@@ -1,1 +1,1 @@
-./docs/pages/halSpec.md
+./docs/pages/Wifi_halSpec.md
