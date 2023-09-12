@@ -70,6 +70,7 @@ typedef struct _wifi_pairedSSIDInfo
 /**
  * @struct _wifi_roamingCtrl_t
  * @brief Structure for roaming control information
+ * @note postAssnSelfSteerBeaconsMissedTime will be removed
  * @todo Need to add comments for each variables including the ranges
  */
 typedef struct _wifi_roamingCtrl_t
@@ -77,16 +78,16 @@ typedef struct _wifi_roamingCtrl_t
   BOOL roamingEnable;                          //!< roamingEnable enabled or not
   BOOL selfSteerOverride;                      //!< selfSteerOverride enabled or not
   BOOL roam80211kvrEnable;                     //!< roam80211kvrEnable enabled or not
-  INT preassnBestThreshold;                    //!<  preassnBestThreshold best threshold
-  INT preassnBestDelta;                        //!<  preassnBestDelta best delta
-  INT postAssnLevelDeltaConnected;             //!<  postAssnLevelDeltaConnected
-  INT postAssnLevelDeltaDisconnected;          //!<  postAssnLevelDeltaDisconnected
-  INT postAssnSelfSteerThreshold;              //!<  postAssnSelfSteerThreshold
-  INT postAssnSelfSteerTimeframe;              //!<  postAssnSelfSteerTimeframe
-  INT postAssnBackOffTime;                     //!<  postAssnBackOffTime
-  //INT postAssnSelfSteerBeaconsMissedTime;    //!< @note postAssnSelfSteerBeaconsMissedTime will be removed
-  INT postAssnAPctrlThreshold;                 //!<  postAssnAPctrlThreshold control threshold
-  INT postAssnAPctrlTimeframe;                 //!<  postAssnAPctrlTimeframe control time frame
+  INT preassnBestThreshold;                    //!< preassnBestThreshold best threshold
+  INT preassnBestDelta;                        //!< preassnBestDelta best delta
+  INT postAssnLevelDeltaConnected;             //!< postAssnLevelDeltaConnected
+  INT postAssnLevelDeltaDisconnected;          //!< postAssnLevelDeltaDisconnected
+  INT postAssnSelfSteerThreshold;              //!< postAssnSelfSteerThreshold
+  INT postAssnSelfSteerTimeframe;              //!< postAssnSelfSteerTimeframe
+  INT postAssnBackOffTime;                     //!< postAssnBackOffTime
+  //INT postAssnSelfSteerBeaconsMissedTime;    //!< postAssnSelfSteerBeaconsMissedTime will be removed
+  INT postAssnAPctrlThreshold;                 //!< postAssnAPctrlThreshold control threshold
+  INT postAssnAPctrlTimeframe;                 //!< postAssnAPctrlTimeframe control time frame
 
 }wifi_roamingCtrl_t;
 
@@ -104,7 +105,7 @@ typedef struct _wifi_telemetry_ops_t
 } wifi_telemetry_ops_t;
 
 /**
- * @brief This API is used to get WPS configuration methods supported by the device
+ * @brief Gets WPS configuration methods supported by the device
  *
  * This function provides the comma-separated list of strings. For example:
  * - "USBFlashDrive" - User uses a USB flash drive to transfer data between the new client device and
@@ -125,14 +126,14 @@ typedef struct _wifi_telemetry_ops_t
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsSupported
  * @todo Need more review
  */
 INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
 
 /**
- * @brief This function indicates WPS configuration methods enabled on the device
+ * @brief Gets WPS configuration methods enabled on the device
  *
  * The API provides the comma-separated list of strings.
  * Each list item MUST be a member of the list reported by the ConfigMethodsSupported parameter.
@@ -144,14 +145,14 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_getCliWpsConfigMethodsSupported(), wifi_setCliWpsConfigMethodsEnabled()
  * @see @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
  */
 INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 
 /**
- * @brief This API sets the active WPS methods
+ * @brief Sets the active WPS methods
  *
  * @param[in] ssidIndex    The index of SSID array
  * @param[in] methodString The methods to enable {Ex: "PushButton, PIN"}
@@ -160,15 +161,16 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_getCliWpsConfigMethodsSupported(), wifi_getCliWpsConfigMethodsEnabled()
  * @see @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
- * @todo ssidIndex will be deprecated in next phase
+ * @note ssidIndex will be deprecated in future versions
+ * @todo ssidIndex to be removed in next phase
  */
 INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
 /**
- * @brief This API sets the WPS PIN and uses it to pair with access point
+ * @brief Sets the WPS PIN and uses it to pair with access point
  *
  * @param[in] ssidIndex   The index of SSID array
  * @param[in] EnrolleePin PIN code to connect to the access point
@@ -177,9 +179,10 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.PIN
- * @todo ssidIndex will be deprecated in next phase
+ * @note ssidIndex will be deprecated in future versions
+ * @todo ssidIndex to be removed in next phase
  */
 INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 
@@ -192,13 +195,14 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
- * @todo ssidIndex will be deprecated in next phase
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @note ssidIndex will be deprecated in future versions
+ * @todo ssidIndex to be removed in next phase
  */
 INT wifi_setCliWpsButtonPush(INT ssidIndex);
 
 /**
- * @brief This API starts the process of connection between the client and an access point
+ * @brief Starts the process of connection between the client and an access point
  *
  * @param[in] ssidIndex                 The index of SSID array
  * @param[in] AP_SSID                   The ssid to connect
@@ -216,7 +220,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *  
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @pre wifi_connectEndpoint_callback_register() should be called before calling this API
  * @see wifiSecurityMode_t, wifi_disconnectEndpoint()
  * @note On successfull connect, wifi_connectEndpoint_callback() will be called
@@ -224,7 +228,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
 INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);
 
 /**
- * @brief This API starts the process of disconnection between the client and an access point
+ * @brief Starts the process of disconnection between the client and an access point
  *
  * @param[in] ssidIndex The index of SSID array
  * @param[in] AP_SSID   The ssid to disconnect
@@ -233,7 +237,7 @@ INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_sec
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @pre wifi_disconnectEndpoint_callback_register() should be called before calling this API
  * @see wifi_connectEndpoint()
  * @note On successfull disconnect, wifi_disconnectEndpoint_callback() will be called
@@ -249,7 +253,7 @@ INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  */
 INT wifi_clearSSIDInfo(INT ssidIndex);
 
@@ -261,9 +265,9 @@ INT wifi_clearSSIDInfo(INT ssidIndex);
  * @param[out] error     An enum variable that indicates the Wi-Fi connection status
  *
  * possible error values:
- * - WIFI_HAL_ERROR_NOT_FOUND
- * - WIFI_HAL_SUCCESS
- * - WIFI_HAL_ERROR_SSID_CHANGED
+ * - WIFI_HAL_ERROR_NOT_FOUND      WPS connection timeout, WPS overlap detects, SSID not found in last scan
+ * - WIFI_HAL_SUCCESS              Successfully disconnected from BSSID
+ * - WIFI_HAL_ERROR_SSID_CHANGED   SSID change
  * 
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -279,7 +283,7 @@ typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wi
  *
  * @param[in] callback_proc the callback function to disconnect the client
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback callback_proc);
@@ -292,17 +296,17 @@ void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback 
  * @param[out] error     An enum variable that indicates the Wi-Fi connection status
  * 
  * possible error values:
- * - WIFI_HAL_CONNECTING
- * - WIFI_HAL_SUCCESS
- * - WIFI_HAL_ERROR_CONNECTION_FAILED
- * - WIFI_HAL_ERROR_INVALID_CREDENTIALS
- * - WIFI_HAL_ERROR_AUTH_FAILED
+ * - WIFI_HAL_CONNECTING                  WPS connection in progress, connec to specific SSID
+ * - WIFI_HAL_SUCCESS                     Successfully connected to BSSID
+ * - WIFI_HAL_ERROR_CONNECTION_FAILED     SSID disabled
+ * - WIFI_HAL_ERROR_INVALID_CREDENTIALS   Wrong key, Password may not be falling within spec   
+ * - WIFI_HAL_ERROR_AUTH_FAILED           Authentication failed           
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @see wifiStatusCode_t, wifi_connectEndpoint_callback_register()
+ * @see wifiStatusCode_t, wifi_connectEndpoint_callback_register(), wifi_connectEndpoint(), wifi_setCliWpsEnrolleePin(), wifi_setCliWpsButtonPush()
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
@@ -312,7 +316,7 @@ typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiS
  *
  * @param[in] callback_proc The callback function to connect the client to the access point
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callback_proc);
@@ -322,7 +326,7 @@ void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callba
  * 
  * @param[in] telemetry_ops Telemetry callback functions
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_telemetry_ops_t
  * @todo revisit telemetry requirement to move out of WiFi-HAL in next phase
  */
@@ -337,13 +341,13 @@ void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
  * @retval RETURN_OK   - if successful
  * @retval RETURN_ERR  - if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_pairedSSIDInfo_t, wifi_connectEndpoint()
  */
 INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
 
 /**
- * @brief This API sets the roaming control parameters
+ * @brief Sets the roaming control parameters
  *
  * @param[in] ssidIndex         The index of the SSID
  * @param[in] pRoamingCtrl_data Structure with roaming control parameters
@@ -352,13 +356,13 @@ INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
  * @retval RETURN_OK   - if successful
  * @retval RETURN_ERR  - if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_roamingCtrl_t, wifi_getRoamingControl()
  */
 INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
- * @brief This API gets the roaming control parameters
+ * @brief Gets the roaming control parameters
  *
  * @param[in] ssidIndex          The index of the SSID
  * @param[out] pRoamingCtrl_data Structure with roaming control parameters 
@@ -367,7 +371,7 @@ INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * @retval RETURN_OK   - if successful
  * @retval RETURN_ERR  - if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_roamingCtrl_t, wifi_setRoamingControl()
  * @note ssidIndex will be deprecated in future versions
  * @todo ssidIndex to be removed in next phase
@@ -376,7 +380,7 @@ INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
 INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
 /**
- * @brief This API gets the current wifi status
+ * @brief Gets the current wifi status
  *
  * @returns WiFiHalStatus_t - wifi status code
  * @retval WIFISTATUS_HAL_DISCONNECTED          - Disconnected from the AP
@@ -390,7 +394,7 @@ INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * @retval WIFISTATUS_HAL_GROUP_HANDSHAKE       - Group handshake
  * @retval WIFISTATUS_HAL_COMPLETED             - Completed and connected to AP
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @todo Need to change the function name to wifi_getwifiStatusCode() from getwifiStatusCode()
  * @todo This is used only by RDKC need to be revisited with RDKC team 
  * @note Implementation of this API is not required as it is currently being used only by end-of-development cameras
@@ -404,7 +408,7 @@ WiFiHalStatus_t getwifiStatusCode();
  * @retval RETURN_OK   - if successful
  * @retval RETURN_ERR  - if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_setCliWpsButtonPush()
  * @todo check whether disconnect callbck is to be called as part of this API implementation
  */

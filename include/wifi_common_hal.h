@@ -388,60 +388,67 @@ typedef struct _wifi_halSettings
 INT wifi_getHalVersion(CHAR *output_string);
 
 /**
- * @brief Initializes the WiFi subsystem
- *
- * Steps involved in a wifi_init operation
- * - Creating default configuration file in a first time boot.
+ * @brief Initializes the WiFi subsystem for wlan0 WiFi interface
+ * 
+ * For instance, steps involved in a wifi_init operation for a wpa_supplicant-based WiFi-HAL
+ * - Creat default configuration file in a first time boot.
  * - Reset the state machine.
- * - Starting of wpa_supplicant daemon.
- * - Opening up communication channels for monitoring and control interfaces
- * - Invoking the event monitoring thread.
+ * - Start wpa_supplicant daemon.
+ * - Open communication channels for monitoring and control interfaces
+ * - Creat the event monitoring thread.
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
  * @see wifi_uninit()
- * @note This function must not suspend and must not invoke any blocking system
- * calls. It should probably just send a message to a driver event handler task.
+ * @note This function must not invoke any blocking calls.
  */
 INT wifi_init(); 
 
 /**
- * @brief Initializes the WiFi subsystem
- *
+ * @brief Initializes the WiFi subsystem with specified interface configuration
+ * 
+ * At any given point of time, only one wireless interface will be active {Ex: "wlan0" or "wlan1"}. 
+ * To initialize a new interface the current interface has to be uninitialized #wifi_uninit().
+ * 
  * @param[in] conf It contains WLAN interface name
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_halConfig_t
  */
 
 INT wifi_initWithConfig(wifi_halConfig_t * conf);
 
 /**
- * @brief Turns off transmit power for the entire WiFi subsystem for all radios
+ * @brief Disables all WiFi interfaces
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called before calling this API
- * @note This function must not suspend and must not invoke any blocking system
- * calls. It should probably just send a message to a driver event handler task.
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @note This function must not invoke any blocking calls.
  */
 INT wifi_down(); 
 
 /**
  * @brief Uninitilizes WiFi module.
  * 
+ * For instance, steps involved in a wifi_uninit operation for a wpa_supplicant-based WiFi-HAL
+ * - Reset the state machine.
+ * - Stop wpa_supplicant daemon.
+ * - Close communication channels for monitoring and control interfaces
+ * - Shut down any threads that were created during #wifi_init() #wifi_initWithConfig.
+ * 
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_init()
  */
 INT wifi_uninit();
@@ -453,7 +460,7 @@ INT wifi_uninit();
  * @param[out] wifi_sta_stats Station status data
  * 
  * @see wifi_sta_stats_t
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @pre Memory for "wifi_sta_stats" must be pre-allocated by the caller
  */
 void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
@@ -467,7 +474,7 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.RadioNumberOfEntries
  */
 INT wifi_getRadioNumberOfEntries(ULONG *output);
@@ -481,7 +488,7 @@ INT wifi_getRadioNumberOfEntries(ULONG *output);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSIDNumberOfEntries
  */
 INT wifi_getSSIDNumberOfEntries(ULONG *output);
@@ -496,7 +503,7 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Enable
  */
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
@@ -511,7 +518,7 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Status
  */
 INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
@@ -526,7 +533,7 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API.
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
  */
 INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
@@ -541,7 +548,7 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API.
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.MaxBitRate
  */
 INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
@@ -556,7 +563,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedFrequencyBands
  */
 INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
@@ -573,7 +580,7 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_getRadioSupportedFrequencyBands()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingFrequencyBand
  */
@@ -589,7 +596,7 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API.
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API.
  * @see wifi_getRadioOperatingFrequencyBand()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedStandards
  */
@@ -609,7 +616,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_getRadioSupportedStandards()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingStandards
  */
@@ -625,7 +632,7 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.PossibleChannels
  */
 INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
@@ -640,7 +647,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called  before calling this API
  * @see wifi_getRadioPossibleChannels()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ChannelsInUse
  */
@@ -656,7 +663,7 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Channel
  */
 INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
@@ -671,7 +678,7 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelSupported 
  */
 INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
@@ -686,7 +693,7 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_getRadioAutoChannelSupported()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelEnable
  */
@@ -696,13 +703,14 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
  * @brief Gets the auto channel selection / dynamic channel selection refresh period in seconds
  *
  * @param[in] radioIndex    The index of the radio
- * @param[out] output_ulong Stores the auto channel selection / dynamic channel selection refresh period
+ * @param[out] output_ulong Stores the auto channel selection / dynamic channel selection refresh period in seconds
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @see wifi_getRadioAutoChannelEnable()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.AutoChannelRefreshPeriod
  */
 INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
@@ -717,7 +725,7 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.GuardInterval
  */
 INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
@@ -732,7 +740,7 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API.
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API.
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.OperatingChannelBandwidth
  */
 INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
@@ -742,17 +750,18 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  *
  * A secondary channel helps in channel bonding where primary and secondary channels can be
  * combined to create a wide channel which can provide more data rate.
- * Position of secondary channel may be either above or below the primary.
+ * Position of secondary channel may be either above or below the primary. Applicable when OperatingChannelBandwidth is set to 40MHz or Auto
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the secondary extension channel {Ex: "Auto"}
+ * @param[out] output_string The string which stores the secondary extension channel position {Valid values: "AboveControlChannel", "BelowControlChannel", "Auto"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
+ * @see wifi_getRadioOperatingChannelBandwidth()
  * @todo This needs to be investigated, to understand the purpose and requirement of this API.
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
@@ -767,7 +776,7 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.MCS
  */
 INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
@@ -782,7 +791,7 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called  before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPowerSupported
  */
 INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
@@ -799,7 +808,7 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see wifi_getRadioTransmitPowerSupported()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.TransmitPower
  */
@@ -817,7 +826,7 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hSupported
  */
 INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
@@ -832,7 +841,7 @@ INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @pre wifi_getRadioIEEE80211hSupported() should return TRUE
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
  */
@@ -848,7 +857,7 @@ INT wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.RegulatoryDomain
  */
 INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
@@ -864,7 +873,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * @retval RETURN_ERR if any error is detected
  * 
  * @see wifi_radioTrafficStats_t
- * @pre wifi_init() should be called  before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.Stats.
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
@@ -881,7 +890,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
  */
 INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
@@ -897,7 +906,7 @@ INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called  before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called  before calling this API
  */
 INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 
@@ -911,7 +920,7 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.MACAddress
  */
 INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
@@ -927,7 +936,7 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected
  *
  * @see wifi_ssidTrafficStats_t
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Stats.
  */
 INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_struct);
@@ -946,7 +955,7 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @retval RETURN_ERR if any error is detected
  *
  * @see wifi_neighbor_ap_t
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size);
@@ -966,7 +975,7 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * @retval RETURN_ERR if any error is detected
  * 
  * @see wifi_neighbor_ap_t, WIFI_HAL_FREQ_BAND
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  */
 INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
 
@@ -980,7 +989,7 @@ INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_nei
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  */
 INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
 
@@ -991,7 +1000,7 @@ INT wifi_setRadioScanningFreqList(INT radioIndex, const CHAR *freqList);
  * @retval 1 if dual band support enabled
  * @retval 0 if dual band support disabled
  * 
- * @pre wifi_init() should be called before calling this API
+ * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  */
 INT wifi_getDualBandSupport();
 
@@ -1005,7 +1014,7 @@ INT wifi_getDualBandSupport();
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
- * @pre wifi_init() should be called  before calling this API.
+ * @pre wifi_init() wifi_initWithConfig() wifi_initWithConfig() should be called  before calling this API.
  * @todo review the implementation of this API
  */
 INT wifi_waitForScanResults(void);
