@@ -487,7 +487,7 @@ INT wifi_getRadioNumberOfEntries(ULONG *output);
 INT wifi_getSSIDNumberOfEntries(ULONG *output);
 
 /**
- * @brief Gets the radio enable config parameter
+ * @brief Checks whether radio is enabled or not
  *
  * @param[in] radioIndex   The index of radio
  * @param[out] output_bool The radio state {Ex: 0-disabled, 1-enabled}
@@ -502,10 +502,10 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output);
 INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 
 /**
- * @brief Gets the Radio enable status
+ * @brief Gets the current operational state of the radio
  *
  * @param[in] radioIndex     The index of radio
- * @param[out] output_string The radio status {Ex: "UP", "DOWN"}
+ * @param[out] output_string The radio status. Please refer data-model items for the complete set of possible values {Ex: "UP", "DOWN"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -520,7 +520,7 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @brief Gets the radio interface name from platform
  *
  * @param[in] radioIndex     The index of radio
- * @param[out] output_string The string which stores the radio interface name
+ * @param[out] output_string The string which stores the radio interface name {Ex: "wlan0", "wlan1"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -583,20 +583,21 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  * @brief Gets radio supported standards.
  *
  * @param[in] radioIndex The index of the radio
- * @param[out] output_string The string which stores the supported freq band {Ex: "b,g,n" or "a,n,ac"}
+ * @param[out] output_string The string stores the comma-sperated list of radio supported standards {Ex: "b,g,n" or "a,n,ac"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() should be called before calling this API.
+ * @see wifi_getRadioOperatingFrequencyBand()
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.SupportedStandards
  */
 INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the radio operating mode and pure mode flag
- * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported.
+ * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported. The value MUST be a member of the list reported by the #wifi_getRadioSupportedStandards()
  *
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The string which stores the radio operating mode {Ex: "b,g,n" or "a,n,ac"}
@@ -618,7 +619,7 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * @brief Gets the supported channel list
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the supported channels {Ex: "1-11", "36-48,149-161"}
+ * @param[out] output_string The string stores the comma-sperated list of supported channels {Ex: "1-11", "36-48,149-161"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -633,7 +634,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * @brief Gets the list of channels currently in use
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the list of used channels {Ex: "1"}
+ * @param[out] output_string The string stores the comma-sperated list of used channels {Ex: "1"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
