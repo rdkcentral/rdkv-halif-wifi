@@ -97,7 +97,7 @@
  * @defgroup WIFI_COMMON_HAL WiFi Common HAL
  * @{
  * @section Data-Model
- * <a href="https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html">Refer for Data-Model Parameters</a>
+ * <a href="https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html">Data-Model Definition</a>
  */
 
 /**
@@ -151,8 +151,10 @@
  *
  * RETURN_OK Return value for the success case
  * RETURN_ERR Return value for the failure case
- * @todo add possible return codes as an enum and include RETURN_UNSUPPORTED for unsupported API next phase
- *
+ * RETURN_UNSUPPORTED Return value for the unsupported API
+ * @todo add possible return codes as an enum in next phase
+ * @todo consider RETURN_UNSUPPORTED, RETURN_OUT_OF_MEMORY, RETURN_NOT_INITIALIZED, RETURN_ALREADY_INITIALISED, 
+ * RETURN_INVALID_PARAM, RETURN_UNINITIALISED in next phase
  */
 #ifndef RETURN_OK
 #define RETURN_OK   0 //!< return ok
@@ -161,6 +163,10 @@
 #ifndef RETURN_ERR
 #define RETURN_ERR   -1 //!< return error
 #endif
+
+#ifndef RETURN_UNSUPPORTED
+#define RETURN_UNSUPPORTED   1 //!< return unsupported
+#endif 
 
 /**
  * @brief Defines for HAL version 2.0.0
@@ -317,7 +323,7 @@ typedef struct _wifi_ssidTrafficStats
  * @struct _wifi_ssidTrafficStats
  * @brief structure for neighbor_ap
  *
- * @note Please do not edit the elements for this data structure
+ * @note Do not edit the fields of this data structure
  */
 
 typedef struct _wifi_neighbor_ap
@@ -403,6 +409,7 @@ INT wifi_getHalVersion(CHAR *output_string);
  *
  * @see wifi_uninit()
  * @note This function must not invoke any blocking calls.
+ * @todo support RETURN_ALREADY_INITIALISED if already initialized in the next phase
  */
 INT wifi_init(); 
 
@@ -427,7 +434,7 @@ INT wifi_initWithConfig(wifi_halConfig_t * conf);
  * @brief Disables all WiFi interfaces
  *
  * @return INT - The status of the operation
- * @retval RETURN_OK if successful
+ * @retval RETURN_OK if successful or if interfaces are already disabled
  * @retval RETURN_ERR if any error is detected
  *
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
@@ -512,8 +519,9 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
  * @brief Gets the current operational state of the radio
  *
  * @param[in] radioIndex     The index of radio
- * @param[out] output_string The radio status. Please refer data-model items for the complete set of possible values {Ex: "UP", "DOWN"}
- *
+ * @param[out] output_string The radio status. Refer data-model parameter for the complete set of
+ * possible values {"Up", "Down", "Unknown", "Dormant", "NotPresent", "LowerLayerDown"}
+ * 
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
@@ -534,7 +542,6 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API.
- * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Alias, Device.WiFi.Radio.{i}.Name
  */
 INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
 
@@ -591,7 +598,9 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  *
  * @param[in] radioIndex The index of the radio
  * @param[out] output_string The string stores the comma-sperated list of radio supported standards {Ex: "b,g,n" or "a,n,ac"}
- *
+ * If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed. 
+ * If OperatingFrequencyBand is set to 5GHz, only values a, n, ac are allowed.
+ * 
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
@@ -604,10 +613,12 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the radio operating mode and pure mode flag
- * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported. The value MUST be a member of the list reported by the #wifi_getRadioSupportedStandards()
+ * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported. 
+ * The value MUST be a member of the list reported by the #wifi_getRadioSupportedStandards()
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the radio operating mode {Ex: "b,g,n" or "a,n,ac"}
+ * @param[out] output_string The string stores the comma-sperated list of radio operating mode. If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed,
+ * if OperatingFrequencyBand is set to 5GHz, only values a, n, ac are allowed {Ex: "b,g,n" or "a,n,ac"}
  * @param[out] gOnly         The g-only mode
  * @param[out] nOnly         The n-only mode
  * @param[out] acOnly        The ac-only mode
@@ -624,7 +635,8 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
 
 /**
  * @brief Gets the supported channel list
- *
+ * List items represent possible radio channels for the wireless standard (a, b, g, n) and the regulatory domain.
+ * 
  * @param[in] radioIndex     The index of the radio
  * @param[out] output_string The string stores the comma-sperated list of supported channels {Ex: "1-11", "36-48,149-161"}
  *
@@ -654,7 +666,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 
 /**
- * @brief Gets the running channel number
+ * @brief Gets the current radio channel used by the connection
  *
  * @param[in] radioIndex    The index of the radio
  * @param[out] output_ulong Variable which stores the currently used channel number
@@ -684,7 +696,7 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
 
 /**
- * @brief Gets the auto channel selection / dynamic channel selection enable status
+ * @brief Checks whether auto channel selection enabled or not
  *
  * @param[in] radioIndex   The index of the radio
  * @param[out] output_bool Stores the auto channel selection / dynamic channel selection status {Ex: 0-disabled, 1-enabled}
@@ -701,7 +713,8 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 
 /**
  * @brief Gets the auto channel selection / dynamic channel selection refresh period in seconds
- *
+ * This parameter is significant only if AutoChannelEnable is set to true.
+ * 
  * @param[in] radioIndex    The index of the radio
  * @param[out] output_ulong Stores the auto channel selection / dynamic channel selection refresh period in seconds
  *
@@ -719,7 +732,7 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
  * @brief Gets the guard interval value
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string Returns the guard interval value {Ex: "400nsec" or "800nsec"}
+ * @param[out] output_string Returns the guard interval value {Valid values: "400nsec", "800nsec", "Auto"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -734,7 +747,7 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
  * @brief Gets the operating channel bandwidth
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The variable stores the bandwidth of the operating channel {Ex: "20MHz", "40MHz", "80MHz", "160MHz" / NULL if not connected}
+ * @param[out] output_string The variable stores the bandwidth of the operating channel {Valid values: "20MHz", "40MHz", "80MHz", "160MHz", "Auto" / NULL if not connected}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -785,7 +798,8 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
  * @brief Gets the supported transmit power list
  *
  * @param[in] radioIndex    The index of the radio
- * @param[out] output_list  The string stores the comma-sperated list of supported transmit power levels as percentage of full power {Ex: “0,25,50,75,100”} 
+ * @param[out] output_list  The string stores the comma-sperated list of supported transmit power
+ * levels as percentage of full power {Ex: “0,25,50,75,100”} 
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -799,7 +813,8 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
 /**
  * @brief Gets the current transmit Power
  *
- * The transmit power level is in units of full power for this radio. The value MUST be a member of the list reported by the #wifi_getRadioTransmitPowerSupported()
+ * The transmit power level is in units of full power for this radio. 
+ * The value MUST be a member of the list reported by the #wifi_getRadioTransmitPowerSupported()
  *
  * @param[in] radioIndex   The index of the radio
  * @param[out] output_INT  The string stores the current transmit power
@@ -874,7 +889,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
  * 
  * @see wifi_radioTrafficStats_t
  * @pre wifi_init() wifi_initWithConfig() should be called  before calling this API
- * @see @ref Data-Model Parameter Device.WiFi.Radio.Stats.
+ * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.Stats.
  */
 INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_struct);
 
@@ -883,8 +898,8 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  *
  * Outputs a 32 byte or less string indicating the SSID name.
  *
- * @param[in] apIndex        The index of the access point
- * @param[out] output_string String which holds the SSID name
+ * @param[in] ssidIndex        The index of the SSID
+ * @param[out] output_string   String which holds the SSID name
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -892,8 +907,10 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  *
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.SSID.{i}.Alias, Device.WiFi.SSID.{i}.Name
+ * @note ssidIndex is not being used it will be revisited in next phase
+ * @todo ssidIndex is not being used it will be revisited in next phase
  */
-INT wifi_getSSIDName(INT apIndex, CHAR *output_string);
+INT wifi_getSSIDName(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief Gets the BSSID

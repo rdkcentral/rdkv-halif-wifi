@@ -120,7 +120,7 @@ typedef struct _wifi_telemetry_ops_t
  * - "PIN" - User has to be read the PIN from either a sticker or display on the new wireless device.
  *
  * @param[in]  ssidIndex The index of SSID array
- * @param[out] methods   The WPS supported methods as a comma-separated string. Please refer data-model items for the complete set of supported methods {Ex: "PushButton,PIN"}
+ * @param[out] methods   The WPS supported methods as a comma-separated string. Refer data-model parameter for the complete set of supported methods {Ex: "PushButton,PIN"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -173,13 +173,15 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
  * @brief Sets the WPS PIN and uses it to pair with access point
  *
  * @param[in] ssidIndex   The index of SSID array
- * @param[in] EnrolleePin PIN code to connect to the access point
+ * @param[in] EnrolleePin PIN code to connect to the access point. This PIN is either a four digit number or an eight digit number
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @pre wifi_connectEndpoint_callback_register() should be called before calling this API
+ * @see wifi_connectEndpoint_callback(), wifi_cancelWpsPairing()
  * @see @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.PIN
  * @note ssidIndex will be deprecated in future versions
  * @todo ssidIndex to be removed in next phase
@@ -196,6 +198,8 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
  * @retval RETURN_ERR if any error is detected
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @pre wifi_connectEndpoint_callback_register() should be called before calling this API
+ * @see wifi_connectEndpoint_callback(), wifi_cancelWpsPairing()
  * @note ssidIndex will be deprecated in future versions
  * @todo ssidIndex to be removed in next phase
  */
@@ -222,7 +226,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  *  
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @pre wifi_connectEndpoint_callback_register() should be called before calling this API
- * @see wifiSecurityMode_t, wifi_disconnectEndpoint()
+ * @see wifiSecurityMode_t, wifi_disconnectEndpoint(), wifi_connectEndpoint_callback()
  * @note On successfull connect, wifi_connectEndpoint_callback() will be called
  */
 INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);
@@ -239,7 +243,7 @@ INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_sec
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
  * @pre wifi_disconnectEndpoint_callback_register() should be called before calling this API
- * @see wifi_connectEndpoint()
+ * @see wifi_connectEndpoint(), wifi_disconnectEndpoint_callback()
  * @note On successfull disconnect, wifi_disconnectEndpoint_callback() will be called
  */
 INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
@@ -273,7 +277,8 @@ INT wifi_clearSSIDInfo(INT ssidIndex);
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @see wifiStatusCode_t, wifi_disconnectEndpoint_callback_register()
+ * @pre wifi_disconnectEndpoint_callback_register() should be called before calling this API
+ * @see wifiStatusCode_t, wifi_cancelWpsPairing()
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
@@ -284,6 +289,7 @@ typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wi
  * @param[in] callback_proc the callback function to disconnect the client
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @see wifi_connectEndpoint_callback_register()
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback callback_proc);
@@ -292,7 +298,7 @@ void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback 
  * @brief This call back will be invoked when client automatically connect to access point
  *
  * @param[in]  ssidIndex The index of SSID array
- * @param[in]  AP_SSID   The ssid to disconnect
+ * @param[in]  AP_SSID   The ssid to connect
  * @param[out] error     An enum variable that indicates the Wi-Fi connection status
  * 
  * possible error values:
@@ -306,7 +312,8 @@ void wifi_disconnectEndpoint_callback_register(wifi_disconnectEndpoint_callback 
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  * 
- * @see wifiStatusCode_t, wifi_connectEndpoint_callback_register(), wifi_connectEndpoint(), wifi_setCliWpsEnrolleePin(), wifi_setCliWpsButtonPush()
+ * @pre wifi_connectEndpoint_callback_register() should be called before calling this API
+ * @see wifiStatusCode_t, wifi_connectEndpoint(), wifi_setCliWpsEnrolleePin(), wifi_setCliWpsButtonPush()
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
@@ -317,6 +324,7 @@ typedef INT (*wifi_connectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiS
  * @param[in] callback_proc The callback function to connect the client to the access point
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
+ * @see wifi_disconnectEndpoint_callback_register()
  * @todo merge wifi_connectEndpoint_callback() wifi_disconnectEndpoint_callback() into a single wifi_status_callback() in next phase
  */
 void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callback_proc);
@@ -327,7 +335,7 @@ void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callba
  * @param[in] telemetry_ops Telemetry callback functions
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
- * @see wifi_telemetry_ops_t
+ * @see wifi_telemetry_ops_t, wifi_telemetry_ops_t.init(), wifi_telemetry_ops_t.event_s(), wifi_telemetry_ops_t.event_d()
  * @todo revisit telemetry requirement to move out of WiFi-HAL in next phase
  */
 void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
@@ -409,8 +417,7 @@ WiFiHalStatus_t getwifiStatusCode();
  * @retval RETURN_ERR  - if any error is detected
  * 
  * @pre wifi_init() wifi_initWithConfig() should be called before calling this API
- * @see wifi_setCliWpsButtonPush()
- * @todo check whether disconnect callbck is to be called as part of this API implementation
+ * @see wifi_setCliWpsButtonPush(), wifi_setCliWpsEnrolleePin(), wifi_disconnectEndpoint_callback()
  */
 INT wifi_cancelWpsPairing();
 
