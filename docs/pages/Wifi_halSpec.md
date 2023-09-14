@@ -84,7 +84,7 @@ These requirements ensure that the `HAL` executes correctly within the run-time 
 
 ### Initialization and Startup
 
-`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
+`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` or `wifi_initwithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initwithConfig()` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init()` or `wifi_initwithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
 
 ### Threading Model
 
@@ -143,8 +143,6 @@ These configurations must persist across reboots and device software upgrades/do
 The following non-functional requirements should be supported by the component:
 
 ### Logging and Debugging requirements
-
-<!-- @todo Provide info on Wi-Fi HAL's internal architecture to Malcom so that Malcolm can get back on what to do about the below. -->
 
 This component is required to log all ERROR, WARNING and INFO messages. DEBUG messages are to be disabled by default and enabled when needed.
 
