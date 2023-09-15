@@ -84,11 +84,11 @@ These requirements ensure that the `HAL` executes correctly within the run-time 
 
 ### Initialization and Startup
 
-`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` or `wifi_initwithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initwithConfig()` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init()` or `wifi_initwithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
+`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` or `wifi_initwithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initwithConfig()` should be deallocated, such as termination of any internal `HAL` threads. There should be no resouce leaks if `wifi_init()` or `wifi_initwithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
 
 ### Threading Model
 
-This interface is required to be thread-safe as it could be invoked from multiple `caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit()` must cause all created threads to be terminated.
+This interface is required to be thread-safe as it could be invoked from multiple `caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit()` should cause all created threads to be terminated.
 
 ### Process Model
 
@@ -96,7 +96,7 @@ The interface is expected to support a single instantiation with a single proces
 
 ### Memory Model
 
-The `Wi-Fi` `HAL` will own any memory that it creates. The `Caller` will own any memory that it creates. Exceptions to these rules are the `API`s `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who must deallocate this memory.
+The `Wi-Fi` `HAL` will own any memory that it creates. The `Caller` will own any memory that it creates. Exceptions to these rules are the `API`s `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who should deallocate this memory.
 
 ### Power Management Requirements
 
@@ -118,7 +118,9 @@ The below events are notified via the callback registered using `wifi_disconnect
 - `Wi-Fi` disconnected
 - `Wi-Fi` network not found / `SSID` changed
 
-Callback functions must originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
+Callback functions should originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
+
+Note: `wifi_telemetry_callback_register()` will be moved out of WiFi-HAL in next phase.
 
 ### Blocking calls
 
@@ -126,7 +128,7 @@ This interface has 3 blocking calls, namely `wifi_getNeighboringWiFiDiagnosticRe
 
 ### Internal Error Handling
 
-All `API`s must return errors synchronously as a return argument. The interface is responsible for managing its internal errors.
+All `API`s should return errors synchronously as a return argument. The interface is responsible for managing its internal errors.
 
 ### Persistence Model
 
@@ -136,7 +138,7 @@ All `API`s must return errors synchronously as a return argument. The interface 
 
 <!-- @todo Wi-Fi HAL should not be responsible for persisting Wi-Fi roaming controls. This should be done from outside the Wi-Fi HAL. In next phase -->
 
-These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations.
+These configurations should persist across reboots and device software upgrades/downgrades. A warehouse/factory reset should clear these configurations. Also by calling `wifi_clearSSIDInfo()` the `Wi-Fi` configuration parameters will be cleared.
 
 ## Non-functional requirements
 
@@ -165,11 +167,11 @@ This interface is required to be released under the Apache License 2.0.
 
 ### Build Requirements
 
-This interface is required to build into shared library. The shared library must be named `libwifihal.so`. The building mechanism must be independent of Yocto.
+This interface is required to build into shared library. The shared library should be named `libwifihal.so`. The building mechanism should be independent of Yocto.
 
 ### Variability Management
 
-Any change to the interface must be reviewed and approved by component architects and owners.
+Any change to the interface should be reviewed and approved by component architects and owners.
 
 ### Platform or Product Customization
 

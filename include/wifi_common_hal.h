@@ -405,11 +405,11 @@ INT wifi_getHalVersion(CHAR *output_string);
  * @brief Initializes the WiFi subsystem for wlan0 WiFi interface
  * 
  * For instance, steps involved in a wifi_init operation for a wpa_supplicant-based WiFi-HAL
- * - Creat default configuration file in a first time boot.
+ * - Create default configuration file in a first time boot.
  * - Reset the state machine.
  * - Start wpa_supplicant daemon.
  * - Open communication channels for monitoring and control interfaces
- * - Creat the event monitoring thread.
+ * - Create the wpa_supplicant event monitoring thread.
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -417,7 +417,6 @@ INT wifi_getHalVersion(CHAR *output_string);
  *
  * @see wifi_uninit()
  * @note This function must not invoke any blocking calls.
- * @todo support RETURN_ALREADY_INITIALISED if already initialized in the next phase
  */
 INT wifi_init(); 
 
@@ -572,7 +571,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
  * @brief Gets the supported frequency bands at which the radio can operate
  * 
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores the comma separates supported frequency bands {Valid values: "2.4Ghz,5Ghz"}
+ * @param[out] output_string The string which stores the comma-separated list of supported frequency bands {Valid values: "2.4Ghz,5Ghz"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -605,7 +604,7 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
  * @brief Gets radio supported standards.
  *
  * @param[in] radioIndex The index of the radio
- * @param[out] output_string The string stores the comma-sperated list of radio supported standards {Ex: "b,g,n" or "a,n,ac"}
+ * @param[out] output_string The string stores the comma-separated list of radio supported standards {Ex: "b,g,n" or "a,n,ac"}
  * If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed. 
  * If OperatingFrequencyBand is set to 5GHz, only values a, n, ac are allowed.
  * 
@@ -625,7 +624,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * The value MUST be a member of the list reported by the #wifi_getRadioSupportedStandards()
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string stores the comma-sperated list of radio operating mode. If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed,
+ * @param[out] output_string The string stores the comma-separated list of radio operating mode. If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed,
  * if OperatingFrequencyBand is set to 5GHz, only values a, n, ac are allowed {Ex: "b,g,n" or "a,n,ac"}
  * @param[out] gOnly         The g-only mode
  * @param[out] nOnly         The n-only mode
@@ -646,7 +645,7 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * List items represent possible radio channels for the wireless standard (a, b, g, n) and the regulatory domain.
  * 
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string stores the comma-sperated list of supported channels {Ex: "1-11", "36-48,149-161"}
+ * @param[out] output_string The string stores the comma-separated list of supported channels {Ex: "1-11", "36-48,149-161"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -661,7 +660,7 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
  * @brief Gets the list of channels currently in use
  *
  * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string stores the comma-sperated list of used channels {Ex: "1"}
+ * @param[out] output_string The string stores the comma-separated list of used channels {Ex: "1"}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
@@ -855,13 +854,13 @@ INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
 
 /**
  * @brief Checks whether the 80211h feature enabled or not
- *
+ * 
  * @param[in] radioIndex The index of the radio
  * @param[out] enable    The 80211h enable status {Ex: 0-disabled, 1-enabled}
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
- * @retval RETURN_ERR if any error is detected
+ * @retval RETURN_ERR if any error is detected or if #wifi_getRadioIEEE80211hSupported() returns FALSE
  * 
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.IEEE80211hEnabled
@@ -980,6 +979,8 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @see wifi_neighbor_ap_t
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result.
+ * @note This call will block until scan completes or a timeout occurs, whichever is earlier
+ * @todo Add timeout parameter as argument in next phase
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size);
 
@@ -999,6 +1000,8 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * 
  * @see wifi_neighbor_ap_t, WIFI_HAL_FREQ_BAND
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
+ * @note This call will block until scan completes or a timeout occurs, whichever is earlier
+ * @todo Add timeout parameter as argument in next phase
  */
 INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
 
@@ -1031,14 +1034,15 @@ INT wifi_getDualBandSupport();
  * @brief Wait for scan results.
  *
  * Wait for scan results if scan is in progress,
- * otherwise start a scan, complete the scan and wait for scan results or a timeout of 8s occurs, whichever happens earlier
+ * otherwise start a scan and wait for scan results or a timeout of 8s to occur, whichever happens earlier
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
  * @retval RETURN_ERR if any error is detected
  *
  * @pre wifi_init() or wifi_initWithConfig() wifi_initWithConfig() should be called  before calling this API.
- * @todo review the implementation of this API
+ * @note This call will block until scan completes or a timeout occurs, whichever is earlier
+ * @todo Add timeout parameter as argument in next phase
  */
 INT wifi_waitForScanResults(void);
 /** @} */ // End of WIFI_COMMON_HAL

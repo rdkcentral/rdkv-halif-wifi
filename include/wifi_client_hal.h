@@ -169,8 +169,6 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see wifi_getCliWpsConfigMethodsSupported(), wifi_getCliWpsConfigMethodsEnabled()
  * @see @ref Data-Model Parameter Device.WiFi.EndPoint.{i}.WPS.ConfigMethodsEnabled
- * @note ssidIndex will be deprecated in future versions
- * @todo ssidIndex to be removed in next phase
  */
 INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 
@@ -204,8 +202,6 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @pre wifi_connectEndpoint_callback_register() should be called before calling this API
  * @see wifi_connectEndpoint_callback(), wifi_cancelWpsPairing()
- * @note ssidIndex will be deprecated in future versions
- * @todo ssidIndex to be removed in next phase
  */
 INT wifi_setCliWpsButtonPush(INT ssidIndex);
 
@@ -254,8 +250,11 @@ INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_sec
 INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
 
 /**
- * @brief This API is used to clear the SSID info which was saved as a result of using #wifi_connectEndpoint()
- *
+ * @brief Clears the SSID information
+ * 
+ * This function clears the SSID info which was saved as a result of using #wifi_connectEndpoint() 
+ * and disconnects from existing WiFi connection.
+ * 
  * @param[in] ssidIndex The index of SSID array
  *
  * @return INT - The status of the operation
@@ -342,11 +341,12 @@ void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callba
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see wifi_telemetry_ops_t, wifi_telemetry_ops_t.init(), wifi_telemetry_ops_t.event_s(), wifi_telemetry_ops_t.event_d()
  * @todo revisit telemetry requirement to move out of WiFi-HAL in next phase
+ * @note telemetry requirement to be moved out of WiFi-HAL in next phase
  */
 void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
 
 /**
- * @brief This API will provide the last connected SSID information
+ * @brief Provides the last connected SSID information
  *
  * @param[out] pairedSSIDInfo Structure which holds the last connected SSID information
  *
@@ -386,9 +386,6 @@ INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * 
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see wifi_roamingCtrl_t, wifi_setRoamingControl()
- * @note ssidIndex will be deprecated in future versions
- * @todo ssidIndex to be removed in next phase
- * @todo check if ssidIndex/apIndex/radioIndex can be deprecated for all APIs in both files
  */
 INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
 
