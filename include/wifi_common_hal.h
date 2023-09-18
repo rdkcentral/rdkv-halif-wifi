@@ -263,7 +263,7 @@ typedef enum
 /**
  * @struct _wifi_radioTrafficStats
  * @brief structure for radioTrafficStats
- * @todo check if fields from radio_NoiseFloor onwards are needed
+ * @todo check if fields from radio_NoiseFloor onwards are needed in next phase
  */
 
 typedef struct _wifi_radioTrafficStats
@@ -331,7 +331,7 @@ typedef struct _wifi_ssidTrafficStats
  * @brief structure for neighbor_ap
  *
  * @note Do not edit the fields of this data structure
- * @todo check if field ap_ChannelUtilization is needed
+ * @todo check if field ap_ChannelUtilization is needed in next phase
  */
 
 typedef struct _wifi_neighbor_ap

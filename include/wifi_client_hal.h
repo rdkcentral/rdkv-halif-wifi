@@ -75,24 +75,23 @@ typedef struct _wifi_pairedSSIDInfo
 /**
  * @struct _wifi_roamingCtrl_t
  * @brief Structure for roaming control information
- * @note postAssnSelfSteerBeaconsMissedTime will be removed
- * @todo Need to add comments for each variables including the ranges
+ * @todo The 802.11 kvr feature has to be supported and enabled by default. This data structure will be removed in next phase.
+ * @note The 802.11 kvr feature has to be supported and enabled by default. This data structure will be removed in next phase.
  */
 typedef struct _wifi_roamingCtrl_t
 {
-  BOOL roamingEnable;                          //!< Enables or disbles the roaming
-  BOOL selfSteerOverride;                      //!< Starts self steer roaming if roam80211kvrEnable is FALSE
-  BOOL roam80211kvrEnable;                     //!< Sets roaming mode to AP steer if roam80211kvrEnable is TRUE and selfSteerOverride is FALSE
-  INT preassnBestThreshold;                    //!< Default value -67
-  INT preassnBestDelta;                        //!< Default value 3
-  INT postAssnLevelDeltaConnected;             //!< Delta level if WiFi connected. Default value 12
-  INT postAssnLevelDeltaDisconnected;          //!< Delta level if WiFi disconnected. Default value 8
-  INT postAssnSelfSteerThreshold;              //!< Self steer threshold. Default value -75
-  INT postAssnSelfSteerTimeframe;              //!< Self sterr timeframe range 0 to 36000 secs
-  INT postAssnBackOffTime;                     //!< BackOff time for incrementing post association time-frame during failure roaming attempts. Range 0 to 3600 secs
-  //INT postAssnSelfSteerBeaconsMissedTime;    //!< postAssnSelfSteerBeaconsMissedTime will be removed
-  INT postAssnAPctrlThreshold;                 //!< AP steer threshold
-  INT postAssnAPctrlTimeframe;                 //!< AP steer time frame. Range 0 to 60 secs
+  BOOL roamingEnable;                          //!< Enables or disables the roaming control {0-disable, 1-enable}
+  BOOL selfSteerOverride;                      //!< Starts self steer roaming if selfSteerOverride is enabled {0-disable, 1-enable}
+  BOOL roam80211kvrEnable;                     //!< Sets roaming mode to AP steer if roam80211kvrEnable is enabled and selfSteerOverride is disabled {0-disable, 1-enable}
+  INT preassnBestThreshold;                    //!< Pre-association best RSSI threshold. Default value -67 {Range: -100 to 0}
+  INT preassnBestDelta;                        //!< Pre-association best RSSI delta between 2.4GHz and 5GHz. Default value 3 {Range: 0 to 100}
+  INT postAssnLevelDeltaConnected;             //!< Post-association delta level if WiFi connected. Default value 12 {Range: 0 to 100}
+  INT postAssnLevelDeltaDisconnected;          //!< Post-association delta level if WiFi disconnected. Default value 8 {Range: 0 to 100}
+  INT postAssnSelfSteerThreshold;              //!< Post-association self steer threshold. Default value -75 {Range: -100 to 0}
+  INT postAssnSelfSteerTimeframe;              //!< Post-association self steer timeframe. Default value 60 {Range: 0 to 36000 seconds}
+  INT postAssnBackOffTime;                     //!< Post-association backoff time for incrementing self steer time-frame during failure of roaming attempts. Default value 2 seconds {Range: 0 to 3600 seconds}
+  INT postAssnAPctrlThreshold;                 //!< Post-association AP steer control threshold. Default value -75 {Range: 0 to 100}
+  INT postAssnAPctrlTimeframe;                 //!< Post-association AP steer control time frame. Default value 60 {Range: 0 to 60 seconds}
 
 }wifi_roamingCtrl_t;
 
@@ -388,28 +387,6 @@ INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
  * @see wifi_roamingCtrl_t, wifi_setRoamingControl()
  */
 INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data);
-
-/**
- * @brief Gets the current wifi status
- *
- * @returns WiFiHalStatus_t - wifi status code
- * @retval WIFISTATUS_HAL_DISCONNECTED          - Disconnected from the AP
- * @retval WIFISTATUS_HAL_INTERFACE_DISABLED    - Interface disabled
- * @retval WIFISTATUS_HAL_INACTIVE              - Inactive
- * @retval WIFISTATUS_HAL_SCANNING              - Scanning for list of available SSIDs
- * @retval WIFISTATUS_HAL_AUTHENTICATING        - Authenticating 
- * @retval WIFISTATUS_HAL_ASSOCIATING           - Associating to the AP
- * @retval WIFISTATUS_HAL_ASSOCIATED            - Associated
- * @retval WIFISTATUS_HAL_4WAY_HANDSHAKE        - 4-way handshake
- * @retval WIFISTATUS_HAL_GROUP_HANDSHAKE       - Group handshake
- * @retval WIFISTATUS_HAL_COMPLETED             - Completed and connected to AP
- * 
- * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
- * @todo Need to change the function name to wifi_getwifiStatusCode() from getwifiStatusCode()
- * @todo This is used only by RDKC need to be revisited with RDKC team 
- * @note Implementation of this API is not required as it is currently being used only by end-of-development cameras
- */
-WiFiHalStatus_t getwifiStatusCode();
 
 /**
  * @brief This API cancels any in-progress WPS operation
