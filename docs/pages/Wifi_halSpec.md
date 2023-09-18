@@ -126,6 +126,8 @@ Note: `wifi_telemetry_callback_register()` will be moved out of WiFi-HAL in next
 
 This interface has 3 blocking calls, namely `wifi_getNeighboringWiFiDiagnosticResult()`, `wifi_waitForScanResults()` and `wifi_getSpecificSSIDInfo()`, which will block until scan results are obtained or a timeout occurs, whichever happens earlier.
 
+Note: Timeout for the above `API`s is defaulted to 4 seconds and it will be passed as an argument in next phase.
+
 ### Internal Error Handling
 
 All `API`s should return errors synchronously as a return argument. The interface is responsible for managing its internal errors.

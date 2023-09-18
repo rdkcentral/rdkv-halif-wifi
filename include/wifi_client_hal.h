@@ -80,19 +80,19 @@ typedef struct _wifi_pairedSSIDInfo
  */
 typedef struct _wifi_roamingCtrl_t
 {
-  BOOL roamingEnable;                          //!< roamingEnable enabled or not
-  BOOL selfSteerOverride;                      //!< selfSteerOverride enabled or not
-  BOOL roam80211kvrEnable;                     //!< roam80211kvrEnable enabled or not
-  INT preassnBestThreshold;                    //!< preassnBestThreshold best threshold
-  INT preassnBestDelta;                        //!< preassnBestDelta best delta
-  INT postAssnLevelDeltaConnected;             //!< postAssnLevelDeltaConnected
-  INT postAssnLevelDeltaDisconnected;          //!< postAssnLevelDeltaDisconnected
-  INT postAssnSelfSteerThreshold;              //!< postAssnSelfSteerThreshold
-  INT postAssnSelfSteerTimeframe;              //!< postAssnSelfSteerTimeframe
-  INT postAssnBackOffTime;                     //!< postAssnBackOffTime
+  BOOL roamingEnable;                          //!< Enables or disbles the roaming
+  BOOL selfSteerOverride;                      //!< Starts self steer roaming if roam80211kvrEnable is FALSE
+  BOOL roam80211kvrEnable;                     //!< Sets roaming mode to AP steer if roam80211kvrEnable is TRUE and selfSteerOverride is FALSE
+  INT preassnBestThreshold;                    //!< Default value -67
+  INT preassnBestDelta;                        //!< Default value 3
+  INT postAssnLevelDeltaConnected;             //!< Delta level if WiFi connected. Default value 12
+  INT postAssnLevelDeltaDisconnected;          //!< Delta level if WiFi disconnected. Default value 8
+  INT postAssnSelfSteerThreshold;              //!< Self steer threshold. Default value -75
+  INT postAssnSelfSteerTimeframe;              //!< Self sterr timeframe range 0 to 36000 secs
+  INT postAssnBackOffTime;                     //!< BackOff time for incrementing post association time-frame during failure roaming attempts. Range 0 to 3600 secs
   //INT postAssnSelfSteerBeaconsMissedTime;    //!< postAssnSelfSteerBeaconsMissedTime will be removed
-  INT postAssnAPctrlThreshold;                 //!< postAssnAPctrlThreshold control threshold
-  INT postAssnAPctrlTimeframe;                 //!< postAssnAPctrlTimeframe control time frame
+  INT postAssnAPctrlThreshold;                 //!< AP steer threshold
+  INT postAssnAPctrlTimeframe;                 //!< AP steer time frame. Range 0 to 60 secs
 
 }wifi_roamingCtrl_t;
 

@@ -620,6 +620,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets the radio operating mode and pure mode flag
+ * 
  * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported. 
  * The value MUST be a member of the list reported by the #wifi_getRadioSupportedStandards()
  *
@@ -642,6 +643,7 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
 
 /**
  * @brief Gets the supported channel list
+ * 
  * List items represent possible radio channels for the wireless standard (a, b, g, n) and the regulatory domain.
  * 
  * @param[in] radioIndex     The index of the radio
@@ -783,7 +785,6 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * @pre wifi_init() or wifi_initWithConfig() should be called  before calling this API
  * @see @ref Data-Model Parameter Device.WiFi.Radio.{i}.ExtensionChannel
  * @see wifi_getRadioOperatingChannelBandwidth()
- * @todo This needs to be investigated, to understand the purpose and requirement of this API.
  */
 INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
 
@@ -919,6 +920,7 @@ INT wifi_getSSIDName(INT ssidIndex, CHAR *output_string);
 
 /**
  * @brief Gets the BSSID
+ * 
  * Basic Service Set Identifier (BSSID) is the mac addresss of the wireless access point.
  *
  * @param[in] ssidIndex      The index of the SSID
@@ -966,7 +968,7 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
 /**
  * @brief Starts a WiFi scan and gets the scan results
  * 
- * Starts a scan and, after the scan completes or a timeout of 8s occurs, collects scan results.
+ * Starts a scan and, after the scan completes or a timeout of 4s occurs, collects scan results.
  *
  * @param[in] radioIndex          The index of the radio
  * @param[out] neighbor_ap_array  Array of neighboring access points found by the WiFi scan. To be allocated by this function and de-allocated by the caller.
@@ -987,7 +989,7 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
 /**
  * @brief Starts a WiFi scan and gets the scan results that match the given SSID name and frequency band
  *
- * Starts a scan and, after the scan completes or a timeout of 8s occurs, collects scan results that match the given SSID name and frequency band.
+ * Starts a scan and, after the scan completes or a timeout of 4s occurs, collects scan results that match the given SSID name and frequency band.
  * 
  * @param[in] SSID               SSID name
  * @param[in] band               frequency band
@@ -1034,7 +1036,7 @@ INT wifi_getDualBandSupport();
  * @brief Wait for scan results.
  *
  * Wait for scan results if scan is in progress,
- * otherwise start a scan and wait for scan results or a timeout of 8s to occur, whichever happens earlier
+ * otherwise start a scan and wait for scan results or a timeout of 4s to occur, whichever happens earlier
  *
  * @return INT - The status of the operation
  * @retval RETURN_OK if successful
