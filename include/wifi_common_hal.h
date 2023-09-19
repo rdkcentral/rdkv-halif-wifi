@@ -431,7 +431,7 @@ INT wifi_init();
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see wifi_halConfig_t
  */
-INT wifi_initWithConfig(wifi_halConfig_t * conf);
+INT wifi_initWithConfig(wifi_halConfig_t *conf);
 
 /**
  * @brief Disables all WiFi interfaces
@@ -879,7 +879,7 @@ INT wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter: Device.WiFi.Radio.{i}.RegulatoryDomain
  */
-INT wifi_getRegulatoryDomain(INT radioIndex, CHAR* output_string);
+INT wifi_getRegulatoryDomain(INT radioIndex, CHAR *output_string);
 
 /**
  * @brief Gets detailed radio traffic statistics information

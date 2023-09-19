@@ -228,7 +228,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @note On successfull connect, wifi_connectEndpoint_callback() will be called
  * @todo Consider to define and use a data structure for input parameter in next phase
  */
-INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR * eapIdentity,CHAR * carootcert,CHAR * clientcert,CHAR * privatekey);
+INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_security_mode, CHAR *AP_security_WEPKey, CHAR *AP_security_PreSharedKey, CHAR *AP_security_KeyPassphrase,INT saveSSID,CHAR *eapIdentity,CHAR *carootcert,CHAR *clientcert,CHAR *privatekey);
 
 /**
  * @brief Starts the process of disconnection between the client and an access point
