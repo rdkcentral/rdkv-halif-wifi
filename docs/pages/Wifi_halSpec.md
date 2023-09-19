@@ -84,7 +84,7 @@ These requirements ensure that the `HAL` executes correctly within the run-time 
 
 ### Initialization and Startup
 
-`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` or `wifi_initwithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initwithConfig()` should be deallocated, such as termination of any internal `HAL` threads. There should be no resouce leaks if `wifi_init()` or `wifi_initwithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
+`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` or `wifi_initWithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initWithConfig()` should be deallocated, such as termination of any internal `HAL` threads. There should be no resouce leaks if `wifi_init()` or `wifi_initWithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
 
 ### Threading Model
 
@@ -92,11 +92,11 @@ This interface is required to be thread-safe as it could be invoked from multipl
 
 ### Process Model
 
-The interface is expected to support a single instantiation with a single process. Results are undefined if `Wi-Fi` `HAL` is instantiated by more than one process.
+This interface is expected to support a single instantiation with a single process. Results are undefined if `Wi-Fi` `HAL` is instantiated by more than one process.
 
 ### Memory Model
 
-The `Wi-Fi` `HAL` will own any memory that it creates. The `Caller` will own any memory that it creates. Exceptions to these rules are the `API`s `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who should deallocate this memory.
+The `Wi-Fi` `HAL` will own any memory that it creates. The `caller` will own any memory that it creates. Exceptions to these rules are `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who should deallocate this memory.
 
 ### Power Management Requirements
 
@@ -126,11 +126,11 @@ Note: `wifi_telemetry_callback_register()` will be moved out of WiFi-HAL in next
 
 This interface has 3 blocking calls, namely `wifi_getNeighboringWiFiDiagnosticResult()`, `wifi_waitForScanResults()` and `wifi_getSpecificSSIDInfo()`, which will block until scan results are obtained or a timeout occurs, whichever happens earlier.
 
-Note: Timeout for the above `API`s is defaulted to 4 seconds and it will be passed as an argument in next phase.
+Note: Timeout for the above `APIs` is defaulted to 4 seconds and it will be passed as an argument in next phase.
 
 ### Internal Error Handling
 
-All `API`s should return errors synchronously as a return argument. The interface is responsible for managing its internal errors.
+All `APIs` should return errors synchronously as a return argument. This interface is responsible for managing its internal errors.
 
 ### Persistence Model
 
@@ -158,8 +158,8 @@ This interface is required to not cause excessive memory and CPU utilization.
 
 * Static analysis is required to be performed. Our preferred tool is Coverity.
 * Have a zero-warning policy with regards to compiling. All warnings are required to be treated as errors.
-* Copyright validation is required to be performed, e.g.: Black duck, FossID.
-* Use of memory analysis tools like Valgrind are encouraged, to identify leaks/corruptions.
+* Copyright validation is required to be performed e.g.: Black duck, FossID.
+* Use of memory analysis tools like Valgrind are encouraged to identify leaks/corruptions.
 * `HAL` Tests will endeavour to create worst-case scenarios to assist investigations.
 * Improvements by any party to the testing suite are required to be fed back.
 
