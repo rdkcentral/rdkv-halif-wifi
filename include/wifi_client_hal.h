@@ -287,7 +287,7 @@ INT wifi_clearSSIDInfo(INT ssidIndex);
 typedef INT (*wifi_disconnectEndpoint_callback)(INT ssidIndex, CHAR *AP_SSID, wifiStatusCode_t *error);
 
 /**
- * @brief Disconnects callback registration function
+ * @brief Registers for disconnect callback
  *
  * @param[in] callback_proc the callback function to disconnect the client
  * 
