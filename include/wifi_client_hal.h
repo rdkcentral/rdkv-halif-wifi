@@ -102,9 +102,9 @@ typedef struct _wifi_roamingCtrl_t
  */
 typedef struct _wifi_telemetry_ops_t
 {
-    void (*init)(char* name);                   /**< init telemetry callback function */
-    void (*event_s)(char* marker, char* value); /**< callback funtion to event a string telemetry marker */
-    void (*event_d)(char* marker, int value);   /**< callback funtion to event an integer telemetry marker */
+    void (*init)(char *name);                   /**< init telemetry callback function */
+    void (*event_s)(char *marker, char *value); /**< callback funtion to event a string telemetry marker */
+    void (*event_d)(char *marker, int value);   /**< callback funtion to event an integer telemetry marker */
 } wifi_telemetry_ops_t;
 
 /**

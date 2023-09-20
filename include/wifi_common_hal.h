@@ -107,7 +107,7 @@
 
 /**
  * @brief Defines for the basic data types
- * @todo Use standard data type in next phase
+ * @todo Use standard data types in next phase
  */
 
 #ifndef ULONG
@@ -381,10 +381,7 @@ typedef struct _wifi_sta_stats
  */
 typedef struct _wifi_halSettings
 {
-   /**
- * @brief Defines for the basic data types
- * @todo Use standard data types in next phase
- */
+  char wlan_Interface[WLAN_IFNAMSIZ];  /**< Name of the wireless interface {Ex: "wlan0", "wlan1"} */
 } wifi_halConfig_t;
 
 /**
@@ -1004,7 +1001,7 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * @note This call will block until scan completes or a timeout occurs, whichever is earlier
  * @todo Add timeout parameter as argument in next phase
  */
-INT wifi_getSpecificSSIDInfo(const char* SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
+INT wifi_getSpecificSSIDInfo(const char *SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
 
 /**
  * @brief Sets the list of frequencies to scan over
