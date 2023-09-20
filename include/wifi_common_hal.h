@@ -381,7 +381,10 @@ typedef struct _wifi_sta_stats
  */
 typedef struct _wifi_halSettings
 {
-  char wlan_Interface[WLAN_IFNAMSIZ];  /**< Name of the wireless interface {Ex: "wlan0", "wlan1"} */
+   /**
+ * @brief Defines for the basic data types
+ * @todo Use standard data types in next phase
+ */
 } wifi_halConfig_t;
 
 /**
