@@ -68,7 +68,7 @@ typedef struct _wifi_pairedSSIDInfo
   CHAR  ap_bssid[64];         /**< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID {Valid values: empty string} */
   CHAR  ap_security[64];      /**< Security mode of AP. Possible values {"NONE", "WPA-NONE", "WPA-PSK", "WPA-EAP", "IEEE8021X", "FT-PSK", "FT-EAP", "FT-EAP-SHA384", "WPA-PSK-SHA256", "WPA-EAP-SHA256", "SAE", "FT-SAE", "WPA-EAP-SUITE-B", "WPA-EAP-SUITE-B-192", "OSEN", "FILS-SHA256", "FILS-SHA384", "FT-FILS-SHA256", "FT-FILS-SHA384", "OWE", "DPP"} */
   CHAR  ap_passphrase[128];   /**< Passphrase of AP, if applicable for the security mode. ASCII passphrase will be minimum 8 characters long and maximum 63 characters long. */
-  CHAR  ap_wep_key[128];      /**< wep_key of AP incase of WEP security. An ASCII	string enclosed	in quotation marks to encode  the  WEP key. Without  quotes  this is a hex string of the actual key. */
+  CHAR  ap_wep_key[128];      /**< wep_key of AP incase of WEP security. An ASCII string enclosed in quotation marks to encode the WEP key. Without quotes this is a hex string of the actual key. */
 }wifi_pairedSSIDInfo_t;
 
 /**
@@ -211,16 +211,16 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @brief Starts the process of connection between the client and an access point
  *
  * @param[in] ssidIndex                 The index of SSID array {Valid values: 1}
- * @param[in] AP_SSID                   The ssid to connect
+ * @param[in] AP_SSID                   The ssid to connect. SSID can be any string up to 32 characters in length, including 0 length
  * @param[in] AP_security_mode          The security mode to use
- * @param[in] AP_security_WEPKey        The wep key
- * @param[in] AP_security_PreSharedKey  The pre shared key
- * @param[in] AP_security_KeyPassphrase The key passphrase
+ * @param[in] AP_security_WEPKey        The wep key. An ASCII	string enclosed	in quotation marks to encode  the  WEP key. Without  quotes  this is a hex string of the actual key.
+ * @param[in] AP_security_PreSharedKey  The pre shared key. ASCII pre shared key will be minimum 8 characters long and maximum 63 characters long
+ * @param[in] AP_security_KeyPassphrase The key passphrase. ASCII passphrase will be minimum 8 characters long and maximum 63 characters long
  * @param[in] saveSSID                  Specifies whether or not to save the WiFi configuration on a successfull connect {0-false,1-true}
- * @param[in] eapIdentity               EAP identity
- * @param[in] carootcert                CA root cert
- * @param[in] clientcert                client cert
- * @param[in] privatekey                private key
+ * @param[in] eapIdentity               EAP identity name
+ * @param[in] carootcert                Absolute file path to CA root certificate
+ * @param[in] clientcert                Absolute file path to client certificate
+ * @param[in] privatekey                Absolute file path to private key
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
