@@ -64,11 +64,11 @@
  */
 typedef struct _wifi_pairedSSIDInfo
 {
-  CHAR  ap_ssid[64];          /**< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSID */
-  CHAR  ap_bssid[64];         /**< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID */
-  CHAR  ap_security[64];      /**< Security mode of AP */
-  CHAR  ap_passphrase[128];   /**< Passphrase of AP */
-  CHAR  ap_wep_key[128];      /**< wep_key of AP incase of WEP security */
+  CHAR  ap_ssid[64];          /**< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSID. SSID can be any string up to 32 characters in length, including 0 length */
+  CHAR  ap_bssid[64];         /**< [MACAddress] The BSSID (Basic Service Set ID) used for the neighboring WiFi SSID {Valid values: empty string} */
+  CHAR  ap_security[64];      /**< Security mode of AP. Possible values {"NONE", "WPA-NONE", "WPA-PSK", "WPA-EAP", "IEEE8021X", "FT-PSK", "FT-EAP", "FT-EAP-SHA384", "WPA-PSK-SHA256", "WPA-EAP-SHA256", "SAE", "FT-SAE", "WPA-EAP-SUITE-B", "WPA-EAP-SUITE-B-192", "OSEN", "FILS-SHA256", "FILS-SHA384", "FT-FILS-SHA256", "FT-FILS-SHA384", "OWE", "DPP"} */
+  CHAR  ap_passphrase[128];   /**< Passphrase of AP, if applicable for the security mode. ASCII passphrase will be minimum 8 characters long and maximum 63 characters long. */
+  CHAR  ap_wep_key[128];      /**< wep_key of AP incase of WEP security. An ASCII	string enclosed	in quotation marks to encode  the  WEP key. Without  quotes  this is a hex string of the actual key. */
 }wifi_pairedSSIDInfo_t;
 
 /**
@@ -82,15 +82,15 @@ typedef struct _wifi_roamingCtrl_t
   BOOL roamingEnable;                          /**< Enables or disables the roaming control {0-disable, 1-enable} */
   BOOL selfSteerOverride;                      /**< Starts self steer roaming if selfSteerOverride is enabled {0-disable, 1-enable} */
   BOOL roam80211kvrEnable;                     /**< Sets roaming mode to AP steer if roam80211kvrEnable is enabled and selfSteerOverride is disabled {0-disable, 1-enable} */
-  INT preassnBestThreshold;                    /**< Pre-association best RSSI threshold. Default value -67 {Range: -100 to 0} */
-  INT preassnBestDelta;                        /**< Pre-association best RSSI delta between 2.4GHz and 5GHz. Default value 3 {Range: 0 to 100} */
-  INT postAssnLevelDeltaConnected;             /**< Post-association delta level if WiFi connected. Default value 12 {Range: 0 to 100} */
-  INT postAssnLevelDeltaDisconnected;          /**< Post-association delta level if WiFi disconnected. Default value 8 {Range: 0 to 100} */
-  INT postAssnSelfSteerThreshold;              /**< Post-association self steer threshold. Default value -75 {Range: -100 to 0} */
-  INT postAssnSelfSteerTimeframe;              /**< Post-association self steer timeframe. Default value 60 {Range: 0 to 36000 seconds} */
-  INT postAssnBackOffTime;                     /**< Post-association backoff time for incrementing self steer time-frame during failure of roaming attempts. Default value 2 seconds {Range: 0 to 3600 seconds} */
-  INT postAssnAPctrlThreshold;                 /**< Post-association AP steer control threshold. Default value -75 {Range: 0 to 100} */
-  INT postAssnAPctrlTimeframe;                 /**< Post-association AP steer control time frame. Default value 60 {Range: 0 to 60 seconds} */
+  INT preassnBestThreshold;                    /**< Pre-association best RSSI threshold. Default value -67. Range is [-100, 0] */
+  INT preassnBestDelta;                        /**< Pre-association best RSSI delta between 2.4GHz and 5GHz. Default value 3. Range is [0, 100] */
+  INT postAssnLevelDeltaConnected;             /**< Post-association delta level if WiFi connected. Default value 12. Range is [0, 100] */
+  INT postAssnLevelDeltaDisconnected;          /**< Post-association delta level if WiFi disconnected. Default value 8. Range is [0, 100] */
+  INT postAssnSelfSteerThreshold;              /**< Post-association self steer threshold. Default value -75. Range is [-100, 0] */
+  INT postAssnSelfSteerTimeframe;              /**< Post-association self steer timeframe. Default value 60. Range is [0, 36000] seconds */
+  INT postAssnBackOffTime;                     /**< Post-association backoff time for incrementing self steer time-frame during failure of roaming attempts. Default value 2 seconds. Range is [0, 3600] seconds */
+  INT postAssnAPctrlThreshold;                 /**< Post-association AP steer control threshold. Default value -75. Range is [-100, 0] */
+  INT postAssnAPctrlTimeframe;                 /**< Post-association AP steer control time frame. Default value 60. Range is [0, 60] seconds */
 
 }wifi_roamingCtrl_t;
 
@@ -122,7 +122,7 @@ typedef struct _wifi_telemetry_ops_t
  *                          on both the access point and the new wireless * client device
  * - "PIN"                - User has to be read the PIN from either a sticker or display on the new wireless device
  *
- * @param[in]  ssidIndex The index of SSID array
+ * @param[in]  ssidIndex The index of SSID array {Valid values: 1}
  * @param[out] methods   The WPS supported methods as a comma-separated string.Refer @ref Data-Model parameter for the complete set of supported methods {Ex: "PushButton,PIN"}
  *
  * @return #INT - The status of the operation
@@ -141,8 +141,10 @@ INT wifi_getCliWpsConfigMethodsSupported(INT ssidIndex, CHAR *methods);
  * This function provides the comma-separated list of strings.
  * Each list item MUST be a member of the list reported by the ConfigMethodsSupported parameter.
  *
- * @param[in]  ssidIndex      The index of SSID array
- * @param[out] output_string  The current WPS methods as a comma-separated string {Ex: "PushButton,PIN"}
+ * @param[in]  ssidIndex      The index of SSID array {Valid values: 1}
+ * @param[out] output_string  The current WPS methods as a comma-separated string. 
+ * Refer @ref Data-Model parameter for the complete set of supported methods 
+ * possible values {"USBFlashDrive", "Ethernet", "ExternalNFCToken", "IntegratedNFCToken", "NFCInterface", "PushButton", "PIN" }
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -157,8 +159,10 @@ INT wifi_getCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *output_string);
 /**
  * @brief Sets the active WPS methods
  *
- * @param[in] ssidIndex    The index of SSID array
- * @param[in] methodString The methods to enable as a comma-separated string {Ex: "PushButton,PIN"}
+ * @param[in] ssidIndex    The index of SSID array {Valid values: 1}
+ * @param[in] methodString The methods to enable as a comma-separated string.
+ * Refer @ref Data-Model parameter for the complete set of supported methods 
+ * possible values {"USBFlashDrive", "Ethernet", "ExternalNFCToken", "IntegratedNFCToken", "NFCInterface", "PushButton", "PIN" }
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -173,7 +177,7 @@ INT wifi_setCliWpsConfigMethodsEnabled(INT ssidIndex, CHAR *methodString);
 /**
  * @brief Sets the WPS PIN and uses it to pair with access point
  *
- * @param[in] ssidIndex   The index of SSID array
+ * @param[in] ssidIndex   The index of SSID array {Valid values: 1}
  * @param[in] EnrolleePin PIN code to connect to the access point. This PIN is either a four digit number or an eight digit number
  *
  * @return #INT - The status of the operation
@@ -191,7 +195,7 @@ INT wifi_setCliWpsEnrolleePin(INT ssidIndex, CHAR *EnrolleePin);
 /**
  * @brief Starts the WPS Push button pairing with access point
  *
- * @param[in] ssidIndex The index of SSID array variable is unused
+ * @param[in] ssidIndex The index of SSID array variable is unused {Valid values: 1}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -206,7 +210,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
 /**
  * @brief Starts the process of connection between the client and an access point
  *
- * @param[in] ssidIndex                 The index of SSID array
+ * @param[in] ssidIndex                 The index of SSID array {Valid values: 1}
  * @param[in] AP_SSID                   The ssid to connect
  * @param[in] AP_security_mode          The security mode to use
  * @param[in] AP_security_WEPKey        The wep key
@@ -233,7 +237,7 @@ INT wifi_connectEndpoint(INT ssidIndex, CHAR *AP_SSID, wifiSecurityMode_t AP_sec
 /**
  * @brief Starts the process of disconnection between the client and an access point
  *
- * @param[in] ssidIndex The index of SSID array
+ * @param[in] ssidIndex The index of SSID array {Valid values: 1}
  * @param[in] AP_SSID   The ssid to disconnect
  *
  * @return #INT - The status of the operation
@@ -253,7 +257,7 @@ INT wifi_disconnectEndpoint(INT ssidIndex, CHAR *AP_SSID);
  * This function clears the SSID info which was saved as a result of using #wifi_connectEndpoint() 
  * and disconnects from existing WiFi connection.
  * 
- * @param[in] ssidIndex The index of SSID array
+ * @param[in] ssidIndex The index of SSID array {Valid values: 1}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -362,7 +366,7 @@ INT wifi_lastConnected_Endpoint(wifi_pairedSSIDInfo_t *pairedSSIDInfo);
 /**
  * @brief Sets the roaming control parameters
  *
- * @param[in] ssidIndex         The index of the SSID
+ * @param[in] ssidIndex         The index of the SSID {Valid values: 1}
  * @param[in] pRoamingCtrl_data Structure with roaming control parameters
  *
  * @returns INT - The status of the operation
@@ -377,7 +381,7 @@ INT wifi_setRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
 /**
  * @brief Gets the roaming control parameters
  *
- * @param[in] ssidIndex          The index of the SSID
+ * @param[in] ssidIndex          The index of the SSID {Valid values: 1}
  * @param[out] pRoamingCtrl_data Structure with roaming control parameters 
  *
  * @returns INT - The status of the operation

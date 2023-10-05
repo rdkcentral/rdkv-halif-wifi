@@ -269,28 +269,28 @@ typedef enum
  */
 typedef struct _wifi_radioTrafficStats
 {
-    ULONG radio_BytesSent;                       /**< The total number of bytes transmitted out of the interface, including framing characters */
-    ULONG radio_BytesReceived;                   /**< The total number of bytes received on the interface, including framing characters */
-    ULONG radio_PacketsSent;                     /**< The total number of packets transmitted out of the interface */
-    ULONG radio_PacketsReceived;                 /**< The total number of packets received on the interface */
+    ULONG radio_BytesSent;                       /**< The total number of bytes transmitted out of the interface, including framing characters. Range is [0, 18446744073709551615] */
+    ULONG radio_BytesReceived;                   /**< The total number of bytes received on the interface, including framing characters. Range is [0, 18446744073709551615] */
+    ULONG radio_PacketsSent;                     /**< The total number of packets transmitted out of the interface. Range is [0, 18446744073709551615] */
+    ULONG radio_PacketsReceived;                 /**< The total number of packets received on the interface. Range is [0, 18446744073709551615] */
     
-    ULONG radio_ErrorsSent;                      /**< The total number of outbound packets that could not be transmitted because of errors */
-    ULONG radio_ErrorsReceived;                  /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol */
-    ULONG radio_DiscardPacketsSent;              /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space */
-    ULONG radio_DiscardPacketsReceived;          /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space */
-    ULONG radio_PLCPErrorCount;                  /**< The number of packets that were received with a detected Physical Layer Convergence Protocol (PLCP) header error */
-    ULONG radio_FCSErrorCount;                   /**< The number of packets that were received with a detected FCS error. This parameter is based on dot11FCSErrorCount from [Annex C/802.11-2012] */
-    ULONG radio_InvalidMACCount;                 /**< The number of packets that were received with a detected invalid MAC header error */
-    ULONG radio_PacketsOtherReceived;            /**< The number of packets that were received, but which were destined for a MAC address that is not associated with this interface */
-    INT   radio_NoiseFloor;                      /**< The noise floor for this radio channel where a recoverable signal can be obtained. Expressed as a signed integer in the range (-110:0). Measurement should capture all energy (in dBm) from sources other than Wi-Fi devices as well as interference from Wi-Fi devices too weak to be decoded. Measured in dBm */
-    ULONG radio_ChannelUtilization;              /**< Percentage of time the channel was occupied by the radio’s own activity (Activity Factor) or the activity of other radios. Channel utilization MUST cover all user traffic, management traffic, and time the radio was unavailable for CSMA activities, including DIFS intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage */
-    INT   radio_ActivityFactor;                  /**< Percentage of time that the radio was transmitting or receiving Wi-Fi packets to/from associated clients. Activity factor MUST include all traffic that deals with communication between the radio and clients associated to the radio as well as management overhead for the radio, including NAV timers, beacons, probe responses,time for receiving devices to send an ACK, SIFC intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage */
-    INT   radio_CarrierSenseThreshold_Exceeded;  /**< Percentage of time that the radio was unable to transmit or receive Wi-Fi packets to/from associated clients due to energy detection (ED) on the channel or clear channel assessment (CCA). The metric is calculated and updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage */
-    INT   radio_RetransmissionMetirc;            /**< Percentage of packets that had to be re-transmitted. Multiple re-transmissions of the same packet count as one. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in percentage */
-    INT   radio_MaximumNoiseFloorOnChannel;      /**< Maximum Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm */
-    INT   radio_MinimumNoiseFloorOnChannel;      /**< Minimum Noise on the channel. The metric is updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm */
-    INT   radio_MedianNoiseFloorOnChannel;       /**< Median Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm */
-    ULONG radio_StatisticsStartTime;             /**< The date and time at which the collection of the current set of statistics started. This time must be updated whenever the radio statistics are reset */
+    ULONG radio_ErrorsSent;                      /**< The total number of outbound packets that could not be transmitted because of errors. Range is [0, 4294967295] */
+    ULONG radio_ErrorsReceived;                  /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 4294967295] */
+    ULONG radio_DiscardPacketsSent;              /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
+    ULONG radio_DiscardPacketsReceived;          /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
+    ULONG radio_PLCPErrorCount;                  /**< The number of packets that were received with a detected Physical Layer Convergence Protocol (PLCP) header error. Range is [0, 4294967295] */
+    ULONG radio_FCSErrorCount;                   /**< The number of packets that were received with a detected FCS error. This parameter is based on dot11FCSErrorCount from [Annex C/802.11-2012]. Range is [0, 4294967295] */
+    ULONG radio_InvalidMACCount;                 /**< The number of packets that were received with a detected invalid MAC header error. Range is [0, 4294967295]*/
+    ULONG radio_PacketsOtherReceived;            /**< The number of packets that were received, but which were destined for a MAC address that is not associated with this interface. Range is [0, 4294967295] */
+    INT   radio_NoiseFloor;                      /**< The noise floor for this radio channel where a recoverable signal can be obtained. Measurement should capture all energy (in dBm) from sources other than Wi-Fi devices as well as interference from Wi-Fi devices too weak to be decoded. Measured in dBm. Range is [-110, 0] */
+    ULONG radio_ChannelUtilization;              /**< Percentage of time the channel was occupied by the radio’s own activity (Activity Factor) or the activity of other radios. Channel utilization MUST cover all user traffic, management traffic, and time the radio was unavailable for CSMA activities, including DIFS intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage. Range is [0, 100] */
+    INT   radio_ActivityFactor;                  /**< Percentage of time that the radio was transmitting or receiving Wi-Fi packets to/from associated clients. Activity factor MUST include all traffic that deals with communication between the radio and clients associated to the radio as well as management overhead for the radio, including NAV timers, beacons, probe responses,time for receiving devices to send an ACK, SIFC intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage. Range is [0, 100] */
+    INT   radio_CarrierSenseThreshold_Exceeded;  /**< Percentage of time that the radio was unable to transmit or receive Wi-Fi packets to/from associated clients due to energy detection (ED) on the channel or clear channel assessment (CCA). The metric is calculated and updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage. Range is [0, 100] */
+    INT   radio_RetransmissionMetirc;            /**< Percentage of packets that had to be re-transmitted. Multiple re-transmissions of the same packet count as one. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in percentage. Range is [0, 100] */
+    INT   radio_MaximumNoiseFloorOnChannel;      /**< Maximum Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm. Range is [-200, 0] */
+    INT   radio_MinimumNoiseFloorOnChannel;      /**< Minimum Noise on the channel. The metric is updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm. Range is [-200, 0] */
+    INT   radio_MedianNoiseFloorOnChannel;       /**< Median Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm. Range is [-200, 0] */
+    ULONG radio_StatisticsStartTime;             /**< The date and time at which the collection of the current set of statistics started. This time must be updated whenever the radio statistics are reset. Range is [0, 18446744073709551615] */
 
 } wifi_radioTrafficStats_t;
 
@@ -300,29 +300,29 @@ typedef struct _wifi_radioTrafficStats
  */
 typedef struct _wifi_ssidTrafficStats
 {
-    ULONG ssid_BytesSent;                  /**< The total number of bytes transmitted out of the interface, including framing characters */
-    ULONG ssid_BytesReceived;              /**< The total number of bytes received on the interface, including framing characters */
-    ULONG ssid_PacketsSent;                /**< The total number of packets transmitted out of the interface */
-    ULONG ssid_PacketsReceived;            /**< The total number of packets received on the interface */
+    ULONG ssid_BytesSent;                  /**< The total number of bytes transmitted out of the interface, including framing characters. Range is [0, 18446744073709551615] */
+    ULONG ssid_BytesReceived;              /**< The total number of bytes received on the interface, including framing characters. Range is [0, 18446744073709551615] */
+    ULONG ssid_PacketsSent;                /**< The total number of packets transmitted out of the interface. Range is [0, 18446744073709551615] */
+    ULONG ssid_PacketsReceived;            /**< The total number of packets received on the interface. Range is [0, 18446744073709551615] */
 
-    ULONG ssid_RetransCount;               /**< The total number of transmitted packets which were retransmissions. Two retransmissions of the same packet results in this counter incrementing by two */
-    ULONG ssid_FailedRetransCount;         /**< The number of packets that were not transmitted successfully due to the number of retransmission attempts exceeding an 802.11 retry limit. This parameter is based on dot11FailedCount from [802.11-2012] */
-    ULONG ssid_RetryCount;                 /**< The number of packets that were successfully transmitted after one or more retransmissions. This parameter is based on dot11RetryCount from [802.11-2012] */
-    ULONG ssid_MultipleRetryCount;         /**< The number of packets that were successfully transmitted after more than one retransmission. This parameter is based on dot11MultipleRetryCount from [802.11-2012] */
-    ULONG ssid_ACKFailureCount;            /**< The number of expected ACKs that were never received. This parameter is based on dot11ACKFailureCount from [802.11-2012] */
-    ULONG ssid_AggregatedPacketCount;      /**< The number of aggregated packets that were transmitted. This applies only to 802.11n and 802.11ac */
+    ULONG ssid_RetransCount;               /**< The total number of transmitted packets which were retransmissions. Two retransmissions of the same packet results in this counter incrementing by two. Range is [0, 4294967295] */
+    ULONG ssid_FailedRetransCount;         /**< The number of packets that were not transmitted successfully due to the number of retransmission attempts exceeding an 802.11 retry limit. This parameter is based on dot11FailedCount from [802.11-2012]. Range is [0, 4294967295] */
+    ULONG ssid_RetryCount;                 /**< The number of packets that were successfully transmitted after one or more retransmissions. This parameter is based on dot11RetryCount from [802.11-2012]. Range is [0, 4294967295] */
+    ULONG ssid_MultipleRetryCount;         /**< The number of packets that were successfully transmitted after more than one retransmission. This parameter is based on dot11MultipleRetryCount from [802.11-2012]. Range is [0, 4294967295] */
+    ULONG ssid_ACKFailureCount;            /**< The number of expected ACKs that were never received. This parameter is based on dot11ACKFailureCount from [802.11-2012]. Range is [0, 4294967295] */
+    ULONG ssid_AggregatedPacketCount;      /**< The number of aggregated packets that were transmitted. This applies only to 802.11n and 802.11ac. Range is [0, 4294967295] */
 
-    ULONG ssid_ErrorsSent;                 /**< The total number of outbound packets that could not be transmitted because of errors */
-    ULONG ssid_ErrorsReceived;             /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol */
-    ULONG ssid_UnicastPacketsSent;         /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol */
-    ULONG ssid_UnicastPacketsReceived;     /**< The total number of received packets, delivered by this layer to a higher layer, which were not addressed to a multicast or broadcast address at this layerm */
-    ULONG ssid_DiscardedPacketsSent;       /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space */
-    ULONG ssid_DiscardedPacketsReceived;   /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space */
-    ULONG ssid_MulticastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a multicast address at this layer, including those that were discarded or not sent */
-    ULONG ssid_MulticastPacketsReceived;   /**< The total number of received packets, delivered by this layer to a higher layer, which were addressed to a multicast address at this layer */
-    ULONG ssid_BroadcastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent */
-    ULONG ssid_BroadcastPacketsRecevied;   /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent */
-    ULONG ssid_UnknownPacketsReceived;     /**< The total number of packets received via the interface which were discarded because of an unknown or unsupported protocol */
+    ULONG ssid_ErrorsSent;                 /**< The total number of outbound packets that could not be transmitted because of errors. Range is [0, 4294967295] */
+    ULONG ssid_ErrorsReceived;             /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 4294967295] */
+    ULONG ssid_UnicastPacketsSent;         /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 18446744073709551615] */
+    ULONG ssid_UnicastPacketsReceived;     /**< The total number of received packets, delivered by this layer to a higher layer, which were not addressed to a multicast or broadcast address at this layerm. Range is [0, 18446744073709551615] */
+    ULONG ssid_DiscardedPacketsSent;       /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
+    ULONG ssid_DiscardedPacketsReceived;   /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
+    ULONG ssid_MulticastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a multicast address at this layer, including those that were discarded or not sent. Range is [0, 18446744073709551615] */
+    ULONG ssid_MulticastPacketsReceived;   /**< The total number of received packets, delivered by this layer to a higher layer, which were addressed to a multicast address at this layer. Range is [0, 18446744073709551615] */
+    ULONG ssid_BroadcastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent. Range is [0, 18446744073709551615] */
+    ULONG ssid_BroadcastPacketsRecevied;   /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent. Range is [0, 18446744073709551615] */
+    ULONG ssid_UnknownPacketsReceived;     /**< The total number of packets received via the interface which were discarded because of an unknown or unsupported protocol. Range is [0, 4294967295] */
 
 } wifi_ssidTrafficStats_t;
 
@@ -335,23 +335,23 @@ typedef struct _wifi_ssidTrafficStats
  */
 typedef struct _wifi_neighbor_ap
 {
-    CHAR  ap_SSID[64];                          /**< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs */
-    CHAR  ap_BSSID[64];                         /**< [MACAddress] The BSSID used for the neighboring WiFi SSID */
-    CHAR  ap_Mode[64];                          /**< The mode the neighboring WiFi radio is operating in. Enumeration of: AdHoc, Infrastructure */
-    UINT  ap_Channel;                           /**< The current radio channel used by the neighboring WiFi radio */
-    INT   ap_SignalStrength;                    /**< An indicator of radio signal strength (RSSI) of the neighboring WiFi radio measured in dBm, as an average of the last 100 packets received */
-    CHAR  ap_SecurityModeEnabled[64];           /**< The type of encryption the neighboring WiFi SSID advertises. Enumeration of:None, WPA-WPA2 etc */
-    CHAR  ap_EncryptionMode[64];                /**< Comma-separated list of strings. The type of encryption the neighboring WiFi SSID advertises. Each list item is an enumeration of: TKIP, AES */
-    CHAR  ap_OperatingFrequencyBand[16];        /**< Indicates the frequency band at which the radio this SSID instance is operating. Enumeration of:2.4GHz, 5GHz */
-    CHAR  ap_SupportedStandards[64];            /**< Comma-separated list of strings. List items indicate which IEEE 802.11 standards this Result instance can support simultaneously, in the frequency band specified by OperatingFrequencyBand. Each list item is an enumeration of: */
-    CHAR  ap_OperatingStandards[16];            /**< Comma-separated list of strings. Each list item MUST be a member of the list reported by theSupportedStandards parameter. List items indicate which IEEE 802.11 standard that is detected for thisResult */
-    CHAR  ap_OperatingChannelBandwidth[16];     /**< Indicates the bandwidth at which the channel is operating. Enumeration of: */
-    UINT  ap_BeaconPeriod;                      /**< Time interval (in ms) between transmitting beacons */
-    INT   ap_Noise;                             /**< Indicator of average noise strength (in dBm) received from the neighboring WiFi radio */
-    CHAR  ap_BasicDataTransferRates[256];       /**< Comma-separated list (maximum list length 256) of strings. Basic data transmit rates (in Mbps) for the SSID. For example, if BasicDataTransferRates is "1,2", this indicates that the SSID is operating with basic rates of 1 Mbps and 2 Mbps */
-    CHAR  ap_SupportedDataTransferRates[256];   /**< Comma-separated list (maximum list length 256) of strings. Data transmit rates (in Mbps) for unicast frames at which the SSID will permit a station to connect. For example, if SupportedDataTransferRates is "1,2,5.5", this indicates that the SSID will only permit connections at 1 Mbps, 2 Mbps and 5.5 Mbps */
-    UINT  ap_DTIMPeriod;                        /**< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012] */
-    UINT  ap_ChannelUtilization[64];            /**< Indicates the fraction of the time AP senses that the channel is in use by the neighboring AP for transmissions */
+    CHAR  ap_SSID[64];                          /**< The current service set identifier in use by the neighboring WiFi SSID. The value MAY be empty for hidden SSIDs. SSID can be any string up to 32 characters in length, including 0 length */
+    CHAR  ap_BSSID[64];                         /**< [MACAddress] The BSSID used for the neighboring WiFi SSID. MAC will be of "AA:BB:CC:DD:EE:FF" format */
+    CHAR  ap_Mode[64];                          /**< The mode the neighboring WiFi radio is operating in. Possible values {"AdHoc", "Infrastructure"} */
+    UINT  ap_Channel;                           /**< The current radio channel used by the neighboring WiFi radio. Possible values {1-13, 36-64,100-165} */
+    INT   ap_SignalStrength;                    /**< An indicator of radio signal strength (RSSI) of the neighboring WiFi radio measured in dBm, as an average of the last 100 packets received. Range is [-200, 0] */
+    CHAR  ap_SecurityModeEnabled[64];           /**< The type of encryption the neighboring WiFi SSID advertises. Possible values {"None", "WEP", "WPA", "WPA2", "WPA3", "WPA-WPA2", "WPA2-WPA3", "WPA-Enterprise", "WPA2-Enterprise", "WPA-WPA2-Enterprise"} */
+    CHAR  ap_EncryptionMode[64];                /**< Comma-separated list of strings. The type of encryption the neighboring WiFi SSID advertises. Possible values {"TKIP", "AES"} */
+    CHAR  ap_OperatingFrequencyBand[16];        /**< Indicates the frequency band at which the radio this SSID instance is operating. Possible values {"2.4GHz", "5GHz"} */
+    CHAR  ap_SupportedStandards[64];            /**< Comma-separated list of strings. List items indicate which IEEE 802.11 standards this Result instance can support simultaneously, in the frequency band specified by OperatingFrequencyBand. Possible values {"a", "b", "g", "n", "ac"} */
+    CHAR  ap_OperatingStandards[16];            /**< Comma-separated list of strings. Each list item MUST be a member of the list reported by theSupportedStandards parameter. List items indicate which IEEE 802.11 standard that is detected for thisResult. Possible values {"a", "b", "g", "n", "ac"} */
+    CHAR  ap_OperatingChannelBandwidth[16];     /**< Indicates the bandwidth at which the channel is operating. Possible values {"20MHz", "40MHz", "80MHz", "160MHz", "Auto"} */
+    UINT  ap_BeaconPeriod;                      /**< Time interval (in ms) between transmitting beacons. Range is [0, 4294967295] */
+    INT   ap_Noise;                             /**< Indicator of average noise strength (in dBm) received from the neighboring WiFi radio. Range is [-200, 0] */
+    CHAR  ap_BasicDataTransferRates[256];       /**< Comma-separated list (maximum list length 256) of strings. Basic data transmit rates (in Mbps) for the SSID. For example, if BasicDataTransferRates is "1,2", this indicates that the SSID is operating with basic rates of 1 Mbps and 2 Mbps. Possible values {"1", "2", "5.5", "6", "9", "12", "18", "24", "36", "48", "54"} */
+    CHAR  ap_SupportedDataTransferRates[256];   /**< Comma-separated list (maximum list length 256) of strings. Data transmit rates (in Mbps) for unicast frames at which the SSID will permit a station to connect. For example, if SupportedDataTransferRates is "1,2,5.5", this indicates that the SSID will only permit connections at 1 Mbps, 2 Mbps and 5.5 Mbps. Possible values {"1", "2", "5.5", "6", "9", "12", "18", "24", "36", "48", "54"} */
+    UINT  ap_DTIMPeriod;                        /**< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012]. Range is [0, 4294967295] */
+    UINT  ap_ChannelUtilization[64];            /**< Indicates the fraction of the time AP senses that the channel is in use by the neighboring AP for transmissions. Range is [0, 100] */
 
 } wifi_neighbor_ap_t;
 
@@ -361,18 +361,18 @@ typedef struct _wifi_neighbor_ap
  */
 typedef struct _wifi_sta_stats
 {
-    CHAR  sta_SSID[64];                 /**< The current connected SSID name */
-    CHAR  sta_BSSID[64];                /**< The BSSID used for connected SSID */
-    CHAR  sta_BAND[16];                 /**< The BAND used for connected SSID */
-    CHAR  sta_SecMode[64];              /**< WiFi Security Mode WPA2-PSK , WPA2-EAP etc. */
-    CHAR  sta_Encryption[64];           /**< WiFi Encryption Type AES, TKIP etc. */
-    FLOAT sta_PhyRate;                  /**< Indicates the Physical rate (Mbps) */
-    FLOAT sta_Noise;                    /**< Indicator of average noise strength (in dBm) received from the connected Wi-Fi radio */
-    FLOAT sta_RSSI;                     /**< RSSI value in dBm */
-    UINT  sta_Frequency;                /**< Current Operating Frequency */
-    UINT  sta_LastDataDownlinkRate;     /**< The data transmit rate in kbps that was most recently used for transmission from the access point to the end point device */
-    UINT  sta_LastDataUplinkRate;       /**< The data transmit rate in kbps that was most recently used for transmission from the end point to the access point device */
-    UINT  sta_Retransmissions;          /**< The number of packets that had to be re-transmitted, from the last 100 packets sent to the access point. Multiple re-transmissions of the same packet count as one */
+    CHAR  sta_SSID[64];                 /**< The current connected SSID name. SSID can be any string up to 32 characters in length, including 0 length. The value MAY be empty for hidden SSIDs */
+    CHAR  sta_BSSID[64];                /**< The BSSID used for connected SSID. MAC will be of AA:BB:CC:DD:EE:FF format */
+    CHAR  sta_BAND[16];                 /**< The BAND used for connected SSID. Possible values {5GHz, 2.4GHz}*/
+    CHAR  sta_SecMode[64];              /**< WiFi Security Mode. Possible values {None, WEP, WPA, WPA2, WPA3, WPA-WPA2, WPA2-WPA3, WPA-Enterprise, WPA2-Enterprise, WPA-WPA2-Enterprise} */
+    CHAR  sta_Encryption[64];           /**< WiFi Encryption Type. Possible values {AES, TKIP} */
+    FLOAT sta_PhyRate;                  /**< Indicates the Physical rate (Mbps). Range is [1, 2.4 * 1024] */
+    FLOAT sta_Noise;                    /**< Indicator of average noise strength (in dBm) received from the connected Wi-Fi radio. Range is [-200, 0]*/
+    FLOAT sta_RSSI;                     /**< RSSI value in dBm. Range is [-200, 0]*/
+    UINT  sta_Frequency;                /**< Current Operating Frequency. Possible values {2412, 2417, 2422, 2427, 2432, 2437, 2442, 2447, 2452, 2457, 2462, 2467, 2472, 5160, 5180, 5200, 5220, 5240, 5260, 5280, 5300, 5320, 5340, 5480, 5500, 5520, 5540, 5560, 5580, 5600, 5620, 5640, 5660, 5680, 5700, 5720, 5745, 5765, 5785, 5805, 5825, 5845, 5865, 5885} */
+    UINT  sta_LastDataDownlinkRate;     /**< The data transmit rate in kbps that was most recently used for transmission from the access point to the end point device. Range is [1000, 600000]*/
+    UINT  sta_LastDataUplinkRate;       /**< The data transmit rate in kbps that was most recently used for transmission from the end point to the access point device. Range is [1000, 600000] */
+    UINT  sta_Retransmissions;          /**< The number of packets that had to be re-transmitted, from the last 100 packets sent to the access point. Multiple re-transmissions of the same packet count as one. Range is [0, 100] */
 } wifi_sta_stats_t;
 
 /**
@@ -466,7 +466,7 @@ INT wifi_uninit();
 /**
  * @brief Gets current station connection status bssid,ssid,rssi,phyrate,noise,band
  *
- * @param[in] radioIndex      The index of the radio
+ * @param[in] radioIndex      The index of the radio {Valid values: 1}
  * @param[out] wifi_sta_stats Station status data
  * 
  * @see wifi_sta_stats_t
@@ -478,7 +478,7 @@ void wifi_getStats(INT radioIndex, wifi_sta_stats_t *wifi_sta_stats);
 /**
  * @brief Gets the total number of radios in the WiFi subsystem
  *
- * @param[out] output The number of radios in string
+ * @param[out] output The number of radios in string {Valid values: 1}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -492,7 +492,7 @@ INT wifi_getRadioNumberOfEntries(ULONG *output);
 /**
  * @brief Gets the total number of SSID entries in the WiFi subsystem
  *
- * @param[out] output The number of SSID entries in string
+ * @param[out] output The number of SSID entries in string {Valid values: 1}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -506,7 +506,7 @@ INT wifi_getSSIDNumberOfEntries(ULONG *output);
 /**
  * @brief Checks whether radio is enabled or not
  *
- * @param[in] radioIndex   The index of radio
+ * @param[in] radioIndex   The index of radio {Valid values: 1}
  * @param[out] output_bool The radio state {Ex: 0-disabled, 1-enabled}
  *
  * @return #INT - The status of the operation
@@ -521,7 +521,7 @@ INT wifi_getRadioEnable(INT radioIndex, BOOL *output_bool);
 /**
  * @brief Gets the current operational state of the radio
  *
- * @param[in] radioIndex     The index of radio
+ * @param[in] radioIndex     The index of radio {Valid values: 1}
  * @param[out] output_string The radio status. Refer @ref Data-Model parameter for the complete set of
  * possible values {"Up", "Down", "Unknown", "Dormant", "NotPresent", "LowerLayerDown"}
  * 
@@ -537,7 +537,7 @@ INT wifi_getRadioStatus(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the radio interface name from platform
  *
- * @param[in] radioIndex     The index of radio
+ * @param[in] radioIndex     The index of radio {Valid values: 1}
  * @param[out] output_string The string which stores the radio interface name {Ex: "wlan0", "wlan1"}
  *
  * @return #INT - The status of the operation
@@ -551,8 +551,8 @@ INT wifi_getRadioIfName(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the maximum PHY bit rate supported by the interface
  *
- * @param[in] radioIndex     The index of radio
- * @param[out] output_string The string which stores the maximum bit rate value {Ex: "216.7 Mbps", "1300 Mbps"}
+ * @param[in] radioIndex     The index of radio {Valid values: 1}
+ * @param[out] output_string The string which stores the maximum bit rate value {Ex: "216.7 Mbps", "1300 Mbps"}. Range is [0, 2.4 * 1024]
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -566,7 +566,7 @@ INT wifi_getRadioMaxBitRate(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the supported frequency bands at which the radio can operate
  * 
- * @param[in] radioIndex     The index of the radio
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
  * @param[out] output_string The string which stores the comma-separated list of supported frequency bands {Valid values: "2.4Ghz,5Ghz"}
  *
  * @return #INT - The status of the operation
@@ -583,8 +583,8 @@ INT wifi_getRadioSupportedFrequencyBands(INT radioIndex, CHAR *output_string);
  * 
  * The value MUST be a member of the list reported by the #wifi_getRadioSupportedFrequencyBands()
  *
- * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string which stores current operating band {Ex: "2.4GHz", NULL if not connected}
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
+ * @param[out] output_string The string which stores current operating band {Ex: "2.4GHz", "5GHz", NULL if not connected}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -599,7 +599,7 @@ INT wifi_getRadioOperatingFrequencyBand(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets radio supported standards.
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex The index of the radio {Valid values: 1}
  * @param[out] output_string The string stores the comma-separated list of radio supported standards {Ex: "b,g,n" or "a,n,ac"}
  * If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed
  * If OperatingFrequencyBand is set to 5GHz, only values a, n, ac are allowed
@@ -620,7 +620,7 @@ INT wifi_getRadioSupportedStandards(INT radioIndex, CHAR *output_string);
  * Mode flags are the IEEE 802.11 standards to indicate the maximum network bandwidth supported. 
  * The value MUST be a member of the list reported by the #wifi_getRadioSupportedStandards()
  *
- * @param[in] radioIndex     The index of the radio
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
  * @param[out] output_string The string stores the comma-separated list of radio operating mode. If OperatingFrequencyBand is set to 2.4GHz, only values b, g, n are allowed.
  * If OperatingFrequencyBand is set to 5GHz, only values a, n, ac are allowed {Ex: "b,g,n" or "a,n,ac"}.
  * @param[out] gOnly         The g-only mode
@@ -642,8 +642,9 @@ INT wifi_getRadioStandard(INT radioIndex, CHAR *output_string, BOOL *gOnly, BOOL
  * 
  * List items represent possible radio channels for the wireless standard (a, b, g, n) and the regulatory domain.
  * 
- * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string stores the comma-separated list of supported channels {Ex: "1-11", "36-48,149-161"}
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
+ * @param[out] output_string The string stores the comma-separated list of supported channels
+ * possible values {"1-13", "36-64,100-165"}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -657,8 +658,9 @@ INT wifi_getRadioPossibleChannels(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the list of channels currently in use
  *
- * @param[in] radioIndex     The index of the radio
- * @param[out] output_string The string stores the comma-separated list of used channels {Ex: "1"}
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
+ * @param[out] output_string The string stores the comma-separated list of used channels
+ * possible values {"1-13", "36-64,100-165"}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -673,9 +675,10 @@ INT wifi_getRadioChannelsInUse(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the current radio channel used by the connection
  *
- * @param[in] radioIndex    The index of the radio
+ * @param[in] radioIndex    The index of the radio {Valid values: 1}
  * @param[out] output_ulong Variable which stores the currently used channel number
- *
+ * possible values {"1-13", "36-64,100-165"}
+ * 
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
  * @retval #RETURN_ERR if any error is detected
@@ -688,7 +691,7 @@ INT wifi_getRadioChannel(INT radioIndex,ULONG *output_ulong);
 /**
  * @brief Checks if the driver supports the auto channel selection / dynamic channel selection
  * 
- * @param[in] radioIndex   The index of the radio
+ * @param[in] radioIndex   The index of the radio {Valid values: 1}
  * @param[out] output_bool Stores the auto channel selection / dynamic channel selection support status {Ex: 0-disabled, 1-enabled}
  *
  * @return #INT - The status of the operation
@@ -703,7 +706,7 @@ INT wifi_getRadioAutoChannelSupported(INT radioIndex, BOOL *output_bool);
 /**
  * @brief Checks whether auto channel selection enabled or not
  *
- * @param[in] radioIndex   The index of the radio
+ * @param[in] radioIndex   The index of the radio {Valid values: 1}
  * @param[out] output_bool Stores the auto channel selection / dynamic channel selection status {Ex: 0-disabled, 1-enabled}
  *
  * @return #INT - The status of the operation
@@ -719,10 +722,10 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
 /**
  * @brief Gets the auto channel selection / dynamic channel selection refresh period in seconds
  * 
- * @param[in] radioIndex    The index of the radio
+ * @param[in] radioIndex    The index of the radio {Valid values: 1}
  * @param[out] output_ulong Stores the auto channel selection / dynamic channel selection refresh period in seconds. 
  * A value of 0 means that the automatic channel selection is done only at boot time. 
- * This parameter is significant only if AutoChannelEnable is set to true.
+ * This parameter is significant only if AutoChannelEnable is set to true. Range is [0, 4294967295].
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -737,7 +740,7 @@ INT wifi_getRadioAutoChannelRefreshPeriod(INT radioIndex, ULONG *output_ulong);
 /**
  * @brief Gets the guard interval value
  *
- * @param[in] radioIndex     The index of the radio
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
  * @param[out] output_string Returns the guard interval value {Valid values: "400nsec", "800nsec", "Auto"}
  *
  * @return #INT - The status of the operation
@@ -752,7 +755,7 @@ INT wifi_getRadioGuardInterval(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the operating channel bandwidth
  *
- * @param[in] radioIndex     The index of the radio
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
  * @param[out] output_string The variable stores the bandwidth of the operating channel {Valid values: "20MHz", "40MHz", "80MHz", "160MHz", "Auto" / NULL if not connected}
  *
  * @return #INT - The status of the operation
@@ -771,7 +774,7 @@ INT wifi_getRadioOperatingChannelBandwidth(INT radioIndex, CHAR *output_string);
  * combined to create a wide channel which can provide more data rate.
  * Position of secondary channel may be either above or below the primary. Applicable when OperatingChannelBandwidth is set to 40MHz or Auto.
  *
- * @param[in] radioIndex     The index of the radio
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
  * @param[out] output_string The string which stores the secondary extension channel position {Valid values: "AboveControlChannel", "BelowControlChannel", "Auto"}
  *
  * @return #INT - The status of the operation
@@ -787,8 +790,9 @@ INT wifi_getRadioExtChannel(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets the Modulation Coding Scheme index
  *
- * @param[in] radioIndex   The index of the radio
+ * @param[in] radioIndex   The index of the radio {Valid values: 1}
  * @param[out] output_INT  The mcs index value
+ * possible values {802.11n  - "0-31", 802.11ac - "0-9", 802.11ax - "1-11"}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -802,7 +806,7 @@ INT wifi_getRadioMCS(INT radioIndex, INT *output_INT);
 /**
  * @brief Gets the supported transmit power list
  *
- * @param[in] radioIndex    The index of the radio
+ * @param[in] radioIndex    The index of the radio {Valid values: 1}
  * @param[out] output_list  The string stores the comma-separated list of supported transmit power
  * levels as percentage of full power {Ex: “0,25,50,75,100”}. A -1 item indicates auto mode.
  *
@@ -821,8 +825,8 @@ INT wifi_getRadioTransmitPowerSupported(INT radioIndex, CHAR *output_list);
  * The transmit power level is in units of full power for this radio. 
  * The value MUST be a member of the list reported by the #wifi_getRadioTransmitPowerSupported()
  *
- * @param[in] radioIndex   The index of the radio
- * @param[out] output_INT  The string stores the current transmit power. A value of -1 indicates auto mode.
+ * @param[in] radioIndex   The index of the radio {Valid values: 1}
+ * @param[out] output_INT  The string stores the current transmit power. A value of -1 indicates auto mode. Range is [-1, 100]
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -837,7 +841,7 @@ INT wifi_getRadioTransmitPower(INT radioIndex, INT *output_INT);
 /**
  * @brief Checks whether 80211h is supported or not
  *
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex The index of the radio {Valid values: 1}
  * @param[out] Supported The boolean value, indicates the 80211h support {Ex: 0-Not supported, 1- supported}
  *
  * @return #INT - The status of the operation
@@ -852,7 +856,7 @@ INT wifi_getRadioIEEE80211hSupported(INT radioIndex, BOOL *Supported);
 /**
  * @brief Checks whether the 80211h feature enabled or not
  * 
- * @param[in] radioIndex The index of the radio
+ * @param[in] radioIndex The index of the radio {Valid values: 1}
  * @param[out] enable    The 80211h enable status {Ex: 0-disabled, 1-enabled}
  *
  * @return #INT - The status of the operation
@@ -867,7 +871,7 @@ INT wifi_getRadioIEEE80211hEnabled(INT radioIndex, BOOL *enable);
 /**
  * @brief Gets the regulatory domain
  *
- * @param[in] radioIndex    The index of the radio
+ * @param[in] radioIndex    The index of the radio {Valid values: 1}
  * @param[in] output_string Stores the regulatory domain string {Ex: "US", "DE"}.
  *                          First two octets are ISO3166-1 two-character country code.
  *                          The third octet is either “ “ (all environments), “O” (outside) or “I” (inside).
@@ -884,7 +888,7 @@ INT wifi_getRegulatoryDomain(INT radioIndex, CHAR *output_string);
 /**
  * @brief Gets detailed radio traffic statistics information
  *
- * @param[in] radioIndex     The index of the radio
+ * @param[in] radioIndex     The index of the radio {Valid values: 1}
  * @param[out] output_struct Structure of type wifi_radioTrafficStats_t that saves the radio traffic statistics
  *
  * @return #INT - The status of the operation
@@ -902,7 +906,7 @@ INT wifi_getRadioTrafficStats(INT radioIndex, wifi_radioTrafficStats_t *output_s
  *
  * Outputs a 32 byte or less string indicating the SSID name.
  *
- * @param[in] ssidIndex        The index of the SSID
+ * @param[in] ssidIndex        The index of the SSID {Valid values: 1}
  * @param[out] output_string   String which holds the SSID name
  *
  * @return #INT - The status of the operation
@@ -919,7 +923,7 @@ INT wifi_getSSIDName(INT ssidIndex, CHAR *output_string);
  * 
  * Basic Service Set Identifier (BSSID) is the mac addresss of the wireless access point.
  *
- * @param[in] ssidIndex      The index of the SSID
+ * @param[in] ssidIndex      The index of the SSID {Valid values: 1}
  * @param[out] output_string The variable that contains the BSSID
  *
  * @return #INT - The status of the operation
@@ -933,8 +937,8 @@ INT wifi_getBaseBSSID(INT ssidIndex, CHAR *output_string);
 /**
  * @brief Gets the MAC address associated with the WiFi SSID
  *
- * @param[in] ssidIndex      The index of the SSID
- * @param[out] output_string The variable that holds the mac address
+ * @param[in] ssidIndex      The index of the SSID {Valid values: 1}
+ * @param[out] output_string The variable that holds the mac address. MAC output will be of "AA:BB:CC:DD:EE:FF" format
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -948,7 +952,7 @@ INT wifi_getSSIDMACAddress(INT ssidIndex, CHAR *output_string);
 /**
  * @brief Gets the basic SSID traffic statistics info
  *
- * @param[in] ssidIndex      The index of the SSID
+ * @param[in] ssidIndex      The index of the SSID {Valid values: 1}
  * @param[out] output_struct Structure of type wifi_ssidTrafficStats_t that holds the ssid traffic status
  *
  * @return #INT - The status of the operation
@@ -966,9 +970,9 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * 
  * Starts a scan and, after the scan completes or a timeout of 4s occurs, collects scan results.
  *
- * @param[in] radioIndex          The index of the radio
+ * @param[in] radioIndex          The index of the radio {Valid values: 1}
  * @param[out] neighbor_ap_array  Array of neighboring access points found by the WiFi scan. To be allocated by this function and de-allocated by the caller.
- * @param[out] output_array_size  Size of neighbor_ap_array
+ * @param[out] output_array_size  Size of neighbor_ap_array, maximum limit is 512.
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
@@ -1006,8 +1010,9 @@ INT wifi_getSpecificSSIDInfo(const char *SSID, WIFI_HAL_FREQ_BAND band, wifi_nei
 /**
  * @brief Sets the list of frequencies to scan over
  *
- * @param[in] radioIndex  Radio index
- * @param[in] freqList    Space-separated frequency list. An empty list implies that a normal, full scan is performed
+ * @param[in] radioIndex  Radio index {Valid values: 1}
+ * @param[in] freqList    Space-separated frequency list. An empty list implies that a normal, full scan is performed.
+ * Possible values {2412, 2417, 2422, 2427, 2432, 2437, 2442, 2447, 2452, 2457, 2462, 2467, 2472, 5160, 5180, 5200, 5220, 5240, 5260, 5280, 5300, 5320, 5340, 5480, 5500, 5520, 5540, 5560, 5580, 5600, 5620, 5640, 5660, 5680, 5700, 5720, 5745, 5765, 5785, 5805, 5825, 5845, 5865, 5885}
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
