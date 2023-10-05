@@ -213,7 +213,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @param[in] ssidIndex                 The index of SSID array {Valid values: 1}
  * @param[in] AP_SSID                   The ssid to connect. SSID can be any string up to 32 characters in length, including 0 length
  * @param[in] AP_security_mode          The security mode to use
- * @param[in] AP_security_WEPKey        The wep key. An ASCII	string enclosed	in quotation marks to encode  the  WEP key. Without  quotes  this is a hex string of the actual key.
+ * @param[in] AP_security_WEPKey        The wep key. An ASCII string enclosed	in quotation marks to encode the WEP key. Without quotes this is a hex string of the actual key.
  * @param[in] AP_security_PreSharedKey  The pre shared key. ASCII pre shared key will be minimum 8 characters long and maximum 63 characters long
  * @param[in] AP_security_KeyPassphrase The key passphrase. ASCII passphrase will be minimum 8 characters long and maximum 63 characters long
  * @param[in] saveSSID                  Specifies whether or not to save the WiFi configuration on a successfull connect {0-false,1-true}
