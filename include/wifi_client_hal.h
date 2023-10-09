@@ -42,7 +42,9 @@
 /**
  * @addtogroup HPK Hardware Porting Kit
  * @{
- * @defgroup WIFI_HAL WiFi HAL
+ * @defgroup RDKV_WIFI RDK-V WiFi
+ * @{
+ * @defgroup RDKV_WIFI_HAL WiFi HAL
  * @{
  * @defgroup WIFI_CLIENT_HAL WiFi Client HAL
  * @{
@@ -406,7 +408,8 @@ INT wifi_getRoamingControl(int ssidIndex, wifi_roamingCtrl_t *pRoamingCtrl_data)
 INT wifi_cancelWpsPairing();
 
 /** @} */ // End of WIFI_CLIENT_HAL
-/** @} */ // End of WIFI_HAL
+/** @} */ // End of RDKV_WIFI_HAL
+/** @} */ // End of RDKV_WIFI
 /** @} */ // End of HPK
 #else
 #error "! __WIFI_CLIENT_HAL_H__"

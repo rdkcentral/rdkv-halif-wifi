@@ -92,7 +92,9 @@
  * TKIP | The Temporal Key Integrity Protocol was developed as a replacement for WEP but is no longer considered secure and has been removed from 802.11 standards
  * TLS | Transport Layer Security is a protocol designed to encrypt and authenticate all kinds of network traffic at the trans port layer, and is the successor to SSL
  *
- * @addtogroup WIFI_HAL WiFi HAL
+ * @defgroup RDKV_WIFI RDK-V WiFi
+ * @{
+ * @defgroup RDKV_WIFI_HAL WiFi HAL
  * @{
  * @defgroup WIFI_COMMON_HAL WiFi Common HAL
  * @{
@@ -1049,7 +1051,8 @@ INT wifi_getDualBandSupport();
  */
 INT wifi_waitForScanResults(void);
 /** @} */ // End of WIFI_COMMON_HAL
-/** @} */ // End of WIFI_HAL
+/** @} */ // End of RDKV_WIFI_HAL
+/** @} */ // End of RDKV_WIFI
 /** @} */ // End of HPK
 #else
 #error "! __WIFI_COMMON_HAL_H__"

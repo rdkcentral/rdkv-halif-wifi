@@ -1,5 +1,5 @@
 
-# RDK-V Wi-Fi HAL Documentation
+# RDK-V WiFi HAL Documentation
 
 ## Version History
 
@@ -9,7 +9,7 @@
 
 ## Table of Contents
 
-- [RDK-V Wi-Fi HAL Documentation](#rdk-v-wi-fi-hal-documentation)
+- [RDK-V WiFi HAL Documentation](#rdk-v-wi-fi-hal-documentation)
   - [Acronyms](#acronyms)
   - [Description](#description)
   - [Component Runtime Execution Requirements](#component-runtime-execution-requirements)
@@ -34,15 +34,15 @@
     - [Theory of operation](#theory-of-operation)
     - [Diagrams](#diagrams)
       - [Operational call sequences](#operational-call-sequences)
-        - [Wi-Fi init](#wi-fi-init)
-        - [Get Wi-Fi stats](#get-wi-fi-stats)
-        - [Get Wi-Fi scan results](#get-wi-fi-scan-results)
-        - [Wi-Fi disconnected event](#wi-fi-disconnected-event)
+        - [WiFi init](#wi-fi-init)
+        - [Get WiFi stats](#get-wi-fi-stats)
+        - [Get WiFi scan results](#get-wi-fi-scan-results)
+        - [WiFi disconnected event](#wi-fi-disconnected-event)
 
 ## Acronyms
 
 - `RDK-V` - Reference Design Kit for Video devices
-- `Wi-Fi` - Wireless Fidelity
+- `WiFi` - Wireless Fidelity
 - `HAL` - Hardware Abstraction Layer
 - `API` - Application Programming Interface
 - `Caller` - Any user of the interface via the `API`s
@@ -51,8 +51,8 @@
 - `BSSID` - Basic Service Set IDentifier
 - `MAC` - Media Access Control
 - `WEP` - Wired Equivalent Privacy
-- `WPA2` - Wi-Fi Protected Access 2
-- `WPA3` - Wi-Fi Protected Access 3
+- `WPA2` - WiFi Protected Access 2
+- `WPA3` - WiFi Protected Access 3
 - `PSK` - Pre-Shared Key
 - `EAP` - Extensible Authentication Protocol
 - `802.11` - Set of standards that define communication for Wireless Local Area Networks
@@ -60,19 +60,19 @@
 - `TKIP` - Temporal Key Integrity Protocol
 - `PHY` - Physical Layer
 - `RSSI` - Received Signal Strength Indicator
-- `WPS` - Wi-Fi Protected Setup
+- `WPS` - WiFi Protected Setup
 
 ## Description
 
-This interface is to abstract the `RDK-V` `Wi-Fi` `HAL` requirements at a general level to allow platform independent control.
+This interface is to abstract the `RDK-V` `WiFi` `HAL` requirements at a general level to allow platform independent control.
 
-The picture below shows the interactions between `Caller`, `Wi-Fi` `HAL` and `Wi-Fi` Driver.
+The picture below shows the interactions between `Caller`, `WiFi` `HAL` and `WiFi` Driver.
 
 ```mermaid
 %%{ init : { "theme" : "forest", "flowchart" : { "curve" : "linear" }}}%%
 graph TD
-caller(Caller) <--> hal(Wi-Fi HAL)
-hal <--> drv(Wi-Fi Driver)
+caller(Caller) <--> hal(WiFi HAL)
+hal <--> drv(WiFi Driver)
 style caller fill:#ffa,stroke:#333,stroke-width:0.3px
 style hal fill:#bbdeb8,stroke:#333,stroke-width:0.3px
 style drv fill:#0af,stroke:#333,stroke-width:0.3px
@@ -84,19 +84,19 @@ These requirements ensure that the `HAL` executes correctly within the run-time 
 
 ### Initialization and Startup
 
-`Caller` is required to initialize `Wi-Fi` `HAL` by calling `wifi_init()` or `wifi_initWithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `Wi-Fi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initWithConfig()` should be deallocated, such as termination of any internal `HAL` threads. There should be no resouce leaks if `wifi_init()` or `wifi_initWithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `Wi-Fi` whenever ethernet is plugged in and to start up `Wi-Fi` whenever ethernet is plugged out.
+`Caller` is required to initialize `WiFi` `HAL` by calling `wifi_init()` or `wifi_initWithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `WiFi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initWithConfig()` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init()` or `wifi_initWithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `WiFi` whenever ethernet is plugged in and to start up `WiFi` whenever ethernet is plugged out.
 
 ### Threading Model
 
-This interface is required to be thread-safe as it could be invoked from multiple `caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit()` should cause all created threads to be terminated.
+This interface is required to be thread-safe as it could be invoked from multiple `caller` threads. There is no restriction on thread creation within the `HAL` but calling `wifi_uninit()` must cause all created threads to be terminated.
 
 ### Process Model
 
-This interface is expected to support a single instantiation with a single process. Results are undefined if `Wi-Fi` `HAL` is instantiated by more than one process.
+This interface is expected to support a single instantiation with a single process. Results are undefined if `WiFi` `HAL` is instantiated by more than one process.
 
 ### Memory Model
 
-The `Wi-Fi` `HAL` will own any memory that it creates. The `caller` will own any memory that it creates. Exceptions to these rules are `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who should deallocate this memory.
+The `WiFi` `HAL` will own any memory that it creates. The `caller` will own any memory that it creates. Exceptions to these rules are `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who must deallocate this memory.
 
 ### Power Management Requirements
 
@@ -110,15 +110,15 @@ The below callback registration functions are defined by the `HAL` interface:
 - `wifi_disconnectEndpoint_callback_register()`
 
 The below events are notified via the callback registered using `wifi_connectEndpoint_callback_register()`:
-- `Wi-Fi` connection in progress
-- `Wi-Fi` connected
-- `Wi-Fi` connection failed / invalid credentials / auth failed
+- `WiFi` connection in progress
+- `WiFi` connected
+- `WiFi` connection failed / invalid credentials / auth failed
 
 The below events are notified via the callback registered using `wifi_disconnectEndpoint_callback_register()`:
-- `Wi-Fi` disconnected
-- `Wi-Fi` network not found / `SSID` changed
+- `WiFi` disconnected
+- `WiFi` network not found / `SSID` changed
 
-Callback functions should originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
+Callback functions must originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
 
 Note: `wifi_telemetry_callback_register()` will be moved out of WiFi-HAL in next phase.
 
@@ -130,21 +130,21 @@ Note: Timeout for the above `APIs` is defaulted to 4 seconds and it will be pass
 
 ### Internal Error Handling
 
-All `APIs` should return errors synchronously as a return argument. This interface is responsible for managing its internal errors.
+All `APIs` must return errors synchronously as a return argument. This interface is responsible for managing its internal errors.
 
 ### Persistence Model
 
-`Wi-Fi` `HAL` is expected to persist the following configurations:
-- `Wi-Fi` roaming controls (set using `wifi_setRoamingControl()`)
-- `Wi-Fi` configuration parameters (specified as arguments to `wifi_connectEndpoint()`)
+`WiFi` `HAL` is expected to persist the following configurations:
+- `WiFi` roaming controls (set using `wifi_setRoamingControl()`)
+- `WiFi` configuration parameters (specified as arguments to `wifi_connectEndpoint()`)
 
-<!-- @todo Wi-Fi HAL should not be responsible for persisting Wi-Fi roaming controls. This should be done from outside the Wi-Fi HAL. In next phase -->
+<!-- @todo WiFi HAL must not be responsible for persisting WiFi roaming controls. This must be done from outside the WiFi HAL. In next phase -->
 
-These configurations should persist across reboots and device software upgrades/downgrades. A warehouse/factory reset should clear these configurations. Also by calling `wifi_clearSSIDInfo()` the `Wi-Fi` configuration parameters will be cleared.
+These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations. Also by calling `wifi_clearSSIDInfo()` the `WiFi` configuration parameters will be cleared.
 
 ## Non-functional requirements
 
-The following non-functional requirements should be supported by the component:
+The following non-functional requirements must be supported by the component:
 
 ### Logging and Debugging requirements
 
@@ -169,15 +169,15 @@ This interface is required to be released under the Apache License 2.0.
 
 ### Build Requirements
 
-This interface is required to build into shared library. The shared library should be named `libwifihal.so`. The building mechanism should be independent of Yocto.
+This interface is required to build into shared library. The shared library must be named `libwifihal.so`. The building mechanism must be independent of Yocto.
 
 ### Variability Management
 
-Any change to the interface should be reviewed and approved by component architects and owners.
+Any change to the interface must be reviewed and approved by component architects and owners.
 
 ### Platform or Product Customization
 
-`Wi-Fi` `HAL` should not have any product-specific dependencies or customizations.
+`WiFi` `HAL` must not have any product-specific dependencies or customizations.
 
 ## Interface API Documentation
 
@@ -185,11 +185,11 @@ Any change to the interface should be reviewed and approved by component archite
 
 ### Theory of operation
 
-`Caller` can use the `Wi-Fi` `HAL` to get various `Wi-Fi` settings such as:
+`Caller` can use the `WiFi` `HAL` to get various `WiFi` settings such as:
 
 - Radio status (on/off)
 - `SSID` name
-- `BSSID` / `Wi-Fi` Router `MAC` address
+- `BSSID` / `WiFi` Router `MAC` address
 - Regulatory domain
 - Operating frequency/channel
 - Operating channel bandwidth
@@ -208,13 +208,13 @@ Any change to the interface should be reviewed and approved by component archite
 
 and to perform actions such as:
 
-- Get `Wi-Fi` scan results (`wifi_getNeighboringWiFiDiagnosticResult()` / `wifi_getSpecificSSIDInfo()`)
-- Connect to a `Wi-Fi` network using password (`wifi_connectEndpoint()`)
-- Connect to a `Wi-Fi` network using `WPS` Push Button / `WPS` PIN (`wifi_setCliWpsButtonPush()` / `wifi_setCliWpsEnrolleePin()`)
-- Disconnect from a `Wi-Fi` network (`wifi_disconnectEndpoint()`)
+- Get `WiFi` scan results (`wifi_getNeighboringWiFiDiagnosticResult()` / `wifi_getSpecificSSIDInfo()`)
+- Connect to a `WiFi` network using password (`wifi_connectEndpoint()`)
+- Connect to a `WiFi` network using `WPS` Push Button / `WPS` PIN (`wifi_setCliWpsButtonPush()` / `wifi_setCliWpsEnrolleePin()`)
+- Disconnect from a `WiFi` network (`wifi_disconnectEndpoint()`)
 - Cancel an in-progress `WPS` (`wifi_cancelWpsPairing()`)
-- Clear current `Wi-Fi` network configuration (`wifi_clearSSIDInfo()`)
-- Get/Set `Wi-Fi` roaming controls (`wifi_getRoamingControl()` / `wifi_setRoamingControl()`)
+- Clear current `WiFi` network configuration (`wifi_clearSSIDInfo()`)
+- Get/Set `WiFi` roaming controls (`wifi_getRoamingControl()` / `wifi_setRoamingControl()`)
 
 ### Diagrams
 
@@ -234,36 +234,36 @@ sequenceDiagram
     Note right of WiFi_Driver: Init driver interface,<br/>Register driver event handler
     WiFi_Driver-->>WiFi_HAL: 
     deactivate WiFi_Driver
-    WiFi_HAL-->>Caller: Wi-Fi init status
+    WiFi_HAL-->>Caller: WiFi init status
     deactivate WiFi_HAL
     Note over WiFi_HAL: System is up and running
-    par get Wi-Fi stats
+    par get WiFi stats
     Caller->>WiFi_HAL: wifi_getStats()
     activate WiFi_HAL
-    loop for each Wi-Fi stat
-    WiFi_HAL->>WiFi_Driver: get Wi-Fi property
+    loop for each WiFi stat
+    WiFi_HAL->>WiFi_Driver: get WiFi property
     activate WiFi_Driver
     WiFi_Driver-->>WiFi_HAL: 
     deactivate WiFi_Driver
     end
-    WiFi_HAL-->>Caller: Wi-Fi stats
+    WiFi_HAL-->>Caller: WiFi stats
     deactivate WiFi_HAL
-    and Get Wi-Fi scan results
+    and Get WiFi scan results
     Caller->>WiFi_HAL: wifi_getNeighboringWiFiDiagnosticResult()
     activate WiFi_HAL
-    WiFi_HAL->>WiFi_Driver: Wi-Fi scan request
+    WiFi_HAL->>WiFi_Driver: WiFi scan request
     activate WiFi_Driver
     WiFi_Driver-->>WiFi_HAL: 
-    WiFi_Driver->>WiFi_HAL: Wi-Fi scan started event
-    WiFi_HAL->>WiFi_HAL: wait for Wi-Fi scan results
-    alt Wi-Fi scan timed out
+    WiFi_Driver->>WiFi_HAL: WiFi scan started event
+    WiFi_HAL->>WiFi_HAL: wait for WiFi scan results
+    alt WiFi scan timed out
     else
-    WiFi_Driver->>WiFi_HAL: Wi-Fi scan results event
+    WiFi_Driver->>WiFi_HAL: WiFi scan results event
     deactivate WiFi_Driver
     end
-    WiFi_HAL->>WiFi_Driver: get Wi-Fi scan results
+    WiFi_HAL->>WiFi_Driver: get WiFi scan results
     WiFi_Driver-->>WiFi_HAL: 
-    WiFi_HAL-->>Caller: Wi-Fi scan results
+    WiFi_HAL-->>Caller: WiFi scan results
     deactivate WiFi_HAL
     end
 ```
@@ -283,22 +283,22 @@ sequenceDiagram
 
     Caller->>WiFi_HAL: wifi_connectEndpoint()
     activate WiFi_HAL
-    WiFi_HAL->>WiFi_Driver: Wi-Fi connect request
+    WiFi_HAL->>WiFi_Driver: WiFi connect request
     activate WiFi_Driver
     WiFi_Driver-->>WiFi_HAL: 
     WiFi_HAL->>Caller: connect_callback_function(WIFI_HAL_CONNECTING)
     WiFi_HAL-->>Caller: 
     deactivate WiFi_HAL
-    WiFi_Driver->>WiFi_HAL: Wi-Fi scan started event
-    WiFi_Driver->>WiFi_HAL: Wi-Fi scan results event
+    WiFi_Driver->>WiFi_HAL: WiFi scan started event
+    WiFi_Driver->>WiFi_HAL: WiFi scan results event
     alt network not found in scan results
-    WiFi_Driver->>WiFi_HAL: Wi-Fi network not found event
+    WiFi_Driver->>WiFi_HAL: WiFi network not found event
     WiFi_HAL->>Caller: disconnect_callback_function(WIFI_HAL_ERROR_NOT_FOUND)
     else connect to network unsuccessful
-    WiFi_Driver->>WiFi_HAL: Wi-Fi disconnected event
+    WiFi_Driver->>WiFi_HAL: WiFi disconnected event
     WiFi_HAL->>Caller: disconnect_callback_function(WIFI_HAL_SUCCESS)
     else connect to network successful
-    WiFi_Driver->>WiFi_HAL: Wi-Fi connected event
+    WiFi_Driver->>WiFi_HAL: WiFi connected event
     deactivate WiFi_Driver
     WiFi_HAL->>Caller: connect_callback_function(WIFI_HAL_SUCCESS)
     end
