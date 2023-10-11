@@ -219,7 +219,7 @@ INT wifi_setCliWpsButtonPush(INT ssidIndex);
  * @param[in] AP_security_PreSharedKey  The pre shared key. ASCII pre shared key will be minimum 8 characters long and maximum 63 characters long
  * @param[in] AP_security_KeyPassphrase The key passphrase. ASCII passphrase will be minimum 8 characters long and maximum 63 characters long
  * @param[in] saveSSID                  Specifies whether or not to save the WiFi configuration on a successfull connect {0-false,1-true}
- * @param[in] eapIdentity               EAP identity name
+ * @param[in] eapIdentity               EAP identity name. Valid characters are {[a-z], [A-Z], [0-9], '-', '_', '.', ',', '@', '\\', '!', '#', '%', '=', ' '}
  * @param[in] carootcert                Absolute file path to CA root certificate
  * @param[in] clientcert                Absolute file path to client certificate
  * @param[in] privatekey                Absolute file path to private key

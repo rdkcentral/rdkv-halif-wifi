@@ -271,19 +271,19 @@ typedef enum
  */
 typedef struct _wifi_radioTrafficStats
 {
-    ULONG radio_BytesSent;                       /**< The total number of bytes transmitted out of the interface, including framing characters. Range is [0, 18446744073709551615] */
-    ULONG radio_BytesReceived;                   /**< The total number of bytes received on the interface, including framing characters. Range is [0, 18446744073709551615] */
-    ULONG radio_PacketsSent;                     /**< The total number of packets transmitted out of the interface. Range is [0, 18446744073709551615] */
-    ULONG radio_PacketsReceived;                 /**< The total number of packets received on the interface. Range is [0, 18446744073709551615] */
+    ULONG radio_BytesSent;                       /**< The total number of bytes transmitted out of the interface, including framing characters. Range is [0, 2^64 - 1] */
+    ULONG radio_BytesReceived;                   /**< The total number of bytes received on the interface, including framing characters. Range is [0, 2^64 - 1] */
+    ULONG radio_PacketsSent;                     /**< The total number of packets transmitted out of the interface. Range is [0, 2^64 - 1] */
+    ULONG radio_PacketsReceived;                 /**< The total number of packets received on the interface. Range is [0, 2^64 - 1] */
     
-    ULONG radio_ErrorsSent;                      /**< The total number of outbound packets that could not be transmitted because of errors. Range is [0, 4294967295] */
-    ULONG radio_ErrorsReceived;                  /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 4294967295] */
-    ULONG radio_DiscardPacketsSent;              /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
-    ULONG radio_DiscardPacketsReceived;          /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
-    ULONG radio_PLCPErrorCount;                  /**< The number of packets that were received with a detected Physical Layer Convergence Protocol (PLCP) header error. Range is [0, 4294967295] */
-    ULONG radio_FCSErrorCount;                   /**< The number of packets that were received with a detected FCS error. This parameter is based on dot11FCSErrorCount from [Annex C/802.11-2012]. Range is [0, 4294967295] */
-    ULONG radio_InvalidMACCount;                 /**< The number of packets that were received with a detected invalid MAC header error. Range is [0, 4294967295]*/
-    ULONG radio_PacketsOtherReceived;            /**< The number of packets that were received, but which were destined for a MAC address that is not associated with this interface. Range is [0, 4294967295] */
+    ULONG radio_ErrorsSent;                      /**< The total number of outbound packets that could not be transmitted because of errors. Range is [0, 2^32 - 1] */
+    ULONG radio_ErrorsReceived;                  /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 2^32 - 1] */
+    ULONG radio_DiscardPacketsSent;              /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 2^32 - 1] */
+    ULONG radio_DiscardPacketsReceived;          /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 2^32 - 1] */
+    ULONG radio_PLCPErrorCount;                  /**< The number of packets that were received with a detected Physical Layer Convergence Protocol (PLCP) header error. Range is [0, 2^32 - 1] */
+    ULONG radio_FCSErrorCount;                   /**< The number of packets that were received with a detected FCS error. This parameter is based on dot11FCSErrorCount from [Annex C/802.11-2012]. Range is [0, 2^32 - 1] */
+    ULONG radio_InvalidMACCount;                 /**< The number of packets that were received with a detected invalid MAC header error. Range is [0, 2^32 - 1]*/
+    ULONG radio_PacketsOtherReceived;            /**< The number of packets that were received, but which were destined for a MAC address that is not associated with this interface. Range is [0, 2^32 - 1] */
     INT   radio_NoiseFloor;                      /**< The noise floor for this radio channel where a recoverable signal can be obtained. Measurement should capture all energy (in dBm) from sources other than Wi-Fi devices as well as interference from Wi-Fi devices too weak to be decoded. Measured in dBm. Range is [-110, 0] */
     ULONG radio_ChannelUtilization;              /**< Percentage of time the channel was occupied by the radio’s own activity (Activity Factor) or the activity of other radios. Channel utilization MUST cover all user traffic, management traffic, and time the radio was unavailable for CSMA activities, including DIFS intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage. Range is [0, 100] */
     INT   radio_ActivityFactor;                  /**< Percentage of time that the radio was transmitting or receiving Wi-Fi packets to/from associated clients. Activity factor MUST include all traffic that deals with communication between the radio and clients associated to the radio as well as management overhead for the radio, including NAV timers, beacons, probe responses,time for receiving devices to send an ACK, SIFC intervals, etc. The metric is calculated and updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected from the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in Percentage. Range is [0, 100] */
@@ -292,7 +292,7 @@ typedef struct _wifi_radioTrafficStats
     INT   radio_MaximumNoiseFloorOnChannel;      /**< Maximum Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm. Range is [-200, 0] */
     INT   radio_MinimumNoiseFloorOnChannel;      /**< Minimum Noise on the channel. The metric is updated in this Parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm. Range is [-200, 0] */
     INT   radio_MedianNoiseFloorOnChannel;       /**< Median Noise on the channel during the measuring interval. The metric is updated in this parameter at the end of the interval defined by "Radio Statistics Measuring Interval". The calculation of this metric MUST only use the data collected in the just completed interval. If this metric is queried before it has been updated with an initial calculation, it MUST return -1. Units in dBm. Range is [-200, 0] */
-    ULONG radio_StatisticsStartTime;             /**< The date and time at which the collection of the current set of statistics started. This time must be updated whenever the radio statistics are reset. Range is [0, 18446744073709551615] */
+    ULONG radio_StatisticsStartTime;             /**< The date and time at which the collection of the current set of statistics started. This time must be updated whenever the radio statistics are reset. Range is [0, 2^64 - 1] */
 
 } wifi_radioTrafficStats_t;
 
@@ -302,29 +302,29 @@ typedef struct _wifi_radioTrafficStats
  */
 typedef struct _wifi_ssidTrafficStats
 {
-    ULONG ssid_BytesSent;                  /**< The total number of bytes transmitted out of the interface, including framing characters. Range is [0, 18446744073709551615] */
-    ULONG ssid_BytesReceived;              /**< The total number of bytes received on the interface, including framing characters. Range is [0, 18446744073709551615] */
-    ULONG ssid_PacketsSent;                /**< The total number of packets transmitted out of the interface. Range is [0, 18446744073709551615] */
-    ULONG ssid_PacketsReceived;            /**< The total number of packets received on the interface. Range is [0, 18446744073709551615] */
+    ULONG ssid_BytesSent;                  /**< The total number of bytes transmitted out of the interface, including framing characters. Range is [0, 2^64 - 1] */
+    ULONG ssid_BytesReceived;              /**< The total number of bytes received on the interface, including framing characters. Range is [0, 2^64 - 1] */
+    ULONG ssid_PacketsSent;                /**< The total number of packets transmitted out of the interface. Range is [0, 2^64 - 1] */
+    ULONG ssid_PacketsReceived;            /**< The total number of packets received on the interface. Range is [0, 2^64 - 1] */
 
-    ULONG ssid_RetransCount;               /**< The total number of transmitted packets which were retransmissions. Two retransmissions of the same packet results in this counter incrementing by two. Range is [0, 4294967295] */
-    ULONG ssid_FailedRetransCount;         /**< The number of packets that were not transmitted successfully due to the number of retransmission attempts exceeding an 802.11 retry limit. This parameter is based on dot11FailedCount from [802.11-2012]. Range is [0, 4294967295] */
-    ULONG ssid_RetryCount;                 /**< The number of packets that were successfully transmitted after one or more retransmissions. This parameter is based on dot11RetryCount from [802.11-2012]. Range is [0, 4294967295] */
-    ULONG ssid_MultipleRetryCount;         /**< The number of packets that were successfully transmitted after more than one retransmission. This parameter is based on dot11MultipleRetryCount from [802.11-2012]. Range is [0, 4294967295] */
-    ULONG ssid_ACKFailureCount;            /**< The number of expected ACKs that were never received. This parameter is based on dot11ACKFailureCount from [802.11-2012]. Range is [0, 4294967295] */
-    ULONG ssid_AggregatedPacketCount;      /**< The number of aggregated packets that were transmitted. This applies only to 802.11n and 802.11ac. Range is [0, 4294967295] */
+    ULONG ssid_RetransCount;               /**< The total number of transmitted packets which were retransmissions. Two retransmissions of the same packet results in this counter incrementing by two. Range is [0, 2^32 - 1] */
+    ULONG ssid_FailedRetransCount;         /**< The number of packets that were not transmitted successfully due to the number of retransmission attempts exceeding an 802.11 retry limit. This parameter is based on dot11FailedCount from [802.11-2012]. Range is [0, 2^32 - 1] */
+    ULONG ssid_RetryCount;                 /**< The number of packets that were successfully transmitted after one or more retransmissions. This parameter is based on dot11RetryCount from [802.11-2012]. Range is [0, 2^32 - 1] */
+    ULONG ssid_MultipleRetryCount;         /**< The number of packets that were successfully transmitted after more than one retransmission. This parameter is based on dot11MultipleRetryCount from [802.11-2012]. Range is [0, 2^32 - 1] */
+    ULONG ssid_ACKFailureCount;            /**< The number of expected ACKs that were never received. This parameter is based on dot11ACKFailureCount from [802.11-2012]. Range is [0, 2^32 - 1] */
+    ULONG ssid_AggregatedPacketCount;      /**< The number of aggregated packets that were transmitted. This applies only to 802.11n and 802.11ac. Range is [0, 2^32 - 1] */
 
-    ULONG ssid_ErrorsSent;                 /**< The total number of outbound packets that could not be transmitted because of errors. Range is [0, 4294967295] */
-    ULONG ssid_ErrorsReceived;             /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 4294967295] */
-    ULONG ssid_UnicastPacketsSent;         /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 18446744073709551615] */
-    ULONG ssid_UnicastPacketsReceived;     /**< The total number of received packets, delivered by this layer to a higher layer, which were not addressed to a multicast or broadcast address at this layerm. Range is [0, 18446744073709551615] */
-    ULONG ssid_DiscardedPacketsSent;       /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
-    ULONG ssid_DiscardedPacketsReceived;   /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 4294967295] */
-    ULONG ssid_MulticastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a multicast address at this layer, including those that were discarded or not sent. Range is [0, 18446744073709551615] */
-    ULONG ssid_MulticastPacketsReceived;   /**< The total number of received packets, delivered by this layer to a higher layer, which were addressed to a multicast address at this layer. Range is [0, 18446744073709551615] */
-    ULONG ssid_BroadcastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent. Range is [0, 18446744073709551615] */
-    ULONG ssid_BroadcastPacketsRecevied;   /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent. Range is [0, 18446744073709551615] */
-    ULONG ssid_UnknownPacketsReceived;     /**< The total number of packets received via the interface which were discarded because of an unknown or unsupported protocol. Range is [0, 4294967295] */
+    ULONG ssid_ErrorsSent;                 /**< The total number of outbound packets that could not be transmitted because of errors. Range is [0, 2^32 - 1] */
+    ULONG ssid_ErrorsReceived;             /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 2^32 - 1] */
+    ULONG ssid_UnicastPacketsSent;         /**< The total number of inbound packets that contained errors preventing them from being delivered to a higher-layer protocol. Range is [0, 2^64 - 1] */
+    ULONG ssid_UnicastPacketsReceived;     /**< The total number of received packets, delivered by this layer to a higher layer, which were not addressed to a multicast or broadcast address at this layerm. Range is [0, 2^64 - 1] */
+    ULONG ssid_DiscardedPacketsSent;       /**< The total number of outbound packets which were chosen to be discarded even though no errors had been detected to prevent their being transmitted. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 2^32 - 1] */
+    ULONG ssid_DiscardedPacketsReceived;   /**< The total number of inbound packets which were chosen to be discarded even though no errors had been detected to prevent their being delivered. One possible reason for discarding such a packet could be to free up buffer space. Range is [0, 2^32 - 1] */
+    ULONG ssid_MulticastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a multicast address at this layer, including those that were discarded or not sent. Range is [0, 2^64 - 1] */
+    ULONG ssid_MulticastPacketsReceived;   /**< The total number of received packets, delivered by this layer to a higher layer, which were addressed to a multicast address at this layer. Range is [0, 2^64 - 1] */
+    ULONG ssid_BroadcastPacketsSent;       /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent. Range is [0, 2^64 - 1] */
+    ULONG ssid_BroadcastPacketsRecevied;   /**< The total number of packets that higher-level protocols requested for transmission and which were addressed to a broadcast address at this layer, including those that were discarded or not sent. Range is [0, 2^64 - 1] */
+    ULONG ssid_UnknownPacketsReceived;     /**< The total number of packets received via the interface which were discarded because of an unknown or unsupported protocol. Range is [0, 2^32 - 1] */
 
 } wifi_ssidTrafficStats_t;
 
@@ -348,11 +348,11 @@ typedef struct _wifi_neighbor_ap
     CHAR  ap_SupportedStandards[64];            /**< Comma-separated list of strings. List items indicate which IEEE 802.11 standards this Result instance can support simultaneously, in the frequency band specified by OperatingFrequencyBand. Possible values {"a", "b", "g", "n", "ac"} */
     CHAR  ap_OperatingStandards[16];            /**< Comma-separated list of strings. Each list item MUST be a member of the list reported by theSupportedStandards parameter. List items indicate which IEEE 802.11 standard that is detected for thisResult. Possible values {"a", "b", "g", "n", "ac"} */
     CHAR  ap_OperatingChannelBandwidth[16];     /**< Indicates the bandwidth at which the channel is operating. Possible values {"20MHz", "40MHz", "80MHz", "160MHz", "Auto"} */
-    UINT  ap_BeaconPeriod;                      /**< Time interval (in ms) between transmitting beacons. Range is [0, 4294967295] */
+    UINT  ap_BeaconPeriod;                      /**< Time interval (in ms) between transmitting beacons. Range is [0, 2^32 - 1] */
     INT   ap_Noise;                             /**< Indicator of average noise strength (in dBm) received from the neighboring WiFi radio. Range is [-200, 0] */
-    CHAR  ap_BasicDataTransferRates[256];       /**< Comma-separated list (maximum list length 256) of strings. Basic data transmit rates (in Mbps) for the SSID. For example, if BasicDataTransferRates is "1,2", this indicates that the SSID is operating with basic rates of 1 Mbps and 2 Mbps. Possible values {"1", "2", "5.5", "6", "9", "12", "18", "24", "36", "48", "54"} */
-    CHAR  ap_SupportedDataTransferRates[256];   /**< Comma-separated list (maximum list length 256) of strings. Data transmit rates (in Mbps) for unicast frames at which the SSID will permit a station to connect. For example, if SupportedDataTransferRates is "1,2,5.5", this indicates that the SSID will only permit connections at 1 Mbps, 2 Mbps and 5.5 Mbps. Possible values {"1", "2", "5.5", "6", "9", "12", "18", "24", "36", "48", "54"} */
-    UINT  ap_DTIMPeriod;                        /**< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012]. Range is [0, 4294967295] */
+    CHAR  ap_BasicDataTransferRates[256];       /**< Comma-separated list (maximum list length 256) of strings each of which represents a number in the range [1-9608]. Basic data transmit rates (in Mbps) for the SSID. For example, if BasicDataTransferRates is "1,2", this indicates that the SSID is operating with basic rates of 1 Mbps and 2 Mbps */
+    CHAR  ap_SupportedDataTransferRates[256];   /**< Comma-separated list (maximum list length 256) of strings each of which represents a number in the range [1-9608]. Data transmit rates (in Mbps) for unicast frames at which the SSID will permit a station to connect. For example, if SupportedDataTransferRates is "1,2,5.5", this indicates that the SSID will only permit connections at 1 Mbps, 2 Mbps and 5.5 Mbps */
+    UINT  ap_DTIMPeriod;                        /**< The number of beacon intervals that elapse between transmission of Beacon frames containing a TIM element whose DTIM count field is 0. This value is transmitted in the DTIM Period field of beacon frames. [802.11-2012]. Range is [0, 2^32 - 1] */
     UINT  ap_ChannelUtilization[64];            /**< Indicates the fraction of the time AP senses that the channel is in use by the neighboring AP for transmissions. Range is [0, 100] */
 
 } wifi_neighbor_ap_t;
@@ -727,7 +727,7 @@ INT wifi_getRadioAutoChannelEnable(INT radioIndex, BOOL *output_bool);
  * @param[in] radioIndex    The index of the radio {Valid values: 1}
  * @param[out] output_ulong Stores the auto channel selection / dynamic channel selection refresh period in seconds. 
  * A value of 0 means that the automatic channel selection is done only at boot time. 
- * This parameter is significant only if AutoChannelEnable is set to true. Range is [0, 4294967295].
+ * This parameter is significant only if AutoChannelEnable is set to true. Range is [0, 2^32 - 1].
  *
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
