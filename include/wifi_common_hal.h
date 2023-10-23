@@ -392,11 +392,12 @@ typedef struct _wifi_halSettings
  * - WIFI_HAL_MINOR_VERSION
  * - WIFI_HAL_MAINTENANCE_VERSION
  *
- * @param[out] output_string It contains HAL version
+ * @param[out] output_string It contains HAL version. Maximum version length is 16 characters.
  * 
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
- * @retval #RETURN_ERR if any error is detected 
+ * @retval #RETURN_ERR if any error is detected
+ * @todo Include to add #output_string size as second argument in next phase 
  */
 INT wifi_getHalVersion(CHAR *output_string);
 
@@ -430,7 +431,6 @@ INT wifi_init();
  * @retval #RETURN_OK  if successful
  * @retval #RETURN_ERR if any error is detected
  * 
- * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see wifi_halConfig_t
  */
 INT wifi_initWithConfig(wifi_halConfig_t *conf);
