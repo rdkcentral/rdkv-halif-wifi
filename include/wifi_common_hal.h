@@ -397,7 +397,7 @@ typedef struct _wifi_halSettings
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
  * @retval #RETURN_ERR if any error is detected
- * @todo Include to add #output_string size as second argument in next phase 
+ * @todo Add #output_string size as second argument in next phase 
  */
 INT wifi_getHalVersion(CHAR *output_string);
 
