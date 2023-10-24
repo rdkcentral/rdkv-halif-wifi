@@ -99,12 +99,13 @@
  * @defgroup WIFI_COMMON_HAL WiFi Common HAL
  * @{
  * @section Data-Model
- * <a href="https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html">Data-Model Definition</a>
+ * [Data-Model Definition](https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html)
+ * @note ssidIndex across APIs is not being used it will be revisited in next phase
+ * @todo ssidIndex across APIs is not being used it will be revisited in next phase
  */
 
 /**
- * @note ssidIndex across APIs is not being used it will be revisited in next phase 
- * @todo ssidIndex across APIs is not being used it will be revisited in next phase
+ * @file  wifi_common_hal.h
  */
 
 /**
@@ -397,7 +398,7 @@ typedef struct _wifi_halSettings
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
  * @retval #RETURN_ERR if any error is detected
- * @todo Add #output_string size as second argument in next phase 
+ * @todo Add output_string size as second argument in next phase 
  */
 INT wifi_getHalVersion(CHAR *output_string);
 

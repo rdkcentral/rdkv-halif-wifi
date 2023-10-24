@@ -51,6 +51,11 @@
  * WiFi Client HAL provides an interface (data structures and API) to interact with underlying WiFi driver and
  * enabling the client to be connected with an access point.
  */
+
+/**
+ * @file wifi_client_hal.h
+ */
+
 #include <wifi_common_hal.h>
 
 /*
