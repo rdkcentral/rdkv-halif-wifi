@@ -1,1 +1,1 @@
-docs/pages/Wifi_halSpec.md
+./docs/pages/rdkv-wifi_halSpec.md

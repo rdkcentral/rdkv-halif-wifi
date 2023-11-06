@@ -21,18 +21,17 @@
 # PLEASE RUN THIS SCRIPT FROM INSIDE THE docs/ DIR SO THAT RELATIVE PATHS SET IN Doxyfile.cfg WORK AS EXPECTED
 
 # In the future this should moved to a fixed verison
-HAL_GENERATOR_VERSION=master
+HAL_GENERATOR_VERSION=1.2.0
 
 # This will look up the last tag in the git repo, depending on the project this may require modification
 PROJECT_VERSION=$(git describe --tags | head -n1)
-DOXYGEN_REPO=git@github.com:rdkcentral/hal-doxygen.git
 
 # Check if the common document configuration is present, if not clone it
 if [ -d "./build" ]; then
-    make -C ./build PROJECT_NAME="RDK VIDEO WIFI HAL" PROJECT_VERSION=${PROJECT_VERSION}
+    make -C ./build PROJECT_NAME="RDK-V WiFi HAL" PROJECT_VERSION=${PROJECT_VERSION}
 else
     echo "Cloning Common documentation generation"
-    git clone $DOXYGEN_REPO build
+    git clone git@github.com:rdkcentral/hal-doxygen.git build
     cd ./build
     git checkout ${HAL_GENERATOR_VERSION}
     cd ..
