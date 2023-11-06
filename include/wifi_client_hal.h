@@ -352,7 +352,7 @@ void wifi_connectEndpoint_callback_register(wifi_connectEndpoint_callback callba
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see wifi_telemetry_ops_t, wifi_telemetry_ops_t.init(), wifi_telemetry_ops_t.event_s(), wifi_telemetry_ops_t.event_d()
  * @todo revisit telemetry requirement to move out of WiFi-HAL in next phase
- * @note telemetry requirement to be moved out of WiFi-HAL in next phase
+ * @note is depreciated and will be removed in coming releases.
  */
 void wifi_telemetry_callback_register(wifi_telemetry_ops_t *telemetry_ops);
 

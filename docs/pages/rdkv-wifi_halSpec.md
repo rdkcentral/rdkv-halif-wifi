@@ -1,7 +1,7 @@
 
 # RDK-V WiFi HAL Documentation
 
-## Version History
+## Document Version History
 
 | Date (DD/MM/YY) | Comment | Version |
 | --- | --- | --- |
@@ -9,7 +9,7 @@
 
 ## Table of Contents
 
-- [RDK-V WiFi HAL Documentation](#rdk-v-wi-fi-hal-documentation)
+- [RDK-V WiFi HAL Documentation](#rdk-v-wifi-hal-documentation)
   - [Acronyms](#acronyms)
   - [Description](#description)
   - [Component Runtime Execution Requirements](#component-runtime-execution-requirements)
@@ -34,10 +34,7 @@
     - [Theory of operation](#theory-of-operation)
     - [Diagrams](#diagrams)
       - [Operational call sequences](#operational-call-sequences)
-        - [WiFi init](#wi-fi-init)
-        - [Get WiFi stats](#get-wi-fi-stats)
-        - [Get WiFi scan results](#get-wi-fi-scan-results)
-        - [WiFi disconnected event](#wi-fi-disconnected-event)
+      - [Callback registrations and asynchronous notifications](#callback-registrations-and-asynchronous-notifications)
 
 ## Acronyms
 
@@ -84,7 +81,11 @@ These requirements ensure that the `HAL` executes correctly within the run-time 
 
 ### Initialization and Startup
 
-`Caller` is required to initialize `WiFi` `HAL` by calling `wifi_init()` or `wifi_initWithConfig()` before any other call. The kernel boot sequence is expected to start all dependencies of `WiFi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initWithConfig()` must be deallocated, such as termination of any internal `HAL` threads. There must be no resouce leaks if `wifi_init()` or `wifi_initWithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `WiFi` whenever ethernet is plugged in and to start up `WiFi` whenever ethernet is plugged out.
+The `Caller` is required to initialize `WiFi` `HAL` by calling `wifi_init()` or `wifi_initWithConfig()` before any other call.
+
+The kernel boot sequence is expected to start all dependencies of `WiFi` `HAL`. When `wifi_uninit()` is called, any resources allocated by `wifi_init()` or `wifi_initWithConfig()` must be deallocated, such as termination of any internal `HAL` threads.
+
+There must be no resouce leaks if `wifi_init()` or `wifi_initWithConfig()` and `wifi_uninit()` are called alternately for an indeterminate number of times, as might occur where there are requirements to shut down `WiFi` whenever ethernet is plugged in and to start up `WiFi` whenever ethernet is unplugged.
 
 ### Threading Model
 
@@ -96,7 +97,14 @@ This interface is expected to support a single instantiation with a single proce
 
 ### Memory Model
 
-The `WiFi` `HAL` will own any memory that it creates. The `caller` will own any memory that it creates. Exceptions to these rules are `wifi_getNeighboringWiFiDiagnosticResult()` and `wifi_getSpecificSSIDInfo()` that allocate and return memory to the `caller` who must deallocate this memory.
+The `WiFi` `HAL` will own any memory that it creates. The `caller` will own any memory that it creates.
+
+Exceptions to this rule are:-
+
+- `wifi_getNeighboringWiFiDiagnosticResult()`
+- `wifi_getSpecificSSIDInfo()`
+
+These allocate and return memory to the `caller` who must then deallocate thismemory.
 
 ### Power Management Requirements
 
@@ -110,21 +118,29 @@ The below callback registration functions are defined by the `HAL` interface:
 - `wifi_disconnectEndpoint_callback_register()`
 
 The below events are notified via the callback registered using `wifi_connectEndpoint_callback_register()`:
+
 - `WiFi` connection in progress
 - `WiFi` connected
 - `WiFi` connection failed / invalid credentials / auth failed
 
 The below events are notified via the callback registered using `wifi_disconnectEndpoint_callback_register()`:
+
 - `WiFi` disconnected
 - `WiFi` network not found / `SSID` changed
 
-Callback functions must originate in a thread that's separate from `caller` context(s). `Caller` will not make any `HAL` calls in the context of these callbacks.
+Callback functions must originate in a thread that's separate from `caller` context(s). `Caller` must not make any `HAL` calls in the context of these callbacks.
 
-Note: `wifi_telemetry_callback_register()` will be moved out of WiFi-HAL in next phase.
+Note: `wifi_telemetry_callback_register()` is depreciated and will be removed in coming releases.
 
 ### Blocking calls
 
-This interface has 3 blocking calls, namely `wifi_getNeighboringWiFiDiagnosticResult()`, `wifi_waitForScanResults()` and `wifi_getSpecificSSIDInfo()`, which will block until scan results are obtained or a timeout occurs, whichever happens earlier.
+This interface has 3 blocking calls
+
+- `wifi_getNeighboringWiFiDiagnosticResult()`
+- `wifi_waitForScanResults()`
+- `wifi_getSpecificSSIDInfo()`
+  
+These will block until scan results are obtained or a timeout occurs, whichever happens earlier.
 
 Note: Timeout for the above `APIs` is defaulted to 4 seconds and it will be passed as an argument in next phase.
 
@@ -135,6 +151,7 @@ All `APIs` must return errors synchronously as a return argument. This interface
 ### Persistence Model
 
 `WiFi` `HAL` is expected to persist the following configurations:
+
 - `WiFi` roaming controls (set using `wifi_setRoamingControl()`)
 - `WiFi` configuration parameters (specified as arguments to `wifi_connectEndpoint()`)
 
@@ -148,7 +165,7 @@ The following non-functional requirements must be supported by the component:
 
 ### Logging and Debugging requirements
 
-This component is required to log all ERROR, WARNING and INFO messages. DEBUG messages are to be disabled by default and enabled when needed.
+This component is required to log all `ERROR`, `WARNING` and `INFO` messages. `DEBUG` messages are to be disabled by default and enabled when needed.
 
 ### Memory and Performance requirements
 
@@ -156,12 +173,12 @@ This interface is required to not cause excessive memory and CPU utilization.
 
 ### Quality Control
 
-* Static analysis is required to be performed. Our preferred tool is Coverity.
-* Have a zero-warning policy with regards to compiling. All warnings are required to be treated as errors.
-* Copyright validation is required to be performed e.g.: Black duck, FossID.
-* Use of memory analysis tools like Valgrind are encouraged to identify leaks/corruptions.
-* `HAL` Tests will endeavour to create worst-case scenarios to assist investigations.
-* Improvements by any party to the testing suite are required to be fed back.
+- Static analysis is required to be performed. Our preferred tool is Coverity.
+- A zero-warning policy is required. All warnings are required to be treated as errors.
+- Copyright validation is required to be performed e.g.: Black duck, FossID.
+- Use of memory analysis tools like Valgrind are encouraged to identify leaks/corruptions.
+- `HAL` Tests will endeavour to create worst-case scenarios to assist investigations.
+- Improvements by any party to the testing suite are required to be fed back.
 
 ### Licensing
 
@@ -268,7 +285,7 @@ sequenceDiagram
     end
 ```
 
-Callback Registrations and Asynchronous Notifications
+#### Callback Registrations and Asynchronous Notifications
 
 ```mermaid
 sequenceDiagram
