@@ -101,7 +101,6 @@
  * @section Data-Model
  * [Data-Model Definition](https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html)
  * @note ssidIndex across APIs is not being used it will be revisited in next phase
- * @todo ssidIndex across APIs is not being used it will be revisited in next phase
  */
 
 /**
@@ -110,7 +109,6 @@
 
 /**
  * @brief Defines for the basic data types
- * @todo Use standard data types in next phase
  */
 
 #ifndef ULONG
@@ -163,8 +161,6 @@
  * RETURN_OK          - Return value for the success case
  * RETURN_ERR         - Return value for the failure case
  * RETURN_UNSUPPORTED - Return value for the unsupported API
- * @todo add possible return codes as an enum in next phase
- * @todo consider RETURN_UNSUPPORTED, RETURN_OUT_OF_MEMORY, RETURN_NOT_INITIALIZED, RETURN_ALREADY_INITIALISED, 
  * RETURN_INVALID_PARAM, RETURN_UNINITIALISED in next phase
  */
 
@@ -268,7 +264,6 @@ typedef enum
 /**
  * @struct _wifi_radioTrafficStats
  * @brief structure for radioTrafficStats
- * @todo check if fields from radio_NoiseFloor onwards are needed in next phase
  */
 typedef struct _wifi_radioTrafficStats
 {
@@ -334,7 +329,6 @@ typedef struct _wifi_ssidTrafficStats
  * @brief structure for neighbor_ap
  *
  * @note Do not edit the fields of this data structure
- * @todo check if field ap_ChannelUtilization is needed in next phase
  */
 typedef struct _wifi_neighbor_ap
 {
@@ -398,7 +392,6 @@ typedef struct _wifi_halSettings
  * @return #INT - The status of the operation
  * @retval #RETURN_OK  if successful
  * @retval #RETURN_ERR if any error is detected
- * @todo Add output_string size as second argument in next phase 
  */
 INT wifi_getHalVersion(CHAR *output_string);
 
@@ -985,7 +978,6 @@ INT wifi_getSSIDTrafficStats(INT ssidIndex, wifi_ssidTrafficStats_t *output_stru
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @see @ref Data-Model Parameter: Device.WiFi.NeighboringWiFiDiagnostic., Device.WiFi.NeighboringWiFiDiagnostic.Result
  * @note This call will block until scan completes or a timeout occurs, whichever is earlier
- * @todo Add timeout parameter as argument in next phase
  */
 INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t **neighbor_ap_array, UINT *output_array_size);
 
@@ -1006,7 +998,6 @@ INT wifi_getNeighboringWiFiDiagnosticResult(INT radioIndex, wifi_neighbor_ap_t *
  * @see wifi_neighbor_ap_t, WIFI_HAL_FREQ_BAND
  * @pre wifi_init() or wifi_initWithConfig() should be called before calling this API
  * @note This call will block until scan completes or a timeout occurs, whichever is earlier
- * @todo Add timeout parameter as argument in next phase
  */
 INT wifi_getSpecificSSIDInfo(const char *SSID, WIFI_HAL_FREQ_BAND band, wifi_neighbor_ap_t **ap_array, UINT *output_array_size);
 
@@ -1048,7 +1039,6 @@ INT wifi_getDualBandSupport();
  *
  * @pre wifi_init() or wifi_initWithConfig() wifi_initWithConfig() should be called  before calling this API.
  * @note This call will block until scan completes or a timeout occurs, whichever is earlier
- * @todo Add timeout parameter as argument in next phase
  */
 INT wifi_waitForScanResults(void);
 /** @} */ // End of WIFI_COMMON_HAL
