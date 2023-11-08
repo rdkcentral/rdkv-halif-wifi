@@ -1,4 +1,3 @@
-
 # RDK-V WiFi HAL Documentation
 
 ## Document Version History
@@ -154,8 +153,6 @@ All `APIs` must return errors synchronously as a return argument. This interface
 
 - `WiFi` roaming controls (set using `wifi_setRoamingControl()`)
 - `WiFi` configuration parameters (specified as arguments to `wifi_connectEndpoint()`)
-
-<!-- @todo WiFi HAL must not be responsible for persisting WiFi roaming controls. This must be done from outside the WiFi HAL. In next phase -->
 
 These configurations must persist across reboots and device software upgrades/downgrades. A warehouse/factory reset must clear these configurations. Also by calling `wifi_clearSSIDInfo()` the `WiFi` configuration parameters will be cleared.
 
