@@ -1,0 +1,1 @@
+./docs/pages/rdkv-wifi_halSpec.md
