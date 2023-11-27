@@ -50,6 +50,11 @@
 /**
  * @addtogroup HPK Hardware Porting Kit
  * @{
+ *
+ * @defgroup RDKV_WIFI RDK-V WiFi
+ * @{
+ * @defgroup RDKV_WIFI_HAL WiFi HAL
+ * @{
  * @section WIFI_GLOSSARY Glossary of terms
  *
  * Abbreviations | Description
@@ -91,15 +96,10 @@
  * WPS | Wi-Fi Protected Setup makes it easier for users to add Wi-Fi clients to WPA and WPA2 protected wireless networks
  * TKIP | The Temporal Key Integrity Protocol was developed as a replacement for WEP but is no longer considered secure and has been removed from 802.11 standards
  * TLS | Transport Layer Security is a protocol designed to encrypt and authenticate all kinds of network traffic at the trans port layer, and is the successor to SSL
- *
- * @defgroup RDKV_WIFI RDK-V WiFi
- * @{
- * @defgroup RDKV_WIFI_HAL WiFi HAL
- * @{
  * @defgroup WIFI_COMMON_HAL WiFi Common HAL
  * @{
  * @section Data-Model
- * [Data-Model Definition](https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html)
+ * [Data-Model Definition](https://cwmp-data-models.broadband-forum.org/tr-181-2-11-0.html)  (licensed under a BSD-style license)
  * @note ssidIndex across APIs is not being used it will be revisited in next phase
  */
 
