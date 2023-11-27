@@ -1,11 +1,5 @@
 # RDK-V WiFi HAL Documentation
 
-## Document Version History
-
-| Date (DD/MM/YY) | Comment | Version |
-| --- | --- | --- |
-| 14/07/23 | Initial Release | 1.0.0 |
-
 ## Table of Contents
 
 - [RDK-V WiFi HAL Documentation](#rdk-v-wifi-hal-documentation)
